@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "potluck.home",
+    "potluck.registration",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -55,7 +56,7 @@ ROOT_URLCONF = "potluck.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [Path(BASE_DIR).joinpath("potluck/templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
