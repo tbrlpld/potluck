@@ -13,7 +13,7 @@ RUN $POETRY install
 
 COPY . .
 
-RUN $POETRY run python manage.py migrate
-
 EXPOSE 8000
-CMD $POETRY run python manage.py runserver 0:8000
+CMD $POETRY run python manage.py migrate --noinput; \
+    $POETRY run python manage.py runserver 0:8000
+
