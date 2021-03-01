@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "potluck.games",
     "potluck.home",
     "potluck.registration",
     "potluck.teams",
