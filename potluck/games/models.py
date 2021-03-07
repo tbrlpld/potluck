@@ -18,3 +18,7 @@ class Game(models.Model):
         blank=True,
         null=True,
     )
+
+    def get_team_names(self):
+        teams = self.teams.values_list("id", "name")[:2]
+        return [team[1] for team in teams]

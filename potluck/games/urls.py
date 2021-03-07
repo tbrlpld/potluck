@@ -4,4 +4,7 @@ from potluck.games import views
 
 app_name = "games"
 
-urlpatterns = [path("create/", views.GameCreateView.as_view(), name="create")]
+urlpatterns = [
+    path("", views.GameListView.as_view(), name="list"),
+    path("create/", views.GameCreateView.as_view(), name="create"),
+]
