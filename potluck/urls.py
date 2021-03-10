@@ -20,4 +20,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
     path("", include("potluck.home.urls", namespace="home")),
+    path("games/", include("potluck.games.urls", namespace="games")),
 ]
