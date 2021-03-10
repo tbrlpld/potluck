@@ -8,9 +8,9 @@
              <li>{{ pot.name }}</li>
             {% endfor %}
         </ul>
-        <a href="">Create a new pot</a>
+        <a href="{% url 'pots:create' %}">Create a new pot</a>
     {% else %}
         <p>No pots here</p>
-        <p><strong>Go a head and <a href="">create one</a></strong></p>
+        <p><strong>Go a head and <a href="{% url 'pots:create' %}">create one</a></strong></p>
     {% endif %}
 {% endblock content %}
