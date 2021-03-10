@@ -2,4 +2,18 @@
 
 {% block content %}
     <h1>{{ pot.name }}</h1>
+    {% if pot.games %}
+        <ul>
+            {% for game in pot.games.all  %}
+                <li>{{ game }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>
+            No games in this pot yet.
+        </p>
+    {% endif %}
+    <p>
+        <a href="">Add game</a>
+    </p>
 {% endblock content %}
