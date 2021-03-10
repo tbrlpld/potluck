@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "potluck.games",
     "potluck.home",
+    "potluck.pots",
     "potluck.registration",
     "potluck.teams",
     "django.contrib.admin",
