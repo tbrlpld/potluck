@@ -5,7 +5,7 @@
     {% if pots  %}
         <ul>
             {% for pot in pots  %}
-             <li>{{ pot.name }}</li>
+             <li><a href="{% url 'pots:detail' pot.id %}">{{ pot.name }}</a></li>
             {% endfor %}
         </ul>
         <a href="{% url 'pots:create' %}">Create a new pot</a>

@@ -9,6 +9,11 @@ class PotListView(generic.ListView):
     context_object_name = "pots"
 
 
+class PotDetailView(generic.DetailView):
+    model = Pot
+    context_object_name = "pot"
+
+
 class PotCreateView(generic.CreateView):
     model = Pot
     success_url = reverse_lazy("pots:list")
