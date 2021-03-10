@@ -2,4 +2,15 @@
 
 {% block content %}
     <h1>Pot List</h1>
+    {% if pots  %}
+        <ul>
+            {% for pot in pots  %}
+             <li>{{ pot.name }}</li>
+            {% endfor %}
+        </ul>
+        <a href="">Create a new pot</a>
+    {% else %}
+        <p>No pots here</p>
+        <p><strong>Go a head and <a href="">create one</a></strong></p>
+    {% endif %}
 {% endblock content %}
