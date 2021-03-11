@@ -2,8 +2,9 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
-from potluck.pots.models import Pot
 from potluck.games.models import Game
+from potluck.pots.models import Pot
+from potluck.pots.forms import PotAddGameForm
 
 
 class PotListView(generic.ListView):
@@ -22,9 +23,9 @@ class PotCreateView(generic.CreateView):
     fields = ("name",)
 
 
-class GameAddView(generic.CreateView):
+class PotAddGameView(generic.CreateView):
     model = Game
-    fields = ("teams", "pot")
+    form_class = PotAddGameForm
     template_name = "pots/game_add.html"
 
     def setup(self, request, *args, **kwargs):
