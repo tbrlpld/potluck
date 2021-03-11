@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Add game</h1>
-    {{ form.as_p }}
-    {{ pot_id }}
+    <h1>{{pot.name }}: Add game</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Add Game">
+    </form>
 
 {% endblock content %}

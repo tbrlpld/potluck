@@ -24,7 +24,6 @@ class PotCreateView(generic.CreateView):
 
 class GameAddView(generic.CreateView):
     model = Game
-    success_url = reverse_lazy("pots:list")
     fields = ("teams", "pot")
     template_name = "pots/game_add.html"
 
@@ -41,3 +40,6 @@ class GameAddView(generic.CreateView):
         initial = super().get_initial()
         initial["pot"] = self.kwargs["pot_id"]
         return initial
+
+    def get_success_url(self):
+        return reverse_lazy("pots:detail", kwargs={"pk": self.pot.id})
