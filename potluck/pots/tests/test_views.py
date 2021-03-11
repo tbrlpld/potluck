@@ -17,3 +17,15 @@ class TestPotDetailView:
 
         assert response.status_code == HTTPStatus.OK
         assert pot.name in str(response.content)
+
+
+@pytest.mark.django_db
+class TestAddGameView:
+    def test_pot_in_context(self):
+        pot = PotFactory.create()
+        url = reverse("pots:add_game", kwargs={"pot_id": pot.id})
+        client = Client()
+
+        response = client.get(url)
+
+        assert pot == response.context["pot"]
