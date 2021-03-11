@@ -23,9 +23,9 @@ class Game(models.Model):
     )
 
     def get_team_names(self):
-        teams = self.teams.values_list("id", "name")[:2]
+        teams = self.teams.values_list("id", "name")
         return [team[1] for team in teams]
 
     def __str__(self):
         team_names = self.get_team_names()
-        return f"{team_names[0]} vs {team_names[1]}"
+        return " vs ".join(team_names)
