@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -27,9 +28,13 @@ class GameAddView(generic.CreateView):
     fields = ("teams", "pot")
     template_name = "pots/game_add.html"
 
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.pot = get_object_or_404(Pot, pk=self.kwargs["pot_id"])
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["pot_id"] = self.kwargs["pot_id"]
+        context["pot"] = self.pot
         return context
 
     def get_initial(self):
