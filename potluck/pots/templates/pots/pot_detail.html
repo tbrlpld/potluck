@@ -14,6 +14,6 @@
         </p>
     {% endif %}
     <p>
-        <a href="">Add game</a>
+        <a href="{% url 'pots:add_game' pot.pk %}">Add game</a>
     </p>
 {% endblock content %}
