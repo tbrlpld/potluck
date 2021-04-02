@@ -5,7 +5,12 @@
     {% if pot.games %}
         <ul>
             {% for game in pot.games.all  %}
-                <li>{{ game }} <a href="{% url 'games:delete' game.pk %}">delete</a></li>
+                <li>{{ game }}
+                    <form action="{% url 'games:delete' game.pk %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Delete">
+                    </form>
+                </li>
             {% endfor %}
         </ul>
     {% else %}
