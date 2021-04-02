@@ -12,6 +12,7 @@ class AddGameForm(forms.ModelForm):
             validators.MaxLengthValidator(limit_value=2),
             validators.MinLengthValidator(limit_value=2),
         ],
+        widget=forms.CheckboxSelectMultiple,
     )
 
     class Meta:
