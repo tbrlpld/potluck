@@ -2,7 +2,6 @@ from django.db import models
 
 from potluck.teams.models import Team
 from potluck.pots.models import Pot
-from potluck.games.validators import validate_len
 
 
 class Game(models.Model):
