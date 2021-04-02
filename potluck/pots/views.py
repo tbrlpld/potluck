@@ -4,7 +4,7 @@ from django.views import generic
 
 from potluck.games.models import Game
 from potluck.pots.models import Pot
-from potluck.pots.forms import PotAddGameForm
+from potluck.pots.forms import AddGameForm
 
 
 class PotListView(generic.ListView):
@@ -25,7 +25,7 @@ class PotCreateView(generic.CreateView):
 
 class PotAddGameView(generic.CreateView):
     model = Game
-    form_class = PotAddGameForm
+    form_class = AddGameForm
     template_name = "pots/game_add.html"
 
     def setup(self, request, *args, **kwargs):
