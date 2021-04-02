@@ -5,7 +5,7 @@
     {% if pot.games %}
         <ul>
             {% for game in pot.games.all  %}
-                <li>{{ game }}</li>
+                <li>{{ game }} <a href="{% url 'games:delete' game.pk %}">delete</a></li>
             {% endfor %}
         </ul>
     {% else %}

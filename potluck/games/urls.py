@@ -6,5 +6,5 @@ app_name = "games"
 
 urlpatterns = [
     # path("", views.GameListView.as_view(), name="list"),
-    # path("create/", views.GameCreateView.as_view(), name="create"),
+    path("<int:pk>/delete/", views.GameDeleteView.as_view(), name="delete"),
 ]
