@@ -7,17 +7,6 @@
   <header>
     <a href="/"><strong>Potluck</strong></a>
   </header>
-
-  <nav>
-    <ul>
-      {% if request.user.is_authenticated %}
-        <li>Hello {{request.user.username }} <a href="{% url 'logout' %}"><strong>Logout</strong></a></li>
-      {% else %}
-        <li><a href="{% url 'login' %}"><strong>Login</strong></a></li>
-      {% endif %}
-
-    </ul>
-  </nav>
   {% block content %}
   {% endblock %}
 </body>
