@@ -4,33 +4,30 @@ from django.views import generic as generic_views
 
 from potluck.games.models import Game
 from potluck.picks.models import GamePick
-from potluck.picks.forms import CreateGamePickForm, GamePickFormset
+from potluck.picks.forms import GamePickFormset, CreatePickForm
 from potluck.picks.models import Pot
 
 
-class CreateGamePickView(generic_views.CreateView):
-    model = GamePick
-    form_class = CreateGamePickForm
+class CreatePickView(generic_views.CreateView):
+    form_class = CreatePickForm
+    template_name = "picks/create.html"
 
     def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
-        game_id = self.kwargs.get("game_id")
-        self.game = shortcuts.get_object_or_404(Game, pk=game_id)
+        super().setup(request)
+        self.pot = Pot.objects.first()
 
     def get_initial(self):
         initial = super().get_initial()
-        initial["game"] = self.game
+        initial["pot"] = self.pot
         return initial
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["game"] = self.game
-        return context
+    def get_success_url(self):
+        return urls.reverse_lazy("picks:pick_games")
 
 
-class CreatePickView(generic_views.FormView):
+class AddGamePicksView(generic_views.FormView):
     form_class = GamePickFormset
-    template_name = "picks/pick_formset.html"
+    template_name = "picks/add_games.html"
 
     def setup(self, request, *args, **kwargs):
         super().setup(request)
@@ -41,6 +38,11 @@ class CreatePickView(generic_views.FormView):
         for game in self.pot.games.all():
             initial.append({"game": game})
         return initial
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context["pot"] = self.pot
+        return context
 
     def form_valid(self, formset):
         for form in formset:

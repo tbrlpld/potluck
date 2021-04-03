@@ -1,11 +1,11 @@
 from django import urls
 
-from potluck.picks.views import CreateGamePickView, CreatePickView
+from potluck.picks.views import CreatePickView, AddGamePicksView
 
 
 app_name = "picks"
 
 urlpatterns = [
-    urls.path("pick/", CreatePickView.as_view(), name="pick"),
-    urls.path("create/<int:game_id>/", CreateGamePickView.as_view(), name="create"),
+    urls.path("create/", CreatePickView.as_view(), name="create"),
+    urls.path("pick-games/", AddGamePicksView.as_view(), name="pick_games"),
 ]
