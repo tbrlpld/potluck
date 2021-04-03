@@ -18,8 +18,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("accounts/", include("django.contrib.auth.urls")),
+    # path("accounts/", include("django.contrib.auth.urls")),
     # path("", include("potluck.home.urls", namespace="home")),
+    path("picks/", include("potluck.picks.urls", namespace="picks")),
     path("", include("potluck.pots.urls", namespace="pots")),
     path("games/", include("potluck.games.urls", namespace="games")),
 ]
