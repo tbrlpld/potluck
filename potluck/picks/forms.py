@@ -6,10 +6,10 @@ from potluck.picks.models import GamePick
 class CreateGamePickForm(forms.ModelForm):
     class Meta:
         model = GamePick
-        fields = ("game", "pick")
+        fields = ("game", "picked_team")
         widgets = {
             "game": forms.HiddenInput(),
-            "pick": forms.RadioSelect,
+            "picked_team": forms.RadioSelect,
         }
 
     def __init__(self, *args, **kwargs):
@@ -19,4 +19,7 @@ class CreateGamePickForm(forms.ModelForm):
             raise ValueError(
                 "{0} needs receive a game as initial data.".format(self.__class__)
             )
-        self.fields["pick"].queryset = self.initial["game"].teams
+        self.fields["picked_team"].queryset = self.initial["game"].teams
+
+
+GamePickFormset = forms.formset_factory(CreateGamePickForm, extra=0)

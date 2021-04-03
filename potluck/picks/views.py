@@ -3,7 +3,8 @@ from django.views import generic as generic_views
 
 from potluck.games.models import Game
 from potluck.picks.models import GamePick
-from potluck.picks.forms import CreateGamePickForm
+from potluck.picks.forms import CreateGamePickForm, GamePickFormset
+from potluck.picks.models import Pot
 
 
 class CreateGamePickView(generic_views.CreateView):
@@ -24,3 +25,18 @@ class CreateGamePickView(generic_views.CreateView):
         context = super().get_context_data(**kwargs)
         context["game"] = self.game
         return context
+
+
+class CreatePickView(generic_views.FormView):
+    form_class = GamePickFormset
+    template_name = "picks/pick_formset.html"
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request)
+        self.pot = Pot.objects.first()
+
+    def get_initial(self):
+        initial = []
+        for game in self.pot.games.all():
+            initial.append({"game": game})
+        return initial
