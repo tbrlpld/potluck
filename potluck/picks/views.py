@@ -1,4 +1,5 @@
 from django import shortcuts
+from django import urls
 from django.views import generic as generic_views
 
 from potluck.games.models import Game
@@ -40,3 +41,11 @@ class CreatePickView(generic_views.FormView):
         for game in self.pot.games.all():
             initial.append({"game": game})
         return initial
+
+    def form_valid(self, formset):
+        for form in formset:
+            form.save()
+        return super().form_valid(formset)
+
+    def get_success_url(self):
+        return urls.reverse_lazy("pots:list")
