@@ -40,6 +40,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     "potluck.games",
     "potluck.home",
+    "potluck.picks",
     "potluck.pots",
     "potluck.registration",
     "potluck.teams",
