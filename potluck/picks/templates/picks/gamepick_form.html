@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Create Game Pick</h1>
+    <h1>Take your pick for {{ game }}</h1>
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        <input type="submit" value="Place pick">
     </form>
 {% endblock content %}
