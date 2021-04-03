@@ -9,6 +9,7 @@ class CreateGamePickForm(forms.ModelForm):
         fields = ("game", "pick")
         widgets = {
             "game": forms.HiddenInput(),
+            "pick": forms.RadioSelect,
         }
 
     def __init__(self, *args, **kwargs):
