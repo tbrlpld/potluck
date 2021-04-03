@@ -15,9 +15,10 @@ class CreatePickForm(forms.ModelForm):
 class CreateGamePickForm(forms.ModelForm):
     class Meta:
         model = GamePick
-        fields = ("game", "picked_team")
+        fields = ("game", "pick", "picked_team")
         widgets = {
             "game": forms.HiddenInput(),
+            "pick": forms.HiddenInput(),
             "picked_team": forms.RadioSelect,
         }
 

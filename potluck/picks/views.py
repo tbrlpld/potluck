@@ -3,7 +3,7 @@ from django import urls
 from django.views import generic as generic_views
 
 from potluck.games.models import Game
-from potluck.picks.models import GamePick
+from potluck.picks.models import GamePick, Pick
 from potluck.picks.forms import GamePickFormset, CreatePickForm
 from potluck.picks.models import Pot
 
@@ -14,7 +14,8 @@ class CreatePickView(generic_views.CreateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request)
-        self.pot = Pot.objects.first()
+        self.pot_id = kwargs.get("pot_id")
+        self.pot = shortcuts.get_object_or_404(Pot, pk=self.pot_id)
 
     def get_initial(self):
         initial = super().get_initial()
@@ -22,7 +23,10 @@ class CreatePickView(generic_views.CreateView):
         return initial
 
     def get_success_url(self):
-        return urls.reverse_lazy("picks:pick_games")
+        return urls.reverse_lazy(
+            "picks:pick_games",
+            kwargs={"pot_id": self.pot_id, "pick_id": self.object.id},
+        )
 
 
 class AddGamePicksView(generic_views.FormView):
@@ -31,16 +35,24 @@ class AddGamePicksView(generic_views.FormView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request)
-        self.pot = Pot.objects.first()
+        self.pot_id = kwargs.get("pot_id")
+        self.pot = shortcuts.get_object_or_404(Pot, pk=self.pot_id)
+        self.pick_id = kwargs.get("pick_id")
+        self.pick = shortcuts.get_object_or_404(Pick, pk=self.pick_id)
 
     def get_initial(self):
         initial = []
         for game in self.pot.games.all():
-            initial.append({"game": game})
+            initial.append(
+                {
+                    "game": game,
+                    "pick": self.pick,
+                }
+            )
         return initial
 
-    def get_context_data(self):
-        context = super().get_context_data()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context["pot"] = self.pot
         return context
 
