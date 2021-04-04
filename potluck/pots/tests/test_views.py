@@ -60,15 +60,3 @@ class TestPotCreateView:
 
         assert response.status_code == HTTPStatus.OK
         assert Pot.objects.first().name == "Test Pot"
-
-
-@pytest.mark.django_db
-class TestAddGameView:
-    def test_pot_in_context(self):
-        pot = PotFactory.create()
-        url = reverse("game_add", kwargs={"pot_id": pot.id})
-        client = Client()
-
-        response = client.get(url)
-
-        assert pot == response.context["pot"]

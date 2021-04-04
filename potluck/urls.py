@@ -14,11 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 
-from potluck.games.views import GameDeleteView
+from potluck.games.views import GameAddView, GameDeleteView
 from potluck.picks.views import CreatePickView, AddGamePicksView
-from potluck.pots.views import PotListView, PotCreateView, PotDetailView, PotAddGameView
+from potluck.pots.views import PotListView, PotCreateView, PotDetailView
 
 
 urlpatterns = [
@@ -29,7 +29,7 @@ urlpatterns = [
     path("", PotListView.as_view(), name="pots_list"),
     path("pots/create/", PotCreateView.as_view(), name="pot_create"),
     path("pots/<int:pk>/", PotDetailView.as_view(), name="pot_detail"),
-    path("pots/<int:pot_id>/add-game", PotAddGameView.as_view(), name="game_add"),
+    path("pots/<int:pot_id>/add-game", GameAddView.as_view(), name="game_add"),
     path(
         "pots/<int:pot_id>/picks/create", CreatePickView.as_view(), name="pick_create"
     ),
