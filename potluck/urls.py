@@ -16,11 +16,29 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from potluck.games.views import GameDeleteView
+from potluck.picks.views import CreatePickView, AddGamePicksView
+from potluck.pots.views import PotListView, PotCreateView, PotDetailView, PotAddGameView
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     # path("accounts/", include("django.contrib.auth.urls")),
-    # path("", include("potluck.home.urls", namespace="home")),
-    path("picks/", include("potluck.picks.urls", namespace="picks")),
-    path("", include("potluck.pots.urls", namespace="pots")),
-    path("games/", include("potluck.games.urls", namespace="games")),
+    # path("", include("potluck.home.urls", name§space="home")),
+    #
+    path("", PotListView.as_view(), name="pots_list"),
+    path("pots/create/", PotCreateView.as_view(), name="pot_create"),
+    path("pots/<int:pk>/", PotDetailView.as_view(), name="pot_detail"),
+    path("pots/<int:pot_id>/add-game", PotAddGameView.as_view(), name="game_add"),
+    path(
+        "pots/<int:pot_id>/picks/create", CreatePickView.as_view(), name="pick_create"
+    ),
+    path(
+        "pots/<int:pot_id>/picks/<int:pick_id>/pick-games",
+        AddGamePicksView.as_view(),
+        name="games_pick",
+    ),
+    #
+    path("games/<int:pk>/delete/", GameDeleteView.as_view(), name="game_delete"),
+    #
 ]

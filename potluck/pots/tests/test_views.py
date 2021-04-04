@@ -10,7 +10,7 @@ from potluck.pots.tests.factories import PotFactory
 class TestPotDetailView:
     def test_pot_name_in_detail_view(self):
         pot = PotFactory.create()
-        url = reverse("pots:detail", kwargs={"pk": pot.id})
+        url = reverse("pot_detail", kwargs={"pk": pot.id})
         client = Client()
 
         response = client.get(url)
@@ -23,7 +23,7 @@ class TestPotDetailView:
 class TestAddGameView:
     def test_pot_in_context(self):
         pot = PotFactory.create()
-        url = reverse("pots:add_game", kwargs={"pot_id": pot.id})
+        url = reverse("game_add", kwargs={"pot_id": pot.id})
         client = Client()
 
         response = client.get(url)

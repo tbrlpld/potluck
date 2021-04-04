@@ -6,7 +6,7 @@
         <ul>
             {% for game in pot.games.all  %}
                 <li style="padding-bottom: 1rem">{{ game }}
-                    <form style="display: inline-block; margin-left: 1rem" action="{% url 'games:delete' game.pk %}" method="post">
+                    <form style="display: inline-block; margin-left: 1rem" action="{% url 'game_delete' game.pk %}" method="post">
                         {% csrf_token %}
                         <input type="submit" value="Delete">
                     </form>
@@ -19,6 +19,6 @@
         </p>
     {% endif %}
     <p>
-        <a href="{% url 'pots:add_game' pot.pk %}">Add game</a>
+        <a href="{% url 'game_add' pot.pk %}">Add game</a>
     </p>
 {% endblock content %}

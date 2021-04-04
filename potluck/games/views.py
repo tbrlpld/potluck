@@ -15,4 +15,4 @@ class GameDeleteView(gerneic_views.DeleteView):
         self.pot = self.game.pot
 
     def get_success_url(self):
-        return reverse_lazy("pots:detail", kwargs={"pk": self.pot.id})
+        return reverse_lazy("pot_detail", kwargs={"pk": self.pot.id})

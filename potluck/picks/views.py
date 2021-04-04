@@ -24,7 +24,7 @@ class CreatePickView(generic_views.CreateView):
 
     def get_success_url(self):
         return urls.reverse_lazy(
-            "picks:pick_games",
+            "games_pick",
             kwargs={"pot_id": self.pot_id, "pick_id": self.object.id},
         )
 
@@ -62,4 +62,4 @@ class AddGamePicksView(generic_views.FormView):
         return super().form_valid(formset)
 
     def get_success_url(self):
-        return urls.reverse_lazy("pots:list")
+        return urls.reverse_lazy("pots_list")
