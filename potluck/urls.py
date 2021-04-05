@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from potluck.games.views import GameAddView, GameDeleteView
-from potluck.picks.views import CreatePickView, AddGamePicksView
+from potluck.picks.views import pick_create_view
 from potluck.pots.views import PotListView, PotCreateView, PotDetailView
 
 
@@ -31,12 +31,9 @@ urlpatterns = [
     path("pots/<int:pk>/", PotDetailView.as_view(), name="pot_detail"),
     path("pots/<int:pot_id>/add-game", GameAddView.as_view(), name="game_add"),
     path(
-        "pots/<int:pot_id>/picks/create", CreatePickView.as_view(), name="pick_create"
-    ),
-    path(
-        "pots/<int:pot_id>/picks/<int:pick_id>/pick-games",
-        AddGamePicksView.as_view(),
-        name="games_pick",
+        "pots/<int:pot_id>/picks/create",
+        pick_create_view,
+        name="pick_create",
     ),
     #
     path("games/<int:pk>/delete/", GameDeleteView.as_view(), name="game_delete"),

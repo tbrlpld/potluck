@@ -1,65 +1,54 @@
+from django import forms
 from django import shortcuts
 from django import urls
-from django.views import generic as generic_views
 
-from potluck.games.models import Game
-from potluck.picks.models import GamePick, Pick
-from potluck.picks.forms import GamePickFormset, CreatePickForm
+from potluck.picks.forms import CreateGamePickForm, CreatePickForm
 from potluck.picks.models import Pot
 
 
-class CreatePickView(generic_views.CreateView):
-    form_class = CreatePickForm
-    template_name = "picks/create.html"
+def pick_create_view(request, pot_id):
+    pot = shortcuts.get_object_or_404(Pot, pk=pot_id)
+    CreateGamePickFormset = forms.formset_factory(
+        CreateGamePickForm,
+        min_num=pot.games.count(),
+        max_num=pot.games.count(),
+        validate_min=True,
+        validate_max=True,
+        extra=0,
+    )
+    initial_pick_form = {"pot": pot}
+    initial_game_pick_formset = []
+    for game in pot.games.all():
+        initial_game_pick_formset.append({"game": game})
 
-    def setup(self, request, *args, **kwargs):
-        super().setup(request)
-        self.pot_id = kwargs.get("pot_id")
-        self.pot = shortcuts.get_object_or_404(Pot, pk=self.pot_id)
-
-    def get_initial(self):
-        initial = super().get_initial()
-        initial["pot"] = self.pot
-        return initial
-
-    def get_success_url(self):
-        return urls.reverse_lazy(
-            "games_pick",
-            kwargs={"pot_id": self.pot_id, "pick_id": self.object.id},
+    if request.method == "POST":
+        create_pick_form = CreatePickForm(request.POST, initial=initial_pick_form)
+        create_game_pick_formset = CreateGamePickFormset(
+            request.POST, initial=initial_game_pick_formset
         )
 
+        if all([create_pick_form.is_valid(), create_game_pick_formset.is_valid()]):
+            pick = create_pick_form.save()
 
-class AddGamePicksView(generic_views.FormView):
-    form_class = GamePickFormset
-    template_name = "picks/add_games.html"
+            for form in create_game_pick_formset:
+                if form.cleaned_data:
+                    game_pick = form.save(commit=False)
+                    game_pick.pick = pick
+                    game_pick.save()
 
-    def setup(self, request, *args, **kwargs):
-        super().setup(request)
-        self.pot_id = kwargs.get("pot_id")
-        self.pot = shortcuts.get_object_or_404(Pot, pk=self.pot_id)
-        self.pick_id = kwargs.get("pick_id")
-        self.pick = shortcuts.get_object_or_404(Pick, pk=self.pick_id)
+            return shortcuts.redirect(urls.reverse_lazy("pots_list"))
+    else:
+        create_pick_form = CreatePickForm(initial=initial_pick_form)
+        create_game_pick_formset = CreateGamePickFormset(
+            initial=initial_game_pick_formset
+        )
 
-    def get_initial(self):
-        initial = []
-        for game in self.pot.games.all():
-            initial.append(
-                {
-                    "game": game,
-                    "pick": self.pick,
-                }
-            )
-        return initial
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["pot"] = self.pot
-        return context
-
-    def form_valid(self, formset):
-        for form in formset:
-            form.save()
-        return super().form_valid(formset)
-
-    def get_success_url(self):
-        return urls.reverse_lazy("pots_list")
+    context = {
+        "create_pick_form": create_pick_form,
+        "create_game_pick_formset": create_game_pick_formset,
+    }
+    return shortcuts.render(
+        request,
+        template_name="picks/create.html",
+        context=context,
+    )

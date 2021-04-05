@@ -32,4 +32,4 @@ class CreateGamePickForm(forms.ModelForm):
         self.fields["picked_team"].queryset = self.initial["game"].teams
 
 
-GamePickFormset = forms.formset_factory(CreateGamePickForm, extra=0)
+# GamePickFormset = forms.formset_factory(CreateGamePickForm, extra=0)

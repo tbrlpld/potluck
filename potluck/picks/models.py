@@ -15,7 +15,7 @@ class Pick(models.Model):
 
 class GamePick(models.Model):
     pick = models.ForeignKey(
-        Pick, on_delete=models.CASCADE, related_name="game_picks", null=True
+        Pick, on_delete=models.CASCADE, related_name="game_picks", null=True, blank=True
     )
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="game_picks")
     picked_team = models.ForeignKey(
