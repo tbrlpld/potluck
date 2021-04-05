@@ -14,7 +14,7 @@ class TestGameAddForm:
         assert validation_passed is False
 
     def test_is_valid_raises_error_with_one_team(self):
-        team_1 = TeamFactory()
+        team_1 = TeamFactory.create()
         form = GameAddForm({"teams": [team_1]})
 
         validation_passed = form.is_valid()
