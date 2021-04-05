@@ -1,5 +1,6 @@
 from django.db import models
 from django.core import validators
+from django.core import exceptions
 
 from potluck.teams.models import Team
 from potluck.pots.models import Pot
@@ -30,10 +31,19 @@ class Game(models.Model):
         null=True,
     )
 
-    def clean_fields(self, exclude=[]):
-        if "teams" not in exclude:
-            validators.MinLengthValidator(limit_value=2)(self.teams.all())
-            validators.MaxLengthValidator(limit_value=2)(self.teams.all())
+    def clean_fields(self, exclude=None):
+        errors = {}
+        try:
+            super().clean_fields(exclude=exclude)
+        except exceptions.ValidationError as e:
+            errors.update(e.message_dict)
+
+        if not exclude or "teams" not in exclude:
+            if self.teams.count() != 2:
+                errors["teams"] = ["Please define exactly two teams."]
+
+        if errors:
+            raise exceptions.ValidationError(message=errors)
 
     # def get_team_names(self):
     #     teams = self.teams.values_list("id", "name")
