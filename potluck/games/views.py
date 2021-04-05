@@ -1,11 +1,9 @@
-from django.views import generic as generic_views
-from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views import generic as generic_views
 
-
-from potluck.games.models import Game
 from potluck.games.forms import GameAddForm
-from potluck.games.models import Pot
+from potluck.games.models import Game, Pot
 
 
 class GameAddView(generic_views.CreateView):

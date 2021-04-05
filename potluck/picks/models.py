@@ -1,8 +1,8 @@
 from django.db import models
 
 from potluck.games.models import Game
-from potluck.teams.models import Team
 from potluck.pots.models import Pot
+from potluck.teams.models import Team
 
 
 class Pick(models.Model):

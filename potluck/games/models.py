@@ -1,9 +1,8 @@
+from django.core import exceptions, validators
 from django.db import models
-from django.core import validators
-from django.core import exceptions
 
-from potluck.teams.models import Team
 from potluck.pots.models import Pot
+from potluck.teams.models import Team
 
 
 class Game(models.Model):

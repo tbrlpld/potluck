@@ -1,8 +1,7 @@
 from django import forms
 from django.core import validators
 
-from potluck.games.models import Game
-from potluck.games.models import Team
+from potluck.games.models import Game, Team
 
 
 class GameAddForm(forms.ModelForm):

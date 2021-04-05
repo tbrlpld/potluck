@@ -1,7 +1,8 @@
 from http import HTTPStatus
-from django.urls import reverse
-from django.test import Client
+
 import pytest
+from django.test import Client
+from django.urls import reverse
 
 from potluck.games.models import Game
 from potluck.games.tests.factories import GameFactory

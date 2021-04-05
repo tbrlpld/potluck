@@ -1,7 +1,8 @@
 from http import HTTPStatus
-from django.urls import reverse
-from django.test import Client
+
 import pytest
+from django.test import Client
+from django.urls import reverse
 
 from potluck.pots.models import Pot
 from potluck.pots.tests.factories import PotFactory
