@@ -1,11 +1,11 @@
 import http
 
-from django import test
-from django import urls
 import pytest
+from django import test, urls
 
-from potluck.pots.tests.factories import PotFactory
 from potluck.games.tests.factories import GameFactory
+from potluck.picks.models import Pick, GamePick
+from potluck.pots.tests.factories import PotFactory
 
 
 @pytest.mark.django_db
@@ -30,3 +30,34 @@ class TestPickCreateView:
 
         assert str(game_1) in str(response.content)
         assert str(game_2) in str(response.content)
+
+    def test_post_creates_pick_and_game_picks(self):
+        pot = PotFactory.create()
+        game_1 = GameFactory.create_with_teams(pot=pot)
+        game_2 = GameFactory.create_with_teams(pot=pot)
+        picked_team_1 = game_1.teams.first()
+        picked_team_2 = game_2.teams.first()
+        picker_name = "Test Picker"
+        data = {
+            "pot": pot.id,
+            "picker": picker_name,
+            "form-INITIAL_FORMS": 2,
+            "form-TOTAL_FORMS": 2,
+            "form-MAX_NUM_FORMS": 2,
+            "form-MIN_NUM_FORMS": 2,
+            "form-0-game": game_1.id,
+            "form-0-picked_team": picked_team_1.id,
+            "form-1-game": game_2.id,
+            "form-1-picked_team": picked_team_2.id,
+        }
+        url = urls.reverse("pick_create", kwargs={"pot_id": pot.id})
+        client = test.Client()
+
+        response = client.post(url, data=data, follow=True)
+
+        assert response.status_code == http.HTTPStatus.OK
+        assert Pick.objects.count() == 1
+        assert GamePick.objects.count() == 2
+        pick = Pick.objects.first()
+        assert pick.game_picks.first().picked_team == picked_team_1
+        assert pick.game_picks.last().picked_team == picked_team_2
