@@ -1,11 +1,19 @@
 from django.db import models
+from django.core import validators
 
 from potluck.teams.models import Team
 from potluck.pots.models import Pot
 
 
 class Game(models.Model):
-    teams = models.ManyToManyField(Team, related_name="+")
+    teams = models.ManyToManyField(
+        Team,
+        related_name="+",
+        validators=[
+            validators.MaxLengthValidator(limit_value=2),
+            validators.MinLengthValidator(limit_value=2),
+        ],
+    )
     winning_team = models.ForeignKey(
         Team,
         on_delete=models.CASCADE,
@@ -21,6 +29,17 @@ class Game(models.Model):
         blank=True,
         null=True,
     )
+
+    # def full_clean(self):
+    #     from django.core.exceptions import ValidationError
+
+    #     raise ValidationError("Error")
+
+    def clean_fields(self, exclude):
+        # from django.core.exceptions import ValidationError
+        # raise ValidationError("Error")
+        if "teams" not in exclude:
+            validators.MinLengthValidator(limit_value=2)(self.teams.all())
 
     def get_team_names(self):
         teams = self.teams.values_list("id", "name")
