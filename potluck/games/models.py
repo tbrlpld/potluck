@@ -30,21 +30,15 @@ class Game(models.Model):
         null=True,
     )
 
-    # def full_clean(self):
-    #     from django.core.exceptions import ValidationError
-
-    #     raise ValidationError("Error")
-
-    def clean_fields(self, exclude):
-        # from django.core.exceptions import ValidationError
-        # raise ValidationError("Error")
+    def clean_fields(self, exclude=[]):
         if "teams" not in exclude:
             validators.MinLengthValidator(limit_value=2)(self.teams.all())
+            validators.MaxLengthValidator(limit_value=2)(self.teams.all())
 
-    def get_team_names(self):
-        teams = self.teams.values_list("id", "name")
-        return [team[1] for team in teams]
+    # def get_team_names(self):
+    #     teams = self.teams.values_list("id", "name")
+    #     return [team[1] for team in teams]
 
-    def __str__(self):
-        team_names = self.get_team_names()
-        return " vs ".join(team_names)
+    # def __str__(self):
+    #     team_names = self.get_team_names()
+    #     return " vs ".join(team_names)
