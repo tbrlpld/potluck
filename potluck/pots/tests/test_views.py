@@ -9,7 +9,7 @@ from potluck.pots.tests.factories import PotFactory
 
 @pytest.mark.django_db
 class TestPotListView:
-    def test_pot_list_empty(self):
+    def test_get_success(self):
         url = reverse("pots_list")
         client = Client()
 
@@ -30,7 +30,17 @@ class TestPotListView:
 
 @pytest.mark.django_db
 class TestPotDetailView:
-    def test_pot_name_in_detail_view(self):
+    def test_get_success(self):
+        pot = PotFactory.create()
+        url = reverse("pot_detail", kwargs={"pk": pot.id})
+        client = Client()
+
+        response = client.get(url)
+
+        assert response.status_code == HTTPStatus.OK
+        assert pot.name in str(response.content)
+
+    def test_pot_name_shown(self):
         pot = PotFactory.create()
         url = reverse("pot_detail", kwargs={"pk": pot.id})
         client = Client()
