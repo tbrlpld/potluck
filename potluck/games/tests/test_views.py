@@ -10,7 +10,7 @@ from potluck.pots.tests.factories import PotFactory
 
 @pytest.mark.django_db
 class TestGameAddView:
-    def test_success_resonse(self):
+    def test_get_success(self):
         pot = PotFactory.create()
         url = reverse("game_add", kwargs={"pot_id": pot.id})
         client = Client()
