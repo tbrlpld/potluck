@@ -1,10 +1,11 @@
 import http
 
-import pytest
 from django import test, urls
 
+import pytest
+
 from potluck.games.tests.factories import GameFactory
-from potluck.picks.models import Pick, GamePick
+from potluck.picks.models import GamePick, Pick
 from potluck.pots.tests.factories import PotFactory
 
 
