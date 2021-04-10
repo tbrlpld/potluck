@@ -21,4 +21,7 @@
     <p>
         <a href="{% url 'game_add' pot.pk %}">Add game</a>
     </p>
+    <p>
+        Share this link for people to create their picks: <a href="{{ picks_url }}">{{ picks_url }}</a>
+    </p>
 {% endblock content %}
