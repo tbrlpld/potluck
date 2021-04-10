@@ -6,15 +6,7 @@
         {% csrf_token %}
         {{ create_pick_form.as_p }}
 
-        {{ create_game_pick_formset.management_form }}
-        {% for form in create_game_pick_formset %}
-            <p>
-                {{ form.initial.game }}
-                {{ form.picked_team }}
-            </p>
-        {% endfor %}
-
-        {% comment %} {{ create_game_pick_formset.as_p }} {% endcomment %}
+        {{ create_game_pick_formset.as_p }}
         <input type="submit" value="Place picks">
     </form>
 {% endblock content %}
