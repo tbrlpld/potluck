@@ -22,6 +22,12 @@
         <a href="{% url 'game_add' pot.pk %}">Add game</a>
     </p>
     <p>
-        Share this link for people to create their picks: <a href="{{ picks_url }}">{{ picks_url }}</a>
+        <a href="{% url 'set_winners' pot.pk %}">Set winning teams</a>
+    </p>
+    <p>
+        Participants in the pot can place the picks here:
+        <p>
+            <a href="{{ picks_url }}">{{ picks_url }}</a>
+        </p>
     </p>
 {% endblock content %}

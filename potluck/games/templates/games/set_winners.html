@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <h1>Set winning team for each game</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ formset }}
+        <input type="submit" value="Set winners">
+    </form>
+
+{% endblock content %}

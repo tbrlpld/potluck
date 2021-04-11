@@ -1,9 +1,11 @@
-from django.shortcuts import get_object_or_404
+from django import forms
+from django import shortcuts
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
 
 from potluck.games.forms import GameAddForm, SetWinningTeamForm
-from potluck.games.models import Game, Pot
+from potluck.games.models import Game
+from potluck.pots.models import Pot
 
 
 class GameAddView(generic_views.CreateView):
@@ -13,7 +15,7 @@ class GameAddView(generic_views.CreateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.pot = get_object_or_404(Pot, pk=self.kwargs["pot_id"])
+        self.pot = shortcuts.get_object_or_404(Pot, pk=self.kwargs["pot_id"])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -35,17 +37,40 @@ class GameDeleteView(generic_views.DeleteView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.game = get_object_or_404(Game, pk=self.kwargs["pk"])
+        self.game = shortcuts.get_object_or_404(Game, pk=self.kwargs["pk"])
         self.pot = self.game.pot
 
     def get_success_url(self):
         return reverse_lazy("pot_detail", kwargs={"pk": self.pot.id})
 
 
-class SetWinningTeamView(generic_views.UpdateView):
-    model = Game
-    form_class = SetWinningTeamForm
+def set_winning_teams(request, pot_id):
+    pot = shortcuts.get_object_or_404(Pot, pk=pot_id)
+    formset_games = pot.games.all()
+    SetWinningTeamFormset = forms.modelformset_factory(
+        Game,
+        form=SetWinningTeamForm,
+        max_num=pot.games.count(),
+        min_num=pot.games.count(),
+        validate_max=True,
+        validate_min=True,
+        extra=0,
+    )
+    if request.method == "POST":
+        formset = SetWinningTeamFormset(request.POST, queryset=formset_games)
+        if formset.is_valid():
+            for form in formset:
+                form.save()
+            return shortcuts.redirect(
+                reverse_lazy("pot_detail", kwargs={"pk": pot.id})
+            )
+    else:
+        formset = SetWinningTeamFormset(queryset=formset_games)
 
-    def get_success_url(self):
-        game = self.get_object()
-        return reverse_lazy("pot_detail", kwargs={"pk": game.pot.id})
+    return shortcuts.render(
+        request,
+        template_name="games/set_winners.html",
+        context={
+            "formset": formset,
+        },
+    )
