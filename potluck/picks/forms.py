@@ -15,21 +15,20 @@ class CreatePickForm(forms.ModelForm):
 class CreateGamePickForm(forms.ModelForm):
     class Meta:
         model = GamePick
-        fields = ("game", "pick", "picked_team")
+        fields = ("game", "picked_team")
         widgets = {
             "game": forms.HiddenInput(),
-            "pick": forms.HiddenInput(),
             "picked_team": forms.RadioSelect,
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        game = self.initial.get("game")
-        if game is None:
+        self.game = self.initial.get("game")
+        if self.game is None:
             raise ValueError(
-                "{0} needs receive a game as initial data.".format(self.__class__)
-            )
-        self.fields["picked_team"].queryset = self.initial["game"].teams
+                "{0} needs receive a game as initial data.".format(
+                    self.__class__))
+        self.fields["picked_team"].queryset = self.game.teams
 
 
 # GamePickFormset = forms.formset_factory(CreateGamePickForm, extra=0)
