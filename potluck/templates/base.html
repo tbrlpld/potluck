@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Potluck</title>
+    <title>Potluck</title>
 </head>
 <body>
-  <header>
-    <a href="/"><strong>Potluck</strong></a>
-  </header>
-  {% block content %}
-  {% endblock %}
+    {% block header %}
+        <header>
+            <a href="/"><strong>Potluck</strong></a>
+        </header>
+    {% endblock header %}
+    {% block content %}
+    {% endblock %}
 </body>
 </html>

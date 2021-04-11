@@ -37,7 +37,11 @@ def pick_create_view(request, pot_id):
                 game_pick = game_pick_form.save(commit=False)
                 game_pick.save_with_pick(pick)
 
-            return shortcuts.redirect(urls.reverse_lazy("pots_list"))
+            return shortcuts.render(
+                request,
+                template_name="picks/thank_you.html",
+                context={"pot": pot},
+            )
     else:
         create_pick_form = CreatePickForm(initial=initial_pick_form)
         create_game_pick_formset = CreateGamePickFormset(
