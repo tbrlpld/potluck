@@ -29,6 +29,7 @@ class CreateGamePickForm(forms.ModelForm):
                 "{0} needs receive a game as initial data.".format(
                     self.__class__))
         self.fields["picked_team"].queryset = self.game.teams
+        self.fields["picked_team"].label = str(self.game)
 
 
 # GamePickFormset = forms.formset_factory(CreateGamePickForm, extra=0)
