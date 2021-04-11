@@ -20,33 +20,34 @@ def pick_create_view(request, pot_id):
         initial_game_pick_formset.append({"game": game})
 
     if request.method == "POST":
-        create_pick_form = CreatePickForm(request.POST, initial=initial_pick_form)
+        create_pick_form = CreatePickForm(
+            request.POST,
+            initial=initial_pick_form,
+        )
         create_game_pick_formset = CreateGamePickFormset(
-            request.POST, initial=initial_game_pick_formset
+            request.POST,
+            initial=initial_game_pick_formset,
         )
 
-        if all([create_pick_form.is_valid(), create_game_pick_formset.is_valid()]):
+        if all((create_pick_form.is_valid(),
+                create_game_pick_formset.is_valid())):
             pick = create_pick_form.save()
 
-            for form in create_game_pick_formset:
-                if form.cleaned_data:
-                    game_pick = form.save(commit=False)
-                    game_pick.pick = pick
-                    game_pick.save()
+            for game_pick_form in create_game_pick_formset:
+                game_pick = game_pick_form.save(commit=False)
+                game_pick.save_with_pick(pick)
 
             return shortcuts.redirect(urls.reverse_lazy("pots_list"))
     else:
         create_pick_form = CreatePickForm(initial=initial_pick_form)
         create_game_pick_formset = CreateGamePickFormset(
-            initial=initial_game_pick_formset
-        )
+            initial=initial_game_pick_formset)
 
-    context = {
-        "create_pick_form": create_pick_form,
-        "create_game_pick_formset": create_game_pick_formset,
-    }
     return shortcuts.render(
         request,
         template_name="picks/create.html",
-        context=context,
+        context={
+            "create_pick_form": create_pick_form,
+            "create_game_pick_formset": create_game_pick_formset,
+        },
     )
