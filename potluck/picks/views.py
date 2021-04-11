@@ -51,6 +51,7 @@ def pick_create_view(request, pot_id):
         request,
         template_name="picks/create.html",
         context={
+            "pot": pot,
             "create_pick_form": create_pick_form,
             "create_game_pick_formset": create_game_pick_formset,
         },

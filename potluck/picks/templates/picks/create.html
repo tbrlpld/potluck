@@ -3,6 +3,7 @@
 {% block header %}{% endblock header %}
 
 {% block content %}
+    <p>{{ pot.name }}</p>
     <h1>Take your picks!</h1>
     <form action="" method="post">
         {% csrf_token %}
