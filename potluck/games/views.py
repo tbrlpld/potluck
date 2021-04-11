@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
 
-from potluck.games.forms import GameAddForm
+from potluck.games.forms import GameAddForm, SetWinningTeamForm
 from potluck.games.models import Game, Pot
 
 
@@ -40,3 +40,12 @@ class GameDeleteView(generic_views.DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("pot_detail", kwargs={"pk": self.pot.id})
+
+
+class SetWinningTeamView(generic_views.UpdateView):
+    model = Game
+    form_class = SetWinningTeamForm
+
+    def get_success_url(self):
+        game = self.get_object()
+        return reverse_lazy("pot_detail", kwargs={"pk": game.pot.id})
