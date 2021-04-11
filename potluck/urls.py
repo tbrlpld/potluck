@@ -30,11 +30,13 @@ urlpatterns = [
     path("pots/<int:pk>/", PotDetailView.as_view(), name="pot_detail"),
     path("pots/<int:pot_id>/add-game", GameAddView.as_view(), name="game_add"),
     path(
-        "pots/<int:pot_id>/picks/create",
+        "pots/<int:pot_id>/picks/place",
         pick_create_view,
         name="pick_create",
     ),
     #
-    path("games/<int:pk>/delete/", GameDeleteView.as_view(), name="game_delete"),
+    path("games/<int:pk>/delete/",
+         GameDeleteView.as_view(),
+         name="game_delete"),
     #
 ]
