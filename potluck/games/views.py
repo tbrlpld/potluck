@@ -44,33 +44,34 @@ class GameDeleteView(generic_views.DeleteView):
         return reverse_lazy("pot_detail", kwargs={"pk": self.pot.id})
 
 
-def set_winning_teams(request, pot_id):
-    pot = shortcuts.get_object_or_404(Pot, pk=pot_id)
-    formset_games = pot.games.all()
-    SetWinningTeamFormset = forms.modelformset_factory(
-        Game,
-        form=SetWinningTeamForm,
-        max_num=pot.games.count(),
-        min_num=pot.games.count(),
-        validate_max=True,
-        validate_min=True,
-        extra=0,
-    )
-    if request.method == "POST":
-        formset = SetWinningTeamFormset(request.POST, queryset=formset_games)
-        if formset.is_valid():
-            for form in formset:
-                form.save()
-            return shortcuts.redirect(
-                reverse_lazy("pot_detail", kwargs={"pk": pot.id})
-            )
-    else:
-        formset = SetWinningTeamFormset(queryset=formset_games)
+class SetWinningTeamsView(generic_views.FormView):
+    template_name="games/set_winners.html"
 
-    return shortcuts.render(
-        request,
-        template_name="games/set_winners.html",
-        context={
-            "formset": formset,
-        },
-    )
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.pot_id = kwargs.get("pot_id")
+        self.pot = shortcuts.get_object_or_404(Pot, pk=self.pot_id)
+
+    def get_form_class(self):
+        return forms.modelformset_factory(
+            Game,
+            form=SetWinningTeamForm,
+            max_num=self.pot.games.count(),
+            min_num=self.pot.games.count(),
+            validate_max=True,
+            validate_min=True,
+            extra=0,
+        )
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({"queryset": self.pot.games.all()})
+        return kwargs
+
+    def form_valid(self, forms):
+        for form in forms:
+            form.save()
+        return shortcuts.redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy("pot_detail", kwargs={"pk": self.pot_id})

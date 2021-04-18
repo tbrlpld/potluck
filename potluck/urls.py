@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from potluck.games.views import GameAddView, GameDeleteView, set_winning_teams
+from potluck.games.views import GameAddView, GameDeleteView, SetWinningTeamsView
 from potluck.picks.views import pick_create_view
 from potluck.pots.views import PotCreateView, PotDetailView, PotListView
 
@@ -29,15 +29,21 @@ urlpatterns = [
     path("pots/create/", PotCreateView.as_view(), name="pot_create"),
     path("pots/<int:pk>/", PotDetailView.as_view(), name="pot_detail"),
     path("pots/<int:pot_id>/add-game", GameAddView.as_view(), name="game_add"),
-    path("pots/<int:pot_id>/winners", set_winning_teams, name="set_winners"),
+    path(
+        "pots/<int:pot_id>/winners",
+        SetWinningTeamsView.as_view(),
+        name="set_winners"
+    ),
     path(
         "pots/<int:pot_id>/picks/place",
         pick_create_view,
         name="pick_create",
     ),
     #
-    path("games/<int:pk>/delete/",
-         GameDeleteView.as_view(),
-         name="game_delete"),
+    path(
+        "games/<int:pk>/delete/",
+        GameDeleteView.as_view(),
+        name="game_delete",
+    ),
     #
 ]
