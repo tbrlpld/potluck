@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from potluck.games.views import GameAddView, GameDeleteView, SetWinningTeamsView
+from potluck.games.views import GameDeleteView
 from potluck.picks.views import pick_create_view
-from potluck.pots.views import PotCreateView, PotDetailView, PotListView
+from potluck.pots.views import PotCreateView, PotDetailView, PotListView, GameAddView, SetWinningTeamsView
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
