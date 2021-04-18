@@ -48,9 +48,14 @@ class TestSetWinningTeamsView:
 
         assert response.status_code == HTTPStatus.OK
 
+    def test_get_team_names(self, setup):
+        response = self.client.get(self.url)
 
-    # def test_get_team_names():
-    #     pass
+        assert response.status_code == HTTPStatus.OK
+        for team in self.game1.teams.all():
+            assert team.name in str(response.content)
+        for team in self.game2.teams.all():
+            assert team.name in str(response.content)
 
 
 @pytest.mark.django_db
