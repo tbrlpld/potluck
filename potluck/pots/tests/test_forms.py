@@ -1,6 +1,6 @@
 import pytest
 
-from potluck.games.forms import GameAddForm
+from potluck.pots.forms import GameAddForm
 from potluck.teams.tests.factories import TeamFactory
 
 
