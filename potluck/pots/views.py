@@ -30,7 +30,7 @@ class PotCreateView(generic.CreateView):
     fields = ("name",)
 
 
-class GameAddView(generic.CreateView):
+class AddGameView(generic.CreateView):
     model = Game
     form_class = GameAddForm
     template_name = "pots/game_add.html"
