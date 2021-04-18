@@ -32,6 +32,26 @@ class TestGameAddView:
 
 
 @pytest.mark.django_db
+class TestSetWinningTeamsView:
+
+    def test_get_success(self):
+        pot = PotFactory.create()
+        game1 = GameFactory.create_with_teams(pot=pot)
+        game2 = GameFactory.create_with_teams(pot=pot)
+        url = reverse("game_add", kwargs={"pot_id": pot.id})
+        client = Client()
+        assert pot.games.count() == 2
+
+        response = client.get(url)
+
+        assert response.status_code == HTTPStatus.OK
+
+
+    # def test_get_team_names():
+    #     pass
+
+
+@pytest.mark.django_db
 class TestGameDeleteView:
     def test_post_deletes_game(self):
         game = GameFactory.create_with_teams()

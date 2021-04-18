@@ -45,7 +45,7 @@ class GameDeleteView(generic_views.DeleteView):
 
 
 class SetWinningTeamsView(generic_views.FormView):
-    template_name="games/set_winners.html"
+    template_name = "games/set_winners.html"
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
