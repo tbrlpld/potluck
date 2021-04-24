@@ -12,7 +12,7 @@ from potluck.games.tests.factories import GameFactory
 @pytest.mark.django_db
 class TestGameDeleteView:
     def test_post_deletes_game(self):
-        game = GameFactory.create_with_teams()
+        game = GameFactory.create()
         url = reverse("game_delete", kwargs={"pk": game.id})
         client = Client()
         assert Game.objects.count() == 1

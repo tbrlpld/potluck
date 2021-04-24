@@ -11,12 +11,17 @@ class GameFactory(factory.django.DjangoModelFactory):
 
     pot = factory.SubFactory(PotFactory)
 
-    @classmethod
-    def create_with_teams(cls, **kwargs):
-        game = cls(**kwargs)
-        team_1 = TeamFactory.create()
-        team_2 = TeamFactory.create()
-        game.teams.add(team_1)
-        game.teams.add(team_2)
-        game.save()
-        return game
+    @factory.post_generation
+    def teams(self, create, extracted, **kwargs):
+        # if now called with the create method, do nothing.
+        if not create:
+            return
+
+        # If a list was passed into the create method, use that
+        if extracted:
+            for team in extracted:
+                self.teams.add(team)
+        # If noting was passed, create and add two teams to the game.
+        else:
+            self.teams.add(TeamFactory.create())
+            self.teams.add(TeamFactory.create())

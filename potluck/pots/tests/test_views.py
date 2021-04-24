@@ -102,8 +102,8 @@ class TestSetWinningTeamsView:
     @pytest.fixture
     def setup(self):
         self.pot = PotFactory.create()
-        self.game1 = GameFactory.create_with_teams(pot=self.pot)
-        self.game2 = GameFactory.create_with_teams(pot=self.pot)
+        self.game1 = GameFactory.create(pot=self.pot)
+        self.game2 = GameFactory.create(pot=self.pot)
         self.url = reverse("add_game", kwargs={"pot_id": self.pot.id})
         self.client = Client()
         assert self.pot.games.count() == 2
