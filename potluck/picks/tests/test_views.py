@@ -22,8 +22,8 @@ class TestPickCreateView:
 
     def test_get_display_game_titles(self):
         pot = PotFactory.create()
-        game_1 = GameFactory.create(pot=pot)
-        game_2 = GameFactory.create(pot=pot)
+        game_1 = pot.games.first()
+        game_2 = pot.games.last()
         url = urls.reverse("pick_create", kwargs={"pot_id": pot.id})
         client = test.Client()
 
@@ -34,8 +34,8 @@ class TestPickCreateView:
 
     def test_post_creates_pick_and_game_picks(self):
         pot = PotFactory.create()
-        game_1 = GameFactory.create(pot=pot)
-        game_2 = GameFactory.create(pot=pot)
+        game_1 = pot.games.first()
+        game_2 = pot.games.last()
         picked_team_1 = game_1.teams.first()
         picked_team_2 = game_2.teams.first()
         picker_name = "Test Picker"

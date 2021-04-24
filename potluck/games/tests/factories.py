@@ -1,15 +1,12 @@
 import factory
 
 from potluck.games.models import Game
-from potluck.pots.tests.factories import PotFactory
 from potluck.teams.tests.factories import TeamFactory
 
 
 class GameFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Game
-
-    pot = factory.SubFactory(PotFactory)
 
     @factory.post_generation
     def teams(self, create, extracted, **kwargs):

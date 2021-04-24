@@ -3,8 +3,10 @@ import pytest
 from potluck.games.tests.factories import GameFactory
 from potluck.picks.tests.factories import GamePickFactory
 
-# @pytest.mark.django_db
-# class TestPick:
+
+@pytest.mark.django_db
+class TestPick:
+    pass
 
 
 @pytest.mark.django_db
