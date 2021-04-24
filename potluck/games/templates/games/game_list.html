@@ -13,11 +13,11 @@
             {% endfor %}
         </ul>
         <div>
-            <a href="{% url 'game_add' %}">Add a game</a>
+            <a href="{% url 'add_game' %}">Add a game</a>
         </div>
     {% else %}
         <div>
-            No games here yet. Go <a href="{% url 'game_add' %}">create one</a>.
+            No games here yet. Go <a href="{% url 'add_game' %}">create one</a>.
         </div>
     {% endif %}
 {% endblock content %}

@@ -79,7 +79,7 @@ class TestPotCreateView:
 class TestGameAddView:
     def test_get_success(self):
         pot = PotFactory.create()
-        url = reverse("game_add", kwargs={"pot_id": pot.id})
+        url = reverse("add_game", kwargs={"pot_id": pot.id})
         client = Client()
 
         response = client.get(url)
@@ -88,7 +88,7 @@ class TestGameAddView:
 
     def test_pot_in_context(self):
         pot = PotFactory.create()
-        url = reverse("game_add", kwargs={"pot_id": pot.id})
+        url = reverse("add_game", kwargs={"pot_id": pot.id})
         client = Client()
 
         response = client.get(url)
@@ -104,7 +104,7 @@ class TestSetWinningTeamsView:
         self.pot = PotFactory.create()
         self.game1 = GameFactory.create_with_teams(pot=self.pot)
         self.game2 = GameFactory.create_with_teams(pot=self.pot)
-        self.url = reverse("game_add", kwargs={"pot_id": self.pot.id})
+        self.url = reverse("add_game", kwargs={"pot_id": self.pot.id})
         self.client = Client()
         assert self.pot.games.count() == 2
 

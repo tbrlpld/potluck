@@ -31,7 +31,7 @@ urlpatterns = [
     path("", PotListView.as_view(), name="pots_list"),
     path("pots/create/", PotCreateView.as_view(), name="pot_create"),
     path("pots/<int:pk>/", PotDetailView.as_view(), name="pot_detail"),
-    path("pots/<int:pot_id>/add-game", AddGameView.as_view(), name="game_add"),
+    path("pots/<int:pot_id>/add-game", AddGameView.as_view(), name="add_game"),
     path(
         "pots/<int:pot_id>/winners",
         SetWinningTeamsView.as_view(),
