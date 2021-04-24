@@ -17,4 +17,5 @@ class GamePickFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = GamePick
 
+    pick = factory.SubFactory(PickFactory)
     game = factory.SubFactory(GameFactory)

@@ -12,6 +12,9 @@ class Pick(models.Model):
     def __str__(self):
         return f"Pick {self.id}: {self.pot} - {self.picker}"
 
+    def count_correct(self):
+        return 0
+
 
 class GamePick(models.Model):
     pick = models.ForeignKey(
