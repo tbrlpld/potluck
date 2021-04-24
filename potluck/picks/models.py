@@ -31,4 +31,5 @@ class GamePick(models.Model):
         self.save()
 
     def is_correct(self):
+        """Return true if picked team is game's winning team."""
         return self.picked_team == self.game.winning_team
