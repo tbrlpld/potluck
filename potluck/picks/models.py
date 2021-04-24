@@ -29,3 +29,6 @@ class GamePick(models.Model):
         self.pick = pick
         self.full_clean
         self.save()
+
+    def is_correct(self):
+        return self.picked_team == self.game.winning_team
