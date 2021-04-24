@@ -13,7 +13,10 @@ class Pick(models.Model):
         return f"Pick {self.id}: {self.pot} - {self.picker}"
 
     def count_correct(self):
-        return 0
+        return len([
+            game_pick for game_pick in self.game_picks.all()
+            if game_pick.is_correct()
+        ])
 
 
 class GamePick(models.Model):
