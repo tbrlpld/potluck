@@ -13,7 +13,7 @@ class GameFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def teams(self, create, extracted, **kwargs):
-        # if now called with the create method, do nothing.
+        # If not called with the create method, do nothing.
         if not create:
             return
 
