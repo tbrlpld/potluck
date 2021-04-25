@@ -15,7 +15,7 @@ class Pick(models.Model):
     def count_correct(self):
         return len([
             game_pick for game_pick in self.game_picks.all()
-            if game_pick.is_correct()
+            if game_pick.is_correct
         ])
 
 
