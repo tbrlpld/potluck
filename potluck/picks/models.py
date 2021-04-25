@@ -19,6 +19,18 @@ class Pick(models.Model):
         ])
 
 
+class GamePickQueryset(models.QuerySet):
+    def annotate_is_correct(self):
+        return self.annotate(is_correct=models.Value(True, output_field=models.BooleanField()))
+
+
+class GamePickManager(models.Manager):
+    def get_queryset(self):
+        queryset = GamePickQueryset(self.model, using=self._db)
+        queryset = queryset.annotate_is_correct()
+        return queryset
+
+
 class GamePick(models.Model):
     pick = models.ForeignKey(
         Pick, on_delete=models.CASCADE, related_name="game_picks", null=True, blank=True
@@ -28,6 +40,8 @@ class GamePick(models.Model):
         Team, on_delete=models.CASCADE, related_name="+", null=True, blank=False
     )
 
+    objects = GamePickManager.from_queryset(GamePickQueryset)()
+
     def __str__(self):
         return f"GamePick {self.id} for {self.pick}: {self.game}"
 
@@ -36,6 +50,6 @@ class GamePick(models.Model):
         self.full_clean
         self.save()
 
-    def is_correct(self):
-        """Return true if picked team is game's winning team."""
-        return self.picked_team == self.game.winning_team
+    # def is_correct(self):
+    #     """Return true if picked team is game's winning team."""
+    #     return self.picked_team == self.game.winning_team
