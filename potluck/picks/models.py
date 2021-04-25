@@ -21,7 +21,12 @@ class Pick(models.Model):
 
 class GamePickQueryset(models.QuerySet):
     def annotate_is_correct(self):
-        return self.annotate(is_correct=models.Value(True, output_field=models.BooleanField()))
+        return self.annotate(
+            is_correct=models.ExpressionWrapper(
+                models.Q(picked_team=models.F("game__winning_team")),
+                output_field=models.BooleanField(),
+            )
+        )
 
 
 class GamePickManager(models.Manager):
@@ -35,7 +40,8 @@ class GamePick(models.Model):
     pick = models.ForeignKey(
         Pick, on_delete=models.CASCADE, related_name="game_picks", null=True, blank=True
     )
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="game_picks")
+    game = models.ForeignKey(Game, on_delete=models.CASCADE,
+                             related_name="game_picks")
     picked_team = models.ForeignKey(
         Team, on_delete=models.CASCADE, related_name="+", null=True, blank=False
     )
