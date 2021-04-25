@@ -31,7 +31,7 @@ class GamePick(models.Model):
     def __str__(self):
         return f"GamePick {self.id} for {self.pick}: {self.game}"
 
-    def save_with_pick(self, pick):
+    def add_pick(self, pick):
         self.pick = pick
         self.full_clean
         self.save()
