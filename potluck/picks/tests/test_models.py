@@ -237,15 +237,15 @@ class TestPick:
         game_pick_1.save()
         game_pick_2 = GamePick(pick=pick, game=game_2, picked_team=team_3)
         game_pick_2.save()
-        game_pick_3 = GamePick(pick=pick, game=game_3, picked_team=team_6)
+        game_pick_3 = GamePick(pick=pick, game=game_3, picked_team=team_5)
         game_pick_3.save()
 
         assert GamePick.objects.count() == 3
         assert pick.game_picks.count() == 3
         assert pick.game_picks.all()[0].is_correct == True
         assert pick.game_picks.all()[1].is_correct == True
-        assert pick.game_picks.all()[2].is_correct == False
-        assert pick.count_correct() == 2
+        assert pick.game_picks.all()[2].is_correct == True
+        assert pick.count_correct() == 3
 
         from django.db import models
 
@@ -253,15 +253,18 @@ class TestPick:
             is_correct=True,
         )
 
-        pick = Pick.objects.all().annotate(
+        picks = Pick.objects.all().annotate(
             correct_count=models.Count(
-                models.Q(game_picks__in=correct_game_picks),
+                "game_picks",
+                filter=models.Q(game_picks__in=correct_game_picks),
                 distinct=True
             )
-        )[0]
+        )
 
-        assert correct_game_picks.count() == 1
-        assert pick.correct_count == 2
+        pick = picks[0]
+
+        assert correct_game_picks.count() == 3
+        assert pick.correct_count == 3
 
 @ pytest.mark.django_db
 class TestGamePick:
