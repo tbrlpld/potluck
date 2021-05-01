@@ -14,8 +14,9 @@ class TestPick:
     @pytest.fixture
     def setup(self):
         self.pick = PickFactory.create()
-        self.game_1 = self.pick.pot.games.first()
-        self.game_2 = self.pick.pot.games.last()
+        self.pot = self.pick.pot
+        self.game_1 = self.pot.games.first()
+        self.game_2 = self.pot.games.last()
 
         self.game_1_winning_team = self.game_1.teams.first()
         self.game_1_loosing_team = self.game_1.teams.last()
@@ -92,7 +93,6 @@ class TestPick:
         place_game_1_wrong_pick,
         place_game_2_wrong_pick,
     ):
-
         result = self.pick.count_correct()
 
         assert result == 0
@@ -103,7 +103,6 @@ class TestPick:
         place_game_1_correct_pick,
         place_game_2_wrong_pick,
     ):
-
         result = self.pick.count_correct()
 
         assert result == 1
@@ -114,7 +113,6 @@ class TestPick:
         place_game_1_wrong_pick,
         place_game_2_correct_pick,
     ):
-
         result = self.pick.count_correct()
 
         assert result == 1
@@ -136,11 +134,6 @@ class TestPick:
         place_game_1_wrong_pick,
         place_game_2_wrong_pick,
     ):
-        assert Pick.objects.count() == 1
-        assert Game.objects.count() == 2
-        assert GamePick.objects.count() == 2
-        assert GamePick.objects.first().is_correct == False
-        assert GamePick.objects.last().is_correct == False
         # To get the annotation, you need to retrieve the object from the manager
         pick = Pick.objects.get(pk=self.pick.id)
 
@@ -188,83 +181,106 @@ class TestPick:
 
         assert result == 2
 
-    def test_annotation(self):
-        team_1 = Team(name="Test Team 1")
-        team_1.save()
-        team_2 = Team(name="Test Team 2")
-        team_2.save()
-        team_3 = Team(name="Test Team 3")
-        team_3.save()
-        team_4 = Team(name="Test Team 4")
-        team_4.save()
-        team_5 = Team(name="Test Team 5")
-        team_5.save()
-        team_6 = Team(name="Test Team 6")
-        team_6.save()
-        assert Team.objects.count() == 6
-
-        pot = Pot(name="Test Pot")
-        pot.save()
-        assert Pot.objects.count() == 1
-        assert Pot.objects.first() == pot
-
-        game_1 = Game(pot=pot)
-        game_1.save()
-        game_1.teams.add(team_1, team_2)
-        game_1.winning_team = team_1
-        game_1.save()
-        game_2 = Game(pot=pot)
-        game_2.save()
-        game_2.teams.add(team_3, team_4)
-        game_2.winning_team = team_3
-        game_2.save()
-        game_3 = Game(pot=pot)
-        game_3.save()
-        game_3.teams.add(team_5, team_6)
-        game_3.winning_team = team_5
-        game_3.save()
-        assert Game.objects.count() == 3
-        assert pot.games.count() == 3
-        assert pot.games.all()[0].winning_team == team_1
-        assert pot.games.all()[1].winning_team == team_3
-        assert pot.games.all()[2].winning_team == team_5
-
-        pick = Pick(picker="Tester", pot=pot)
-        pick.save()
-        assert Pick.objects.count() == 1
-
-        game_pick_1 = GamePick(pick=pick, game=game_1, picked_team=team_1)
-        game_pick_1.save()
-        game_pick_2 = GamePick(pick=pick, game=game_2, picked_team=team_3)
-        game_pick_2.save()
-        game_pick_3 = GamePick(pick=pick, game=game_3, picked_team=team_5)
-        game_pick_3.save()
-
-        assert GamePick.objects.count() == 3
-        assert pick.game_picks.count() == 3
-        assert pick.game_picks.all()[0].is_correct == True
-        assert pick.game_picks.all()[1].is_correct == True
-        assert pick.game_picks.all()[2].is_correct == True
-        assert pick.count_correct() == 3
-
-        from django.db import models
-
-        correct_game_picks = GamePick.objects.filter(
-            is_correct=True,
+    def test_correct_count_annotation_still_works_when_other_pick_in_db(
+        self,
+        setup,
+        place_game_1_wrong_pick,
+        place_game_2_correct_pick,
+    ):
+        # Create another pick with 2 correct picks. It's existence can not incluence the fact
+        # that the pick under test only has one correct pick!
+        other_pick = PickFactory.create(pot=self.pot, picker="The Other Picker")
+        GamePickFactory.create(
+            pick=other_pick, game=self.game_1, picked_team=self.game_1_winning_team
         )
-
-        picks = Pick.objects.all().annotate(
-            correct_count=models.Count(
-                "game_picks",
-                filter=models.Q(game_picks__in=correct_game_picks),
-                distinct=True
-            )
+        GamePickFactory.create(
+            pick=other_pick, game=self.game_2, picked_team=self.game_2_winning_team
         )
+        assert GamePick.objects.count() == 4
+        # Get the original pick, the one that is being tested
+        pick = Pick.objects.get(pk=self.pick.id)
 
-        pick = picks[0]
+        result = pick.correct_count
 
-        assert correct_game_picks.count() == 3
-        assert pick.correct_count == 3
+        assert result == 1
+
+    # def test_annotation(self):
+    #     team_1 = Team(name="Test Team 1")
+    #     team_1.save()
+    #     team_2 = Team(name="Test Team 2")
+    #     team_2.save()
+    #     team_3 = Team(name="Test Team 3")
+    #     team_3.save()
+    #     team_4 = Team(name="Test Team 4")
+    #     team_4.save()
+    #     team_5 = Team(name="Test Team 5")
+    #     team_5.save()
+    #     team_6 = Team(name="Test Team 6")
+    #     team_6.save()
+    #     assert Team.objects.count() == 6
+
+    #     pot = Pot(name="Test Pot")
+    #     pot.save()
+    #     assert Pot.objects.count() == 1
+    #     assert Pot.objects.first() == pot
+
+    #     game_1 = Game(pot=pot)
+    #     game_1.save()
+    #     game_1.teams.add(team_1, team_2)
+    #     game_1.winning_team = team_1
+    #     game_1.save()
+    #     game_2 = Game(pot=pot)
+    #     game_2.save()
+    #     game_2.teams.add(team_3, team_4)
+    #     game_2.winning_team = team_3
+    #     game_2.save()
+    #     game_3 = Game(pot=pot)
+    #     game_3.save()
+    #     game_3.teams.add(team_5, team_6)
+    #     game_3.winning_team = team_5
+    #     game_3.save()
+    #     assert Game.objects.count() == 3
+    #     assert pot.games.count() == 3
+    #     assert pot.games.all()[0].winning_team == team_1
+    #     assert pot.games.all()[1].winning_team == team_3
+    #     assert pot.games.all()[2].winning_team == team_5
+
+    #     pick = Pick(picker="Tester", pot=pot)
+    #     pick.save()
+    #     assert Pick.objects.count() == 1
+
+    #     game_pick_1 = GamePick(pick=pick, game=game_1, picked_team=team_1)
+    #     game_pick_1.save()
+    #     game_pick_2 = GamePick(pick=pick, game=game_2, picked_team=team_3)
+    #     game_pick_2.save()
+    #     game_pick_3 = GamePick(pick=pick, game=game_3, picked_team=team_5)
+    #     game_pick_3.save()
+
+    #     assert GamePick.objects.count() == 3
+    #     assert pick.game_picks.count() == 3
+    #     assert pick.game_picks.all()[0].is_correct == True
+    #     assert pick.game_picks.all()[1].is_correct == True
+    #     assert pick.game_picks.all()[2].is_correct == True
+    #     assert pick.count_correct() == 3
+
+    #     from django.db import models
+
+    #     correct_game_picks = GamePick.objects.filter(
+    #         is_correct=True,
+    #     )
+
+    #     picks = Pick.objects.all().annotate(
+    #         correct_count=models.Count(
+    #             "game_picks",
+    #             filter=models.Q(game_picks__in=correct_game_picks),
+    #             distinct=True
+    #         )
+    #     )
+
+    #     pick = picks[0]
+
+    #     assert correct_game_picks.count() == 3
+    #     assert pick.correct_count == 3
 
 @ pytest.mark.django_db
 class TestGamePick:
