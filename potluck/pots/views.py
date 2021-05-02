@@ -54,7 +54,7 @@ class AddGameView(generic.CreateView):
 
 
 class SetWinningTeamsView(generic.FormView):
-    template_name = "games/set_winners.html"
+    template_name = "pots/set_winning_teams.html"
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
@@ -84,3 +84,7 @@ class SetWinningTeamsView(generic.FormView):
 
     def get_success_url(self):
         return urls.reverse_lazy("pot_detail", kwargs={"pk": self.pot_id})
+
+
+class TallyView(generic.ListView):
+    pass
