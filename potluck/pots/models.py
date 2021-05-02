@@ -8,6 +8,4 @@ class Pot(models.Model):
         return self.name
 
     def get_tally(self):
-        picks = self.picks.all()
-        picks = sorted(picks, key=lambda pick: pick.count_correct(), reverse=True)
-        return picks
+        return self.picks.order_by("-correct_count")
