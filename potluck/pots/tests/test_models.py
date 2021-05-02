@@ -12,14 +12,12 @@ class TestPot:
         game_1 = pot.games.first()
         game_1_winning_team = game_1.teams.first()
         game_1_loosing_team = game_1.teams.last()
-        game_1.winning_team = game_1_winning_team
-        game_1.save()
+        game_1.set_winning_team(game_1_winning_team)
 
         game_2 = pot.games.first()
         game_2_winning_team = game_2.teams.first()
         game_2_loosing_team = game_2.teams.last()
-        game_2.winning_team = game_2_winning_team
-        game_2.save()
+        game_2.set_winning_team(game_2_winning_team)
 
         # Pick 1 with 1 correct game pick
         pick_1 = PickFactory(pot=pot)
