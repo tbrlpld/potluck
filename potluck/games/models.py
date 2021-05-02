@@ -33,3 +33,9 @@ class Game(models.Model):
     def __str__(self):
         team_names = self.get_team_names()
         return " vs ".join(team_names)
+
+    def set_winning_team(self, team):
+        if team not in self.teams.all():
+            raise exceptions.ValidationError("Team has to paricipate in game to win!")
+        self.winning_team = team
+        self.save()
