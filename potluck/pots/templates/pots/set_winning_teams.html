@@ -2,7 +2,7 @@
 
 
 {% block content %}
-    <h1>Set winning team for each game</h1>
+    <h1>{{ pot.name }}: Set winning team for each game</h1>
     <form action="" method="POST">
         {% csrf_token %}
         {{ form }}

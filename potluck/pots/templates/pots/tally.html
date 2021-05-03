@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ pot.name }}: Tally</h1>
+        {% if picks %}
+        {% regroup picks by correct_count as pick_groups_by_correct_count %}
+        <ul>
+            {% for group in pick_groups_by_correct_count %}
+                <li>
+                    <h3>{{ group.grouper }} correct picks</h3>
+                    <ul>
+                        {% for pick in group.list %}
+                            <li>{{ pick.picker }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock content %}

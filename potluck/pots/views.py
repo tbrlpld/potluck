@@ -2,6 +2,7 @@ from django import forms, shortcuts, urls
 from django.views import generic
 
 from potluck.games.models import Game
+from potluck.picks.models import Pick
 from potluck.pots.forms import GameAddForm, SetWinningTeamForm
 from potluck.pots.models import Pot
 
@@ -82,9 +83,29 @@ class SetWinningTeamsView(generic.FormView):
             form.save()
         return shortcuts.redirect(self.get_success_url())
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["pot"] = self.pot
+        return context
+
     def get_success_url(self):
         return urls.reverse_lazy("pot_detail", kwargs={"pk": self.pot_id})
 
 
 class TallyView(generic.ListView):
-    pass
+    template_name = "pots/tally.html"
+    model = Pick
+    context_object_name = "picks"
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.pot_id = kwargs.get("pot_id")
+        self.pot = shortcuts.get_object_or_404(Pot, pk=self.pot_id)
+
+    def get_queryset(self):
+        return self.pot.get_tally()
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context["pot"] = self.pot
+        return context

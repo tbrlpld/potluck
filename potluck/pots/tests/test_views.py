@@ -5,7 +5,7 @@ from django.urls import reverse
 
 import pytest
 
-from potluck.games.tests.factories import GameFactory
+from potluck.picks.tests.factories import GamePickFactory, PickFactory
 from potluck.pots.models import Pot
 from potluck.pots.tests.factories import PotFactory
 
@@ -121,3 +121,64 @@ class TestSetWinningTeamsView:
             assert team.name in str(response.content)
         for team in self.game2.teams.all():
             assert team.name in str(response.content)
+
+
+@pytest.mark.django_db
+class TestTallyView:
+
+    @pytest.fixture
+    def setup(self):
+        pot = PotFactory.create()
+
+        game_1 = pot.games.first()
+        game_1_winning_team = game_1.teams.first()
+        game_1_loosing_team = game_1.teams.last()
+        game_1.set_winning_team(game_1_winning_team)
+
+        game_2 = pot.games.first()
+        game_2_winning_team = game_2.teams.first()
+        game_2_loosing_team = game_2.teams.last()
+        game_2.set_winning_team(game_2_winning_team)
+
+        # Pick 1 with 1 correct game pick
+        self.pick_1 = PickFactory(pot=pot)
+        GamePickFactory(
+            pick=self.pick_1, game=game_1, picked_team=game_1_winning_team
+        )
+        GamePickFactory(
+            pick=self.pick_1, game=game_2, picked_team=game_2_loosing_team
+        )
+
+        # Pick 2 with 2 correct game picks
+        self.pick_2 = PickFactory(pot=pot)
+        GamePickFactory(
+            pick=self.pick_2, game=game_1, picked_team=game_1_winning_team
+        )
+        GamePickFactory(
+            pick=self.pick_2, game=game_2, picked_team=game_2_winning_team
+        )
+
+        self.url = reverse("show_tally", kwargs={"pot_id": pot.id})
+        self.client = Client()
+
+    def test_get_success(self, setup):
+        response = self.client.get(self.url)
+
+        assert response.status_code == HTTPStatus.OK
+
+    def test_get_shows_picker_names(self, setup):
+        response = self.client.get(self.url)
+
+        assert response.status_code == HTTPStatus.OK
+        response_content = str(response.content)
+        assert self.pick_1.picker in response_content
+        assert self.pick_2.picker in response_content
+
+    def test_get_shows_picker_names_in_order_of_correct_picks(self, setup):
+        response = self.client.get(self.url)
+
+        assert response.status_code == HTTPStatus.OK
+        response_content = str(response.content)
+        picker_1_index = response_content.index(self.pick_1.picker)
+        picker_2_index = response_content.index(self.pick_2.picker)
+        assert picker_2_index < picker_1_index

@@ -22,12 +22,15 @@
         <a href="{% url 'add_game' pot.pk %}">Add game</a>
     </p>
     <p>
-        <a href="{% url 'set_winners' pot.pk %}">Set winning teams</a>
-    </p>
-    <p>
         Participants in the pot can place the picks here:
         <p>
             <a href="{{ picks_url }}">{{ picks_url }}</a>
         </p>
+    </p>
+    <p>
+        <a href="{% url 'set_winners' pot.pk %}">Set winning teams</a>
+    </p>
+    <p>
+        So who won? <a href="{% url 'show_tally' pot.pk %}">Get the tally.</a>
     </p>
 {% endblock content %}
