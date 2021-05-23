@@ -5,7 +5,7 @@ from potluck.pots.models import Pot
 from potluck.teams.models import Team
 
 
-class PickQueryset(models.QuerySet):
+class PickSheetQueryset(models.QuerySet):
     def annotate_correct_count(self):
         correct_game_picks = Pick.objects.filter(
             is_correct=True,
@@ -22,12 +22,12 @@ class PickQueryset(models.QuerySet):
 
 class PickSheetManager(models.Manager):
     def get_queryset(self):
-        queryset = PickQueryset(self.model, using=self._db)
+        queryset = PickSheetQueryset(self.model, using=self._db)
         queryset = queryset.annotate_correct_count()
         return queryset
 
 
-PickSheetMangerFromQueryset = PickSheetManager.from_queryset(PickQueryset)
+PickSheetMangerFromQueryset = PickSheetManager.from_queryset(PickSheetQueryset)
 
 
 class PickSheet(models.Model):
