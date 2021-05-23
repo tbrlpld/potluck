@@ -3,7 +3,7 @@ import pytest
 from potluck.games.models import Game
 from potluck.games.tests.factories import GameFactory
 from potluck.picks.models import Pick, PickSheet
-from potluck.picks.tests.factories import GamePickFactory, PickFactory
+from potluck.picks.tests.factories import GamePickFactory, PickSheetFactory
 from potluck.pots.models import Pot
 from potluck.teams.models import Team
 
@@ -13,8 +13,8 @@ class TestPick:
 
     @pytest.fixture
     def setup(self):
-        self.pick = PickFactory.create()
-        self.pot = self.pick.pot
+        self.pick_sheet = PickSheetFactory.create()
+        self.pot = self.pick_sheet.pot
         self.game_1 = self.pot.games.first()
         self.game_2 = self.pot.games.last()
 
@@ -50,7 +50,7 @@ class TestPick:
     @pytest.fixture
     def place_game_1_wrong_pick(self):
         game_pick = GamePickFactory.create(
-            pick=self.pick, game=self.game_1, picked_team=self.game_1_loosing_team
+            pick=self.pick_sheet, game=self.game_1, picked_team=self.game_1_loosing_team
         )
 
         yield game_pick
@@ -60,7 +60,7 @@ class TestPick:
     @pytest.fixture
     def place_game_1_correct_pick(self):
         game_pick = GamePickFactory.create(
-            pick=self.pick, game=self.game_1, picked_team=self.game_1_winning_team
+            pick=self.pick_sheet, game=self.game_1, picked_team=self.game_1_winning_team
         )
 
         yield game_pick
@@ -70,7 +70,7 @@ class TestPick:
     @pytest.fixture
     def place_game_2_wrong_pick(self):
         game_pick = GamePickFactory.create(
-            pick=self.pick, game=self.game_2, picked_team=self.game_2_loosing_team
+            pick=self.pick_sheet, game=self.game_2, picked_team=self.game_2_loosing_team
         )
 
         yield game_pick
@@ -80,7 +80,7 @@ class TestPick:
     @pytest.fixture
     def place_game_2_correct_pick(self):
         game_pick = GamePickFactory.create(
-            pick=self.pick, game=self.game_2, picked_team=self.game_2_winning_team
+            pick=self.pick_sheet, game=self.game_2, picked_team=self.game_2_winning_team
         )
 
         yield game_pick
@@ -93,7 +93,7 @@ class TestPick:
         place_game_1_wrong_pick,
         place_game_2_wrong_pick,
     ):
-        result = self.pick.count_correct()
+        result = self.pick_sheet.count_correct()
 
         assert result == 0
 
@@ -103,7 +103,7 @@ class TestPick:
         place_game_1_correct_pick,
         place_game_2_wrong_pick,
     ):
-        result = self.pick.count_correct()
+        result = self.pick_sheet.count_correct()
 
         assert result == 1
 
@@ -113,7 +113,7 @@ class TestPick:
         place_game_1_wrong_pick,
         place_game_2_correct_pick,
     ):
-        result = self.pick.count_correct()
+        result = self.pick_sheet.count_correct()
 
         assert result == 1
 
@@ -124,7 +124,7 @@ class TestPick:
         place_game_2_correct_pick,
     ):
 
-        result = self.pick.count_correct()
+        result = self.pick_sheet.count_correct()
 
         assert result == 2
 
@@ -135,9 +135,9 @@ class TestPick:
         place_game_2_wrong_pick,
     ):
         # To get the annotation, you need to retrieve the object from the manager
-        pick = PickSheet.objects.get(pk=self.pick.id)
+        pick_sheet = PickSheet.objects.get(pk=self.pick_sheet.id)
 
-        result = pick.correct_count
+        result = pick_sheet.correct_count
 
         assert result == 0
 
@@ -148,9 +148,9 @@ class TestPick:
         place_game_2_wrong_pick,
     ):
         # To get the annotation, you need to retrieve the object from the manager
-        pick = PickSheet.objects.get(pk=self.pick.id)
+        pick_sheet = PickSheet.objects.get(pk=self.pick_sheet.id)
 
-        result = pick.correct_count
+        result = pick_sheet.correct_count
 
         assert result == 1
 
@@ -161,10 +161,10 @@ class TestPick:
         place_game_2_correct_pick,
     ):
         # To get the annotation, you need to retrieve the object from the manager
-        pick = PickSheet.objects.get(pk=self.pick.id)
+        pick_sheet = PickSheet.objects.get(pk=self.pick_sheet.id)
 
-        assert self.pick.count_correct() == 1
-        result = pick.correct_count
+        assert self.pick_sheet.count_correct() == 1
+        result = pick_sheet.correct_count
 
         assert result == 1
 
@@ -175,9 +175,9 @@ class TestPick:
         place_game_2_correct_pick,
     ):
         # To get the annotation, you need to retrieve the object from the manager
-        pick = PickSheet.objects.get(pk=self.pick.id)
+        pick_sheet = PickSheet.objects.get(pk=self.pick_sheet.id)
 
-        result = pick.correct_count
+        result = pick_sheet.correct_count
 
         assert result == 2
 
@@ -189,18 +189,18 @@ class TestPick:
     ):
         # Create another pick with 2 correct picks. It's existence can not incluence the fact
         # that the pick under test only has one correct pick!
-        other_pick = PickFactory.create(pot=self.pot, picker="The Other Picker")
+        other_pick_sheet = PickSheetFactory.create(pot=self.pot, picker="The Other Picker")
         GamePickFactory.create(
-            pick=other_pick, game=self.game_1, picked_team=self.game_1_winning_team
+            pick=other_pick_sheet, game=self.game_1, picked_team=self.game_1_winning_team
         )
         GamePickFactory.create(
-            pick=other_pick, game=self.game_2, picked_team=self.game_2_winning_team
+            pick=other_pick_sheet, game=self.game_2, picked_team=self.game_2_winning_team
         )
         assert Pick.objects.count() == 4
         # Get the original pick, the one that is being tested
-        pick = PickSheet.objects.get(pk=self.pick.id)
+        pick_sheet = PickSheet.objects.get(pk=self.pick_sheet.id)
 
-        result = pick.correct_count
+        result = pick_sheet.correct_count
 
         assert result == 1
 

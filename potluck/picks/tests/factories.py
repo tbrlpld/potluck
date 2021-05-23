@@ -5,7 +5,7 @@ from potluck.picks.models import Pick, PickSheet
 from potluck.pots.tests.factories import PotFactory
 
 
-class PickFactory(factory.django.DjangoModelFactory):
+class PickSheetFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = PickSheet
 
@@ -17,5 +17,5 @@ class GamePickFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Pick
 
-    pick = factory.SubFactory(PickFactory)
+    pick = factory.SubFactory(PickSheetFactory)
     game = factory.SubFactory(GameFactory)
