@@ -27,14 +27,14 @@ class PickManager(models.Manager):
         return queryset
 
 
-PickMangerFromQueryset = PickManager.from_queryset(PickQueryset)
+PickSheetMangerFromQueryset = PickManager.from_queryset(PickQueryset)
 
 
 class PickSheet(models.Model):
     picker = models.CharField(max_length=100, help_text="Name of the person picking")
     pot = models.ForeignKey(Pot, on_delete=models.CASCADE, related_name="picks")
 
-    objects = PickMangerFromQueryset()
+    objects = PickSheetMangerFromQueryset()
 
     def __str__(self):
         return f"Pick {self.id}: {self.pot} - {self.picker}"
