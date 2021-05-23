@@ -7,7 +7,7 @@ from potluck.teams.models import Team
 
 class PickQueryset(models.QuerySet):
     def annotate_correct_count(self):
-        correct_game_picks = GamePick.objects.filter(
+        correct_game_picks = GamePickTemp.objects.filter(
             is_correct=True,
         )
         annotated_picks = self.annotate(
@@ -65,7 +65,7 @@ class GamePickManager(models.Manager):
 GamePickMangerFromQueryset = GamePickManager.from_queryset(GamePickQueryset)
 
 
-class GamePick(models.Model):
+class GamePickTemp(models.Model):
     pick = models.ForeignKey(
         Pick, on_delete=models.CASCADE, related_name="game_picks", null=True, blank=True
     )

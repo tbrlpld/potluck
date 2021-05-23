@@ -2,7 +2,7 @@ import pytest
 
 from potluck.games.models import Game
 from potluck.games.tests.factories import GameFactory
-from potluck.picks.models import GamePick, Pick
+from potluck.picks.models import GamePickTemp, Pick
 from potluck.picks.tests.factories import GamePickFactory, PickFactory
 from potluck.pots.models import Pot
 from potluck.teams.models import Team
@@ -32,7 +32,7 @@ class TestPick:
         assert Pick.objects.count() == 1
         assert Game.objects.count() == 2
         assert Team.objects.count() == 4
-        assert GamePick.objects.count() == 0
+        assert GamePickTemp.objects.count() == 0
 
         yield self
 
@@ -45,7 +45,7 @@ class TestPick:
         assert Pick.objects.count() == 0
         assert Game.objects.count() == 0
         assert Team.objects.count() == 0
-        assert GamePick.objects.count() == 0
+        assert GamePickTemp.objects.count() == 0
 
     @pytest.fixture
     def place_game_1_wrong_pick(self):
@@ -196,7 +196,7 @@ class TestPick:
         GamePickFactory.create(
             pick=other_pick, game=self.game_2, picked_team=self.game_2_winning_team
         )
-        assert GamePick.objects.count() == 4
+        assert GamePickTemp.objects.count() == 4
         # Get the original pick, the one that is being tested
         pick = Pick.objects.get(pk=self.pick.id)
 
@@ -294,7 +294,7 @@ class TestGamePick:
             picked_team=winning_team
         )
         # To get the annotation, you need to retrieve the object from the manager
-        game_pick = GamePick.objects.get(pk=game_pick.id)
+        game_pick = GamePickTemp.objects.get(pk=game_pick.id)
 
         result = game_pick.is_correct
 
@@ -311,7 +311,7 @@ class TestGamePick:
             picked_team=loosing_team
         )
         # To get the annotation, you need to retrieve the object from the manager
-        game_pick = GamePick.objects.get(pk=game_pick.id)
+        game_pick = GamePickTemp.objects.get(pk=game_pick.id)
 
         result = game_pick.is_correct
 
