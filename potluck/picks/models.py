@@ -62,7 +62,7 @@ class GamePickManager(models.Manager):
         return queryset
 
 
-GamePickMangerFromQueryset = GamePickManager.from_queryset(GamePickQueryset)
+PickMangerFromQueryset = GamePickManager.from_queryset(GamePickQueryset)
 
 
 class Pick(models.Model):
@@ -75,7 +75,7 @@ class Pick(models.Model):
         Team, on_delete=models.CASCADE, related_name="+", null=True, blank=False
     )
 
-    objects = GamePickMangerFromQueryset()
+    objects = PickMangerFromQueryset()
 
     def __str__(self):
         return f"GamePick {self.id} for {self.pick}: {self.game}"
