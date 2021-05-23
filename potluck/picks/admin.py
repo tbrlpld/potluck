@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from potluck.picks.models import GamePickTemp, PickSheet
+from potluck.picks.models import Pick, PickSheet
 
 
 # Register your models here.
@@ -10,6 +10,6 @@ class PickAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-@admin.register(GamePickTemp)
+@admin.register(Pick)
 class GamePickAdmin(admin.ModelAdmin):
     pass

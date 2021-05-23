@@ -5,7 +5,7 @@ from django import test, urls
 import pytest
 
 from potluck.games.tests.factories import GameFactory
-from potluck.picks.models import GamePickTemp, PickSheet
+from potluck.picks.models import Pick, PickSheet
 from potluck.pots.tests.factories import PotFactory
 
 
@@ -58,7 +58,7 @@ class TestPickCreateView:
 
         assert response.status_code == http.HTTPStatus.OK
         assert PickSheet.objects.count() == 1
-        assert GamePickTemp.objects.count() == 2
+        assert Pick.objects.count() == 2
         pick = PickSheet.objects.first()
         assert pick.game_picks.first().picked_team == picked_team_1
         assert pick.game_picks.last().picked_team == picked_team_2
