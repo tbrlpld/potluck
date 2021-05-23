@@ -55,14 +55,14 @@ class GamePickQueryset(models.QuerySet):
         )
 
 
-class GamePickManager(models.Manager):
+class PickManager(models.Manager):
     def get_queryset(self):
         queryset = GamePickQueryset(self.model, using=self._db)
         queryset = queryset.annotate_is_correct()
         return queryset
 
 
-PickMangerFromQueryset = GamePickManager.from_queryset(GamePickQueryset)
+PickMangerFromQueryset = PickManager.from_queryset(GamePickQueryset)
 
 
 class Pick(models.Model):
