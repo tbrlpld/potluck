@@ -1,11 +1,11 @@
 from django import forms
 
-from potluck.picks.models import GamePickTemp, Pick
+from potluck.picks.models import GamePickTemp, PickSheet
 
 
 class CreatePickForm(forms.ModelForm):
     class Meta:
-        model = Pick
+        model = PickSheet
         fields = ("picker", "pot")
         widgets = {
             "pot": forms.HiddenInput(),

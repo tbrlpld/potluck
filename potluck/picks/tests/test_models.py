@@ -2,7 +2,7 @@ import pytest
 
 from potluck.games.models import Game
 from potluck.games.tests.factories import GameFactory
-from potluck.picks.models import GamePickTemp, Pick
+from potluck.picks.models import GamePickTemp, PickSheet
 from potluck.picks.tests.factories import GamePickFactory, PickFactory
 from potluck.pots.models import Pot
 from potluck.teams.models import Team
@@ -29,7 +29,7 @@ class TestPick:
         self.game_2.save()
 
         assert Pot.objects.count() == 1
-        assert Pick.objects.count() == 1
+        assert PickSheet.objects.count() == 1
         assert Game.objects.count() == 2
         assert Team.objects.count() == 4
         assert GamePickTemp.objects.count() == 0
@@ -37,12 +37,12 @@ class TestPick:
         yield self
 
         Pot.objects.all().delete()
-        Pick.objects.all().delete()
+        PickSheet.objects.all().delete()
         Game.objects.all().delete()
         Team.objects.all().delete()
 
         assert Pot.objects.count() == 0
-        assert Pick.objects.count() == 0
+        assert PickSheet.objects.count() == 0
         assert Game.objects.count() == 0
         assert Team.objects.count() == 0
         assert GamePickTemp.objects.count() == 0
@@ -135,7 +135,7 @@ class TestPick:
         place_game_2_wrong_pick,
     ):
         # To get the annotation, you need to retrieve the object from the manager
-        pick = Pick.objects.get(pk=self.pick.id)
+        pick = PickSheet.objects.get(pk=self.pick.id)
 
         result = pick.correct_count
 
@@ -148,7 +148,7 @@ class TestPick:
         place_game_2_wrong_pick,
     ):
         # To get the annotation, you need to retrieve the object from the manager
-        pick = Pick.objects.get(pk=self.pick.id)
+        pick = PickSheet.objects.get(pk=self.pick.id)
 
         result = pick.correct_count
 
@@ -161,7 +161,7 @@ class TestPick:
         place_game_2_correct_pick,
     ):
         # To get the annotation, you need to retrieve the object from the manager
-        pick = Pick.objects.get(pk=self.pick.id)
+        pick = PickSheet.objects.get(pk=self.pick.id)
 
         assert self.pick.count_correct() == 1
         result = pick.correct_count
@@ -175,7 +175,7 @@ class TestPick:
         place_game_2_correct_pick,
     ):
         # To get the annotation, you need to retrieve the object from the manager
-        pick = Pick.objects.get(pk=self.pick.id)
+        pick = PickSheet.objects.get(pk=self.pick.id)
 
         result = pick.correct_count
 
@@ -198,7 +198,7 @@ class TestPick:
         )
         assert GamePickTemp.objects.count() == 4
         # Get the original pick, the one that is being tested
-        pick = Pick.objects.get(pk=self.pick.id)
+        pick = PickSheet.objects.get(pk=self.pick.id)
 
         result = pick.correct_count
 

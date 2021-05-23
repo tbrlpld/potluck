@@ -2,7 +2,7 @@ from django import forms, shortcuts, urls
 from django.views import generic
 
 from potluck.games.models import Game
-from potluck.picks.models import Pick
+from potluck.picks.models import PickSheet
 from potluck.pots.forms import GameAddForm, SetWinningTeamForm
 from potluck.pots.models import Pot
 
@@ -94,7 +94,7 @@ class SetWinningTeamsView(generic.FormView):
 
 class TallyView(generic.ListView):
     template_name = "pots/tally.html"
-    model = Pick
+    model = PickSheet
     context_object_name = "picks"
 
     def setup(self, request, *args, **kwargs):

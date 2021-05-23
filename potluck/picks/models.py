@@ -30,7 +30,7 @@ class PickManager(models.Manager):
 PickMangerFromQueryset = PickManager.from_queryset(PickQueryset)
 
 
-class Pick(models.Model):
+class PickSheet(models.Model):
     picker = models.CharField(max_length=100, help_text="Name of the person picking")
     pot = models.ForeignKey(Pot, on_delete=models.CASCADE, related_name="picks")
 
@@ -67,7 +67,7 @@ GamePickMangerFromQueryset = GamePickManager.from_queryset(GamePickQueryset)
 
 class GamePickTemp(models.Model):
     pick = models.ForeignKey(
-        Pick, on_delete=models.CASCADE, related_name="game_picks", null=True, blank=True
+        PickSheet, on_delete=models.CASCADE, related_name="game_picks", null=True, blank=True
     )
     game = models.ForeignKey(Game, on_delete=models.CASCADE,
                              related_name="game_picks")
