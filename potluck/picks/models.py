@@ -20,14 +20,14 @@ class PickQueryset(models.QuerySet):
         return annotated_picks
 
 
-class PickManager(models.Manager):
+class PickSheetManager(models.Manager):
     def get_queryset(self):
         queryset = PickQueryset(self.model, using=self._db)
         queryset = queryset.annotate_correct_count()
         return queryset
 
 
-PickSheetMangerFromQueryset = PickManager.from_queryset(PickQueryset)
+PickSheetMangerFromQueryset = PickSheetManager.from_queryset(PickQueryset)
 
 
 class PickSheet(models.Model):
