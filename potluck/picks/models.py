@@ -45,7 +45,7 @@ class PickSheet(models.Model):
         return corrent_game_picks.count()
 
 
-class GamePickQueryset(models.QuerySet):
+class PickQueryset(models.QuerySet):
     def annotate_is_correct(self):
         return self.annotate(
             is_correct=models.ExpressionWrapper(
@@ -57,12 +57,12 @@ class GamePickQueryset(models.QuerySet):
 
 class PickManager(models.Manager):
     def get_queryset(self):
-        queryset = GamePickQueryset(self.model, using=self._db)
+        queryset = PickQueryset(self.model, using=self._db)
         queryset = queryset.annotate_is_correct()
         return queryset
 
 
-PickMangerFromQueryset = PickManager.from_queryset(GamePickQueryset)
+PickMangerFromQueryset = PickManager.from_queryset(PickQueryset)
 
 
 class Pick(models.Model):
