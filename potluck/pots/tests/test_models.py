@@ -1,6 +1,6 @@
 import pytest
 
-from potluck.picks.tests.factories import GamePickFactory, PickSheetFactory
+from potluck.picks.tests.factories import PickFactory, PickSheetFactory
 from potluck.pots.tests.factories import PotFactory
 
 
@@ -19,23 +19,23 @@ class TestPot:
         game_2_loosing_team = game_2.teams.last()
         game_2.set_winning_team(game_2_winning_team)
         # Pick 1 with 1 correct game pick
-        pick_1 = PickSheetFactory(pot=pot)
-        GamePickFactory(
-            pick=pick_1, game=game_1, picked_team=game_1_winning_team
+        pick_sheet_1 = PickSheetFactory(pot=pot)
+        PickFactory(
+            pick=pick_sheet_1, game=game_1, picked_team=game_1_winning_team
         )
-        GamePickFactory(
-            pick=pick_1, game=game_2, picked_team=game_2_loosing_team
+        PickFactory(
+            pick=pick_sheet_1, game=game_2, picked_team=game_2_loosing_team
         )
         # Pick 2 with 2 correct game picks
-        pick_2 = PickSheetFactory(pot=pot)
-        GamePickFactory(
-            pick=pick_2, game=game_1, picked_team=game_1_winning_team
+        pick_sheet_2 = PickSheetFactory(pot=pot)
+        PickFactory(
+            pick=pick_sheet_2, game=game_1, picked_team=game_1_winning_team
         )
-        GamePickFactory(
-            pick=pick_2, game=game_2, picked_team=game_2_winning_team
+        PickFactory(
+            pick=pick_sheet_2, game=game_2, picked_team=game_2_winning_team
         )
 
         result = pot.get_tally()
 
-        assert result[0] == pick_2
-        assert result[1] == pick_1
+        assert result[0] == pick_sheet_2
+        assert result[1] == pick_sheet_1

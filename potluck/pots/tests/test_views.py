@@ -5,7 +5,7 @@ from django.urls import reverse
 
 import pytest
 
-from potluck.picks.tests.factories import GamePickFactory, PickSheetFactory
+from potluck.picks.tests.factories import PickFactory, PickSheetFactory
 from potluck.pots.models import Pot
 from potluck.pots.tests.factories import PotFactory
 
@@ -142,19 +142,19 @@ class TestTallyView:
 
         # Pick 1 with 1 correct game pick
         self.pick_sheet_1 = PickSheetFactory(pot=pot)
-        GamePickFactory(
+        PickFactory(
             pick=self.pick_sheet_1, game=game_1, picked_team=game_1_winning_team
         )
-        GamePickFactory(
+        PickFactory(
             pick=self.pick_sheet_1, game=game_2, picked_team=game_2_loosing_team
         )
 
         # Pick 2 with 2 correct game picks
         self.pick_sheet_2 = PickSheetFactory(pot=pot)
-        GamePickFactory(
+        PickFactory(
             pick=self.pick_sheet_2, game=game_1, picked_team=game_1_winning_team
         )
-        GamePickFactory(
+        PickFactory(
             pick=self.pick_sheet_2, game=game_2, picked_team=game_2_winning_team
         )
 

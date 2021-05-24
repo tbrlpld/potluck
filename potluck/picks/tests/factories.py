@@ -13,7 +13,7 @@ class PickSheetFactory(factory.django.DjangoModelFactory):
     pot = factory.SubFactory(PotFactory)
 
 
-class GamePickFactory(factory.django.DjangoModelFactory):
+class PickFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Pick
 

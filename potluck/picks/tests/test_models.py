@@ -3,7 +3,7 @@ import pytest
 from potluck.games.models import Game
 from potluck.games.tests.factories import GameFactory
 from potluck.picks.models import Pick, PickSheet
-from potluck.picks.tests.factories import GamePickFactory, PickSheetFactory
+from potluck.picks.tests.factories import PickFactory, PickSheetFactory
 from potluck.pots.models import Pot
 from potluck.teams.models import Team
 
@@ -49,43 +49,43 @@ class TestPick:
 
     @pytest.fixture
     def place_game_1_wrong_pick(self):
-        game_pick = GamePickFactory.create(
+        pick = PickFactory.create(
             pick=self.pick_sheet, game=self.game_1, picked_team=self.game_1_loosing_team
         )
 
-        yield game_pick
+        yield pick
 
-        game_pick.delete()
+        pick.delete()
 
     @pytest.fixture
     def place_game_1_correct_pick(self):
-        game_pick = GamePickFactory.create(
+        pick = PickFactory.create(
             pick=self.pick_sheet, game=self.game_1, picked_team=self.game_1_winning_team
         )
 
-        yield game_pick
+        yield pick
 
-        game_pick.delete()
+        pick.delete()
 
     @pytest.fixture
     def place_game_2_wrong_pick(self):
-        game_pick = GamePickFactory.create(
+        pick = PickFactory.create(
             pick=self.pick_sheet, game=self.game_2, picked_team=self.game_2_loosing_team
         )
 
-        yield game_pick
+        yield pick
 
-        game_pick.delete()
+        pick.delete()
 
     @pytest.fixture
     def place_game_2_correct_pick(self):
-        game_pick = GamePickFactory.create(
+        pick = PickFactory.create(
             pick=self.pick_sheet, game=self.game_2, picked_team=self.game_2_winning_team
         )
 
-        yield game_pick
+        yield pick
 
-        game_pick.delete()
+        pick.delete()
 
     def test_count_correct_method_returns_0_for_both_wrong(
         self,
@@ -190,10 +190,10 @@ class TestPick:
         # Create another pick with 2 correct picks. It's existence can not incluence the fact
         # that the pick under test only has one correct pick!
         other_pick_sheet = PickSheetFactory.create(pot=self.pot, picker="The Other Picker")
-        GamePickFactory.create(
+        PickFactory.create(
             pick=other_pick_sheet, game=self.game_1, picked_team=self.game_1_winning_team
         )
-        GamePickFactory.create(
+        PickFactory.create(
             pick=other_pick_sheet, game=self.game_2, picked_team=self.game_2_winning_team
         )
         assert Pick.objects.count() == 4
@@ -289,14 +289,14 @@ class TestGamePick:
         winning_team = game.teams.first()
         game.winning_team = winning_team
         game.save()  # Game needs to be able to check equality in the DB
-        game_pick = GamePickFactory(
+        pick = PickFactory(
             game=game,
             picked_team=winning_team
         )
         # To get the annotation, you need to retrieve the object from the manager
-        game_pick = Pick.objects.get(pk=game_pick.id)
+        pick = Pick.objects.get(pk=pick.id)
 
-        result = game_pick.is_correct
+        result = pick.is_correct
 
         assert result is True
 
@@ -306,13 +306,13 @@ class TestGamePick:
         loosing_team = game.teams.last()
         game.winning_team = winning_team
         game.save()  # Game needs to be able to check equality in the DB
-        game_pick = GamePickFactory(
+        pick = PickFactory(
             game=game,
             picked_team=loosing_team
         )
         # To get the annotation, you need to retrieve the object from the manager
-        game_pick = Pick.objects.get(pk=game_pick.id)
+        pick = Pick.objects.get(pk=pick.id)
 
-        result = game_pick.is_correct
+        result = pick.is_correct
 
         assert result is False
