@@ -66,7 +66,7 @@ PickMangerFromQueryset = PickManager.from_queryset(PickQueryset)
 
 
 class Pick(models.Model):
-    pick = models.ForeignKey(
+    pick_sheet = models.ForeignKey(
         PickSheet, on_delete=models.CASCADE, related_name="game_picks", null=True, blank=True
     )
     game = models.ForeignKey(Game, on_delete=models.CASCADE,
@@ -78,10 +78,10 @@ class Pick(models.Model):
     objects = PickMangerFromQueryset()
 
     def __str__(self):
-        return f"GamePick {self.id} for {self.pick}: {self.game}"
+        return f"GamePick {self.id} for {self.pick_sheet}: {self.game}"
 
-    def add_pick(self, pick):
-        self.pick = pick
+    def add_pick_sheet(self, pick_sheet):
+        self.pick_sheet = pick_sheet
         self.full_clean
         self.save()
 

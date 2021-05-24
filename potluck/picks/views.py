@@ -35,7 +35,7 @@ def pick_create_view(request, pot_id):
 
             for game_pick_form in create_game_pick_formset:
                 game_pick = game_pick_form.save(commit=False)
-                game_pick.add_pick(pick)
+                game_pick.add_pick_sheet(pick)
 
             return shortcuts.render(
                 request,

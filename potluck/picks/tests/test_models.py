@@ -50,7 +50,7 @@ class TestPick:
     @pytest.fixture
     def place_game_1_wrong_pick(self):
         pick = PickFactory.create(
-            pick=self.pick_sheet, game=self.game_1, picked_team=self.game_1_loosing_team
+            pick_sheet=self.pick_sheet, game=self.game_1, picked_team=self.game_1_loosing_team
         )
 
         yield pick
@@ -60,7 +60,7 @@ class TestPick:
     @pytest.fixture
     def place_game_1_correct_pick(self):
         pick = PickFactory.create(
-            pick=self.pick_sheet, game=self.game_1, picked_team=self.game_1_winning_team
+            pick_sheet=self.pick_sheet, game=self.game_1, picked_team=self.game_1_winning_team
         )
 
         yield pick
@@ -70,7 +70,7 @@ class TestPick:
     @pytest.fixture
     def place_game_2_wrong_pick(self):
         pick = PickFactory.create(
-            pick=self.pick_sheet, game=self.game_2, picked_team=self.game_2_loosing_team
+            pick_sheet=self.pick_sheet, game=self.game_2, picked_team=self.game_2_loosing_team
         )
 
         yield pick
@@ -80,7 +80,7 @@ class TestPick:
     @pytest.fixture
     def place_game_2_correct_pick(self):
         pick = PickFactory.create(
-            pick=self.pick_sheet, game=self.game_2, picked_team=self.game_2_winning_team
+            pick_sheet=self.pick_sheet, game=self.game_2, picked_team=self.game_2_winning_team
         )
 
         yield pick
@@ -191,10 +191,10 @@ class TestPick:
         # that the pick under test only has one correct pick!
         other_pick_sheet = PickSheetFactory.create(pot=self.pot, picker="The Other Picker")
         PickFactory.create(
-            pick=other_pick_sheet, game=self.game_1, picked_team=self.game_1_winning_team
+            pick_sheet=other_pick_sheet, game=self.game_1, picked_team=self.game_1_winning_team
         )
         PickFactory.create(
-            pick=other_pick_sheet, game=self.game_2, picked_team=self.game_2_winning_team
+            pick_sheet=other_pick_sheet, game=self.game_2, picked_team=self.game_2_winning_team
         )
         assert Pick.objects.count() == 4
         # Get the original pick, the one that is being tested

@@ -21,18 +21,18 @@ class TestPot:
         # Pick 1 with 1 correct game pick
         pick_sheet_1 = PickSheetFactory(pot=pot)
         PickFactory(
-            pick=pick_sheet_1, game=game_1, picked_team=game_1_winning_team
+            pick_sheet=pick_sheet_1, game=game_1, picked_team=game_1_winning_team
         )
         PickFactory(
-            pick=pick_sheet_1, game=game_2, picked_team=game_2_loosing_team
+            pick_sheet=pick_sheet_1, game=game_2, picked_team=game_2_loosing_team
         )
         # Pick 2 with 2 correct game picks
         pick_sheet_2 = PickSheetFactory(pot=pot)
         PickFactory(
-            pick=pick_sheet_2, game=game_1, picked_team=game_1_winning_team
+            pick_sheet=pick_sheet_2, game=game_1, picked_team=game_1_winning_team
         )
         PickFactory(
-            pick=pick_sheet_2, game=game_2, picked_team=game_2_winning_team
+            pick_sheet=pick_sheet_2, game=game_2, picked_team=game_2_winning_team
         )
 
         result = pot.get_tally()
