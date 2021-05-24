@@ -11,5 +11,5 @@ class PickSheetAdmin(admin.ModelAdmin):
 
 # Register your models here.
 @admin.register(Pick)
-class GamePickAdmin(admin.ModelAdmin):
+class PickAdmin(admin.ModelAdmin):
     pass
