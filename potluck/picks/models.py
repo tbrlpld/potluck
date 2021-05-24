@@ -37,7 +37,7 @@ class PickSheet(models.Model):
     objects = PickSheetMangerFromQueryset()
 
     def __str__(self):
-        return f"Pick {self.id}: {self.pot} - {self.picker}"
+        return f"PickSheet {self.id}: {self.picker} ({self.pot})"
 
     def count_correct(self):
         corrent_game_picks = self.game_picks.filter(is_correct=True)
@@ -78,7 +78,7 @@ class Pick(models.Model):
     objects = PickMangerFromQueryset()
 
     def __str__(self):
-        return f"GamePick {self.id} for {self.pick_sheet}: {self.game}"
+        return f"Pick {self.id}: {self.pick_sheet.picker} ({self.game})"
 
     def add_pick_sheet(self, pick_sheet):
         self.pick_sheet = pick_sheet
