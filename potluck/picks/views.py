@@ -1,13 +1,13 @@
 from django import forms, shortcuts, urls
 
-from potluck.picks.forms import CreateGamePickForm, CreatePickSheetForm
+from potluck.picks.forms import CreatePickForm, CreatePickSheetForm
 from potluck.picks.models import Pot
 
 
 def pick_create_view(request, pot_id):
     pot = shortcuts.get_object_or_404(Pot, pk=pot_id)
-    CreateGamePickFormset = forms.formset_factory(
-        CreateGamePickForm,
+    CreatePickFormset = forms.formset_factory(
+        CreatePickForm,
         min_num=pot.games.count(),
         max_num=pot.games.count(),
         validate_min=True,
@@ -15,27 +15,27 @@ def pick_create_view(request, pot_id):
         extra=0,
     )
     initial_pick_sheet_form = {"pot": pot}
-    initial_game_pick_formset = []
+    initial_pick_formset = []
     for game in pot.games.all():
-        initial_game_pick_formset.append({"game": game})
+        initial_pick_formset.append({"game": game})
 
     if request.method == "POST":
         create_pick_sheet_form = CreatePickSheetForm(
             request.POST,
             initial=initial_pick_sheet_form,
         )
-        create_game_pick_formset = CreateGamePickFormset(
+        create_pick_formset = CreatePickFormset(
             request.POST,
-            initial=initial_game_pick_formset,
+            initial=initial_pick_formset,
         )
 
         if all((create_pick_sheet_form.is_valid(),
-                create_game_pick_formset.is_valid())):
+                create_pick_formset.is_valid())):
             pick_sheet = create_pick_sheet_form.save()
 
-            for game_pick_form in create_game_pick_formset:
-                game_pick = game_pick_form.save(commit=False)
-                game_pick.add_pick_sheet(pick_sheet)
+            for pick_form in create_pick_formset:
+                pick = pick_form.save(commit=False)
+                pick.add_pick_sheet(pick_sheet)
 
             return shortcuts.render(
                 request,
@@ -44,8 +44,8 @@ def pick_create_view(request, pot_id):
             )
     else:
         create_pick_sheet_form = CreatePickSheetForm(initial=initial_pick_sheet_form)
-        create_game_pick_formset = CreateGamePickFormset(
-            initial=initial_game_pick_formset)
+        create_pick_formset = CreatePickFormset(
+            initial=initial_pick_formset)
 
     return shortcuts.render(
         request,
@@ -53,6 +53,6 @@ def pick_create_view(request, pot_id):
         context={
             "pot": pot,
             "create_pick_sheet_form": create_pick_sheet_form,
-            "create_game_pick_formset": create_game_pick_formset,
+            "create_pick_formset": create_pick_formset,
         },
     )

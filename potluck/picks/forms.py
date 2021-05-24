@@ -13,7 +13,7 @@ class CreatePickSheetForm(forms.ModelForm):
         labels = {"picker": "Your name"}
 
 
-class CreateGamePickForm(forms.ModelForm):
+class CreatePickForm(forms.ModelForm):
     class Meta:
         model = Pick
         fields = ("game", "picked_team")

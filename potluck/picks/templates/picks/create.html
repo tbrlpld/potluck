@@ -9,7 +9,7 @@
         {% csrf_token %}
         {{ create_pick_sheet_form.as_p }}
 
-        {{ create_game_pick_formset.as_p }}
+        {{ create_pick_formset.as_p }}
         <input type="submit" value="Place picks">
     </form>
 {% endblock content %}
