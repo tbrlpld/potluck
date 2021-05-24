@@ -59,6 +59,6 @@ class TestPickCreateView:
         assert response.status_code == http.HTTPStatus.OK
         assert PickSheet.objects.count() == 1
         assert Pick.objects.count() == 2
-        pick = PickSheet.objects.first()
-        assert pick.game_picks.first().picked_team == picked_team_1
-        assert pick.game_picks.last().picked_team == picked_team_2
+        pick_sheet = PickSheet.objects.first()
+        assert pick_sheet.picks.first().picked_team == picked_team_1
+        assert pick_sheet.picks.last().picked_team == picked_team_2

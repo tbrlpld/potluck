@@ -7,17 +7,17 @@ from potluck.teams.models import Team
 
 class PickSheetQueryset(models.QuerySet):
     def annotate_correct_count(self):
-        correct_game_picks = Pick.objects.filter(
+        correct_picks = Pick.objects.filter(
             is_correct=True,
         )
-        annotated_picks = self.annotate(
+        annotated_pick_sheets = self.annotate(
             correct_count=models.Count(
-                "game_picks",
-                filter=models.Q(game_picks__in=correct_game_picks),
+                "picks",
+                filter=models.Q(picks__in=correct_picks),
                 distinct=True
             )
         )
-        return annotated_picks
+        return annotated_pick_sheets
 
 
 class PickSheetManager(models.Manager):
@@ -40,9 +40,9 @@ class PickSheet(models.Model):
         return f"PickSheet {self.id}: {self.picker} ({self.pot})"
 
     def count_correct(self):
-        corrent_game_picks = self.game_picks.filter(is_correct=True)
+        correct_game_picks = self.picks.filter(is_correct=True)
         # print(corrent_game_picks.query)
-        return corrent_game_picks.count()
+        return correct_game_picks.count()
 
 
 class PickQueryset(models.QuerySet):
@@ -67,12 +67,23 @@ PickMangerFromQueryset = PickManager.from_queryset(PickQueryset)
 
 class Pick(models.Model):
     pick_sheet = models.ForeignKey(
-        PickSheet, on_delete=models.CASCADE, related_name="game_picks", null=True, blank=True
+        PickSheet,
+        on_delete=models.CASCADE,
+        related_name="picks",
+        null=True,
+        blank=True,
     )
-    game = models.ForeignKey(Game, on_delete=models.CASCADE,
-                             related_name="game_picks")
+    game = models.ForeignKey(
+        Game,
+        on_delete=models.CASCADE,
+        related_name="picks",
+    )
     picked_team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, related_name="+", null=True, blank=False
+        Team,
+        on_delete=models.CASCADE,
+        related_name="+",
+        null=True,
+        blank=False,
     )
 
     objects = PickMangerFromQueryset()
