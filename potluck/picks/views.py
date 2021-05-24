@@ -1,6 +1,6 @@
 from django import forms, shortcuts, urls
 
-from potluck.picks.forms import CreateGamePickForm, CreatePickForm
+from potluck.picks.forms import CreateGamePickForm, CreatePickSheetForm
 from potluck.picks.models import Pot
 
 
@@ -14,28 +14,28 @@ def pick_create_view(request, pot_id):
         validate_max=True,
         extra=0,
     )
-    initial_pick_form = {"pot": pot}
+    initial_pick_sheet_form = {"pot": pot}
     initial_game_pick_formset = []
     for game in pot.games.all():
         initial_game_pick_formset.append({"game": game})
 
     if request.method == "POST":
-        create_pick_form = CreatePickForm(
+        create_pick_sheet_form = CreatePickSheetForm(
             request.POST,
-            initial=initial_pick_form,
+            initial=initial_pick_sheet_form,
         )
         create_game_pick_formset = CreateGamePickFormset(
             request.POST,
             initial=initial_game_pick_formset,
         )
 
-        if all((create_pick_form.is_valid(),
+        if all((create_pick_sheet_form.is_valid(),
                 create_game_pick_formset.is_valid())):
-            pick = create_pick_form.save()
+            pick_sheet = create_pick_sheet_form.save()
 
             for game_pick_form in create_game_pick_formset:
                 game_pick = game_pick_form.save(commit=False)
-                game_pick.add_pick_sheet(pick)
+                game_pick.add_pick_sheet(pick_sheet)
 
             return shortcuts.render(
                 request,
@@ -43,7 +43,7 @@ def pick_create_view(request, pot_id):
                 context={"pot": pot},
             )
     else:
-        create_pick_form = CreatePickForm(initial=initial_pick_form)
+        create_pick_sheet_form = CreatePickSheetForm(initial=initial_pick_sheet_form)
         create_game_pick_formset = CreateGamePickFormset(
             initial=initial_game_pick_formset)
 
@@ -52,7 +52,7 @@ def pick_create_view(request, pot_id):
         template_name="picks/create.html",
         context={
             "pot": pot,
-            "create_pick_form": create_pick_form,
+            "create_pick_sheet_form": create_pick_sheet_form,
             "create_game_pick_formset": create_game_pick_formset,
         },
     )

@@ -7,7 +7,7 @@
     <h1>Take your picks!</h1>
     <form action="" method="post">
         {% csrf_token %}
-        {{ create_pick_form.as_p }}
+        {{ create_pick_sheet_form.as_p }}
 
         {{ create_game_pick_formset.as_p }}
         <input type="submit" value="Place picks">

@@ -3,7 +3,7 @@ from django import forms
 from potluck.picks.models import Pick, PickSheet
 
 
-class CreatePickForm(forms.ModelForm):
+class CreatePickSheetForm(forms.ModelForm):
     class Meta:
         model = PickSheet
         fields = ("picker", "pot")
