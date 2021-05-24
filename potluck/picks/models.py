@@ -32,7 +32,7 @@ PickSheetMangerFromQueryset = PickSheetManager.from_queryset(PickSheetQueryset)
 
 class PickSheet(models.Model):
     picker = models.CharField(max_length=100, help_text="Name of the person picking")
-    pot = models.ForeignKey(Pot, on_delete=models.CASCADE, related_name="picks")
+    pot = models.ForeignKey(Pot, on_delete=models.CASCADE, related_name="pick_sheets")
 
     objects = PickSheetMangerFromQueryset()
 
@@ -40,9 +40,9 @@ class PickSheet(models.Model):
         return f"PickSheet {self.id}: {self.picker} ({self.pot})"
 
     def count_correct(self):
-        correct_game_picks = self.picks.filter(is_correct=True)
+        correct_picks = self.picks.filter(is_correct=True)
         # print(corrent_game_picks.query)
-        return correct_game_picks.count()
+        return correct_picks.count()
 
 
 class PickQueryset(models.QuerySet):
