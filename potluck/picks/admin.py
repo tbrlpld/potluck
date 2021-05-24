@@ -5,7 +5,7 @@ from potluck.picks.models import Pick, PickSheet
 
 # Register your models here.
 @admin.register(PickSheet)
-class PickAdmin(admin.ModelAdmin):
+class PickSheetAdmin(admin.ModelAdmin):
     pass
 
 
