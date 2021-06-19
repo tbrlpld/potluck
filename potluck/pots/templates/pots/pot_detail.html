@@ -40,4 +40,13 @@
             So who won? <a href="{% url 'show_tally' pot.pk %}">Get the tally.</a>
         </p>
     {% endif %}
+    <p>
+        <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
+            {% csrf_token %}
+            {% if pot.next_status %}
+                <button type="submit" name="status" value="{{ pot.next_status }}">Set pot to {{ pot.next_status.label }}</button>
+            {% endif %}
+
+        </form>
+    </p>
 {% endblock content %}

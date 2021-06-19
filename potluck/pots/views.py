@@ -31,6 +31,15 @@ class PotCreateView(generic.CreateView):
     fields = ("name",)
 
 
+class UpdatePotStatusView(generic.UpdateView):
+    model = Pot
+    fields = ("status",)
+    http_method_names = ["post"]
+
+    def get_success_url(self):
+        return urls.reverse_lazy("pot_detail", kwargs={"pk": self.kwargs["pk"]})
+
+
 class AddGameView(generic.CreateView):
     model = Game
     form_class = GameAddForm
