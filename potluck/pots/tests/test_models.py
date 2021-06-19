@@ -1,7 +1,9 @@
 import pytest
 
 from potluck.picks.tests.factories import PickFactory, PickSheetFactory
+from potluck.pots.models import Pot
 from potluck.pots.tests.factories import PotFactory
+
 
 
 @pytest.mark.django_db
@@ -39,3 +41,20 @@ class TestPot:
 
         assert result[0] == pick_sheet_2
         assert result[1] == pick_sheet_1
+
+
+    @pytest.mark.parametrize(
+        "initial_status, expected_next_status",
+        [
+            (Pot.Status.DRAFT, Pot.Status.OPEN),
+            (Pot.Status.OPEN, Pot.Status.CLOSED),
+            (Pot.Status.CLOSED, Pot.Status.TALLY),
+            (Pot.Status.TALLY, None),
+        ]
+    )
+    def test_next_status(self, initial_status, expected_next_status):
+        pot = PotFactory.create(status=initial_status)
+
+        next_status = pot.next_status
+
+        assert next_status == expected_next_status
