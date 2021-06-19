@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{{ pot.name }}</h1>
+    <h1>{{ pot.name }} ({{ pot.get_status_display }})</h1>
     {% if pot.games %}
         <ul>
             {% for game in pot.games.all  %}
                 <li style="padding-bottom: 1rem">{{ game }}
-                    <form style="display: inline-block; margin-left: 1rem" action="{% url 'game_delete' game.pk %}" method="post">
-                        {% csrf_token %}
-                        <input type="submit" value="Delete">
-                    </form>
+                    {% if pot.status == pot.Status.DRAFT %}
+                        <form style="display: inline-block; margin-left: 1rem" action="{% url 'game_delete' game.pk %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Delete">
+                        </form>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
@@ -18,19 +20,24 @@
             No games in this pot yet.
         </p>
     {% endif %}
-    <p>
-        <a href="{% url 'add_game' pot.pk %}">Add game</a>
-    </p>
-    <p>
-        Participants in the pot can place the picks here:
+    {% if pot.status == pot.Status.DRAFT %}
         <p>
-            <a href="{{ picks_url }}">{{ picks_url }}</a>
+            <a href="{% url 'add_game' pot.pk %}">Add game</a>
         </p>
-    </p>
-    <p>
-        <a href="{% url 'set_winners' pot.pk %}">Set winning teams</a>
-    </p>
-    <p>
-        So who won? <a href="{% url 'show_tally' pot.pk %}">Get the tally.</a>
-    </p>
+    {% elif pot.status == pot.Status.OPEN %}
+        <p>
+            Participants in the pot can place the picks here:
+            <p>
+                <a href="{{ picks_url }}">{{ picks_url }}</a>
+            </p>
+        </p>
+    {% elif pot.status == pot.Status.CLOSED %}
+        <p>
+            <a href="{% url 'set_winners' pot.pk %}">Set winning teams</a>
+        </p>
+    {% elif pot.status == pot.Status.TALLY %}
+        <p>
+            So who won? <a href="{% url 'show_tally' pot.pk %}">Get the tally.</a>
+        </p>
+    {% endif %}
 {% endblock content %}
