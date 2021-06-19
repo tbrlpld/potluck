@@ -5,7 +5,6 @@ from potluck.pots.models import Pot
 from potluck.pots.tests.factories import PotFactory
 
 
-
 @pytest.mark.django_db
 class TestPot:
     def test_tally_lists_picks_by_decending_number_of_correct_picks(self):
@@ -42,7 +41,6 @@ class TestPot:
         assert result[0] == pick_sheet_2
         assert result[1] == pick_sheet_1
 
-
     @pytest.mark.parametrize(
         "initial_status, expected_next_status",
         [
@@ -50,7 +48,7 @@ class TestPot:
             (Pot.Status.OPEN, Pot.Status.CLOSED),
             (Pot.Status.CLOSED, Pot.Status.TALLY),
             (Pot.Status.TALLY, None),
-        ]
+        ],
     )
     def test_next_status(self, initial_status, expected_next_status):
         pot = PotFactory.create(status=initial_status)
@@ -58,3 +56,19 @@ class TestPot:
         next_status = pot.next_status
 
         assert next_status == expected_next_status
+
+    @pytest.mark.parametrize(
+        "initial_status, expected_previous_status",
+        [
+            (Pot.Status.DRAFT, None),
+            (Pot.Status.OPEN, Pot.Status.DRAFT),
+            (Pot.Status.CLOSED, Pot.Status.OPEN),
+            (Pot.Status.TALLY, Pot.Status.CLOSED),
+        ],
+    )
+    def test_previous_status(self, initial_status, expected_previous_status):
+        pot = PotFactory.create(status=initial_status)
+
+        previous_status = pot.previous_status
+
+        assert previous_status == expected_previous_status

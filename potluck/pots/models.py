@@ -37,3 +37,12 @@ class Pot(models.Model):
         except IndexError:
             next_status = None
         return next_status
+
+    @property
+    def previous_status(self):
+        previous_status_index = self.status_order.index(self.status) - 1
+        if previous_status_index < 0:
+            previous_status = None
+        else:
+            previous_status = self.status_order[previous_status_index]
+        return previous_status

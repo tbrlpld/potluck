@@ -43,6 +43,9 @@
     <p>
         <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
             {% csrf_token %}
+            {% if pot.previous_status %}
+                <button type="submit" name="status" value="{{ pot.previous_status }}">Set pot to {{ pot.previous_status.label }}</button>
+            {% endif %}
             {% if pot.next_status %}
                 <button type="submit" name="status" value="{{ pot.next_status }}">Set pot to {{ pot.next_status.label }}</button>
             {% endif %}
