@@ -18,9 +18,15 @@ from django.urls import path
 
 from potluck.games.views import GameDeleteView
 from potluck.picks.views import pick_create_view
-from potluck.pots.views import (AddGameView, PotCreateView, PotDetailView,
-                                PotListView, SetWinningTeamsView, TallyView,
-                                UpdatePotStatusView)
+from potluck.pots.views import (
+    AddGameView,
+    PotCreateView,
+    PotDetailView,
+    PotListView,
+    SetWinningTeamsView,
+    TallyView,
+    UpdatePotStatusView,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
