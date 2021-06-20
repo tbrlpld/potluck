@@ -9,17 +9,39 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('games', '0003_add_pot_fk_to_game'),
-        ('teams', '0001_add_team_model'),
+        ("games", "0003_add_pot_fk_to_game"),
+        ("teams", "0001_add_team_model"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='GamePick',
+            name="GamePick",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='game_picks', to='games.game')),
-                ('pick', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='teams.team')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "game",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="game_picks",
+                        to="games.game",
+                    ),
+                ),
+                (
+                    "pick",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="+",
+                        to="teams.team",
+                    ),
+                ),
             ],
         ),
     ]

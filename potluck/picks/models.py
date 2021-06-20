@@ -12,9 +12,7 @@ class PickSheetQueryset(models.QuerySet):
         )
         annotated_pick_sheets = self.annotate(
             correct_count=models.Count(
-                "picks",
-                filter=models.Q(picks__in=correct_picks),
-                distinct=True
+                "picks", filter=models.Q(picks__in=correct_picks), distinct=True
             )
         )
         return annotated_pick_sheets

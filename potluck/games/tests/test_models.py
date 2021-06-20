@@ -1,6 +1,6 @@
-import pytest
 from django.core import exceptions
 
+import pytest
 
 from potluck.games.models import Game
 from potluck.games.tests.factories import GameFactory
@@ -24,4 +24,3 @@ class TestGame:
 
         with pytest.raises(exceptions.ValidationError):
             game.set_winning_team(team_not_in_game)
-

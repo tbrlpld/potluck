@@ -9,16 +9,39 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('teams', '0001_add_team_model'),
+        ("teams", "0001_add_team_model"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Game',
+            name="Game",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('teams', models.ManyToManyField(related_name='_game_teams_+', to='teams.Team')),
-                ('winner', models.ForeignKey(limit_choices_to=models.ManyToManyField(related_name='_game_teams_+', to='teams.Team'), on_delete=django.db.models.deletion.CASCADE, related_name='+', to='teams.team')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "teams",
+                    models.ManyToManyField(
+                        related_name="_game_teams_+", to="teams.Team"
+                    ),
+                ),
+                (
+                    "winner",
+                    models.ForeignKey(
+                        limit_choices_to=models.ManyToManyField(
+                            related_name="_game_teams_+", to="teams.Team"
+                        ),
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="+",
+                        to="teams.team",
+                    ),
+                ),
             ],
         ),
     ]

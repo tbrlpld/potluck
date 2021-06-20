@@ -29,8 +29,7 @@ def pick_create_view(request, pot_id):
             initial=initial_pick_formset,
         )
 
-        if all((create_pick_sheet_form.is_valid(),
-                create_pick_formset.is_valid())):
+        if all((create_pick_sheet_form.is_valid(), create_pick_formset.is_valid())):
             pick_sheet = create_pick_sheet_form.save()
 
             for pick_form in create_pick_formset:
@@ -44,8 +43,7 @@ def pick_create_view(request, pot_id):
             )
     else:
         create_pick_sheet_form = CreatePickSheetForm(initial=initial_pick_sheet_form)
-        create_pick_formset = CreatePickFormset(
-            initial=initial_pick_formset)
+        create_pick_formset = CreatePickFormset(initial=initial_pick_formset)
 
     return shortcuts.render(
         request,

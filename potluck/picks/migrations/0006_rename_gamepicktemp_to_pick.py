@@ -6,14 +6,14 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('games', '0003_add_pot_fk_to_game'),
-        ('teams', '0001_add_team_model'),
-        ('picks', '0005_rename_pick_to_picksheet'),
+        ("games", "0003_add_pot_fk_to_game"),
+        ("teams", "0001_add_team_model"),
+        ("picks", "0005_rename_pick_to_picksheet"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='GamePickTemp',
-            new_name='Pick',
+            old_name="GamePickTemp",
+            new_name="Pick",
         ),
     ]

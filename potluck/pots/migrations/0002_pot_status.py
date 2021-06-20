@@ -6,13 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pots', '0001_add_pot_model'),
+        ("pots", "0001_add_pot_model"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='pot',
-            name='status',
-            field=models.CharField(choices=[('DR', 'Draft'), ('OP', 'Open'), ('CL', 'Closed'), ('TA', 'Tally')], default='DR', max_length=2),
+            model_name="pot",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("DR", "Draft"),
+                    ("OP", "Open"),
+                    ("CL", "Closed"),
+                    ("TA", "Tally"),
+                ],
+                default="DR",
+                max_length=2,
+            ),
         ),
     ]

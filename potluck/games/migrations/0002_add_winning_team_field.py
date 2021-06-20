@@ -7,18 +7,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('teams', '0001_add_team_model'),
-        ('games', '0001_add_game_model'),
+        ("teams", "0001_add_team_model"),
+        ("games", "0001_add_game_model"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='game',
-            name='winner',
+            model_name="game",
+            name="winner",
         ),
         migrations.AddField(
-            model_name='game',
-            name='winning_team',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='teams.team'),
+            model_name="game",
+            name="winning_team",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="+",
+                to="teams.team",
+            ),
         ),
     ]

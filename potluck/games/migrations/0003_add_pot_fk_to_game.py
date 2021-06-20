@@ -7,14 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pots', '0001_add_pot_model'),
-        ('games', '0002_add_winning_team_field'),
+        ("pots", "0001_add_pot_model"),
+        ("games", "0002_add_winning_team_field"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='game',
-            name='pot',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='games', to='pots.pot'),
+            model_name="game",
+            name="pot",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="games",
+                to="pots.pot",
+            ),
         ),
     ]

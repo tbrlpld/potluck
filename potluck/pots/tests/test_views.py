@@ -98,7 +98,6 @@ class TestGameAddView:
 
 @pytest.mark.django_db
 class TestSetWinningTeamsView:
-
     @pytest.fixture
     def setup(self):
         self.pot = PotFactory.create()
@@ -125,7 +124,6 @@ class TestSetWinningTeamsView:
 
 @pytest.mark.django_db
 class TestTallyView:
-
     @pytest.fixture
     def setup(self):
         pot = PotFactory.create()

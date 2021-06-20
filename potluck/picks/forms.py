@@ -27,8 +27,8 @@ class CreatePickForm(forms.ModelForm):
         self.game = self.initial.get("game")
         if self.game is None:
             raise ValueError(
-                "{0} needs receive a game as initial data.".format(
-                    self.__class__))
+                "{0} needs receive a game as initial data.".format(self.__class__)
+            )
         self.fields["picked_team"].queryset = self.game.teams
         self.fields["picked_team"].label = str(self.game)
 

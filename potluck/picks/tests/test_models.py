@@ -10,7 +10,6 @@ from potluck.teams.models import Team
 
 @pytest.mark.django_db
 class TestPick:
-
     @pytest.fixture
     def setup(self):
         self.pick_sheet = PickSheetFactory.create()
@@ -50,7 +49,9 @@ class TestPick:
     @pytest.fixture
     def place_game_1_wrong_pick(self):
         pick = PickFactory.create(
-            pick_sheet=self.pick_sheet, game=self.game_1, picked_team=self.game_1_loosing_team
+            pick_sheet=self.pick_sheet,
+            game=self.game_1,
+            picked_team=self.game_1_loosing_team,
         )
 
         yield pick
@@ -60,7 +61,9 @@ class TestPick:
     @pytest.fixture
     def place_game_1_correct_pick(self):
         pick = PickFactory.create(
-            pick_sheet=self.pick_sheet, game=self.game_1, picked_team=self.game_1_winning_team
+            pick_sheet=self.pick_sheet,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team,
         )
 
         yield pick
@@ -70,7 +73,9 @@ class TestPick:
     @pytest.fixture
     def place_game_2_wrong_pick(self):
         pick = PickFactory.create(
-            pick_sheet=self.pick_sheet, game=self.game_2, picked_team=self.game_2_loosing_team
+            pick_sheet=self.pick_sheet,
+            game=self.game_2,
+            picked_team=self.game_2_loosing_team,
         )
 
         yield pick
@@ -80,7 +85,9 @@ class TestPick:
     @pytest.fixture
     def place_game_2_correct_pick(self):
         pick = PickFactory.create(
-            pick_sheet=self.pick_sheet, game=self.game_2, picked_team=self.game_2_winning_team
+            pick_sheet=self.pick_sheet,
+            game=self.game_2,
+            picked_team=self.game_2_winning_team,
         )
 
         yield pick
@@ -189,12 +196,18 @@ class TestPick:
     ):
         # Create another pick with 2 correct picks. It's existence can not incluence the fact
         # that the pick under test only has one correct pick!
-        other_pick_sheet = PickSheetFactory.create(pot=self.pot, picker="The Other Picker")
-        PickFactory.create(
-            pick_sheet=other_pick_sheet, game=self.game_1, picked_team=self.game_1_winning_team
+        other_pick_sheet = PickSheetFactory.create(
+            pot=self.pot, picker="The Other Picker"
         )
         PickFactory.create(
-            pick_sheet=other_pick_sheet, game=self.game_2, picked_team=self.game_2_winning_team
+            pick_sheet=other_pick_sheet,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team,
+        )
+        PickFactory.create(
+            pick_sheet=other_pick_sheet,
+            game=self.game_2,
+            picked_team=self.game_2_winning_team,
         )
         assert Pick.objects.count() == 4
         # Get the original pick, the one that is being tested
@@ -282,17 +295,15 @@ class TestPick:
     #     assert correct_game_picks.count() == 3
     #     assert pick.correct_count == 3
 
-@ pytest.mark.django_db
+
+@pytest.mark.django_db
 class TestGamePick:
     def test_is_correct_annotation_is_true_if_picked_team_matches_winning_team(self):
         game = GameFactory.create()
         winning_team = game.teams.first()
         game.winning_team = winning_team
         game.save()  # Game needs to be able to check equality in the DB
-        pick = PickFactory(
-            game=game,
-            picked_team=winning_team
-        )
+        pick = PickFactory(game=game, picked_team=winning_team)
         # To get the annotation, you need to retrieve the object from the manager
         pick = Pick.objects.get(pk=pick.id)
 
@@ -300,16 +311,15 @@ class TestGamePick:
 
         assert result is True
 
-    def test_is_correct_annotation_is_false_if_picked_team_not_matches_winning_team(self):
+    def test_is_correct_annotation_is_false_if_picked_team_not_matches_winning_team(
+        self,
+    ):
         game = GameFactory.create()
         winning_team = game.teams.first()
         loosing_team = game.teams.last()
         game.winning_team = winning_team
         game.save()  # Game needs to be able to check equality in the DB
-        pick = PickFactory(
-            game=game,
-            picked_team=loosing_team
-        )
+        pick = PickFactory(game=game, picked_team=loosing_team)
         # To get the annotation, you need to retrieve the object from the manager
         pick = Pick.objects.get(pk=pick.id)
 
