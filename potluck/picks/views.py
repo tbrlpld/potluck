@@ -1,4 +1,4 @@
-from django import forms, shortcuts, urls
+from django import forms, shortcuts
 
 from potluck.picks.forms import CreatePickForm, CreatePickSheetForm
 from potluck.picks.models import Pot

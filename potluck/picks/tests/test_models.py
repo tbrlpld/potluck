@@ -194,8 +194,8 @@ class TestPick:
         place_game_1_wrong_pick,
         place_game_2_correct_pick,
     ):
-        # Create another pick with 2 correct picks. It's existence can not incluence the fact
-        # that the pick under test only has one correct pick!
+        # Create another pick with 2 correct picks. It's existence can not incluence the
+        # fact that the pick under test only has one correct pick!
         other_pick_sheet = PickSheetFactory.create(
             pot=self.pot, picker="The Other Picker"
         )

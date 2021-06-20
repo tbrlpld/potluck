@@ -34,7 +34,8 @@ class Pot(models.Model):
     }
     _status_help_text = {
         Status.DRAFT: (
-            "While the pot is in draft, you can add to remove games included in the pot. "
+            "While the pot is in draft you can "
+            "add and remove games included in the pot. "
             "No picks can be submitted at this time."
         ),
         Status.OPEN: "The pot is open to pick sheet submissions.",

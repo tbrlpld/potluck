@@ -1,4 +1,4 @@
-from django.core import exceptions, validators
+from django.core import exceptions
 from django.db import models
 
 from potluck.pots.models import Pot

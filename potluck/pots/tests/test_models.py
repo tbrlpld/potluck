@@ -12,7 +12,7 @@ class TestPot:
         #
         game_1 = pot.games.first()
         game_1_winning_team = game_1.teams.first()
-        game_1_loosing_team = game_1.teams.last()
+        game_1_loosing_team = game_1.teams.last()  # noqa: F841
         game_1.set_winning_team(game_1_winning_team)
         #
         game_2 = pot.games.first()
