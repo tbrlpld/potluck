@@ -22,6 +22,16 @@ class Pot(models.Model):
         Status.CLOSED,
         Status.TALLY,
     )
+    _next_status_action_text = {
+        Status.OPEN: "Open up the pot for pick placements",
+        Status.CLOSED: "Close the pot and set winning teams",
+        Status.TALLY: "Finish off the pot and check who won",
+    }
+    _previous_status_action_text = {
+        Status.DRAFT: "Reset the pot to draft to edit the games",
+        Status.OPEN: "Re-open up the pot for pick placements",
+        Status.CLOSED: "Go back to set winning teams in the games",
+    }
 
     def __str__(self):
         return self.name
@@ -46,3 +56,11 @@ class Pot(models.Model):
         else:
             previous_status = self.status_order[previous_status_index]
         return previous_status
+
+    @property
+    def next_status_action_text(self):
+        return self._next_status_action_text.get(self.next_status)
+
+    @property
+    def previous_status_action_text(self):
+        return self._previous_status_action_text.get(self.previous_status)
