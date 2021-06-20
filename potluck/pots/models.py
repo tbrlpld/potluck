@@ -23,14 +23,29 @@ class Pot(models.Model):
         Status.TALLY,
     )
     _next_status_action_text = {
-        Status.OPEN: "Open up the pot for pick placements",
+        Status.OPEN: "Open up the pot for pick submission",
         Status.CLOSED: "Close the pot and set winning teams",
         Status.TALLY: "Finish off the pot and check who won",
     }
     _previous_status_action_text = {
         Status.DRAFT: "Reset the pot to draft to edit the games",
-        Status.OPEN: "Re-open up the pot for pick placements",
+        Status.OPEN: "Re-open up the pot for pick submissions",
         Status.CLOSED: "Go back to set winning teams in the games",
+    }
+    _status_help_text = {
+        Status.DRAFT: (
+            "While the pot is in draft, you can add to remove games included in the pot. "
+            "No picks can be submitted at this time."
+        ),
+        Status.OPEN: "The pot is open to pick sheet submissions.",
+        Status.CLOSED: (
+            "The pot is closed. No further pick sheet submissions are "
+            "accepted at this point. It is now time to enter the winning teams."
+        ),
+        Status.TALLY: (
+            "The pot is closed and the winning teams are known. "
+            "Now it's time to tally the submissions and find out who won."
+        ),
     }
 
     def __str__(self):
@@ -64,3 +79,7 @@ class Pot(models.Model):
     @property
     def previous_status_action_text(self):
         return self._previous_status_action_text.get(self.previous_status)
+
+    @property
+    def status_help_text(self):
+        return self._status_help_text.get(self.status)

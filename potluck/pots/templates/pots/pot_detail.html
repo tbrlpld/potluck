@@ -2,6 +2,11 @@
 
 {% block content %}
     <h1>{{ pot.name }} ({{ pot.get_status_display }})</h1>
+    <p>
+        <small>
+            {{ pot.status_help_text }}
+        </small>
+    </p>
     {% if pot.games %}
         <ul>
             {% for game in pot.games.all  %}
