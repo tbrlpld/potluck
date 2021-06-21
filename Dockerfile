@@ -8,7 +8,6 @@ USER potluck
 # Install poetry
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 ENV POETRY /home/potluck/.poetry/bin/poetry
-ENV PATH /home/potluck/.poetry/bin/poetry:$PATH
 RUN env
 
 COPY pyproject.toml .
