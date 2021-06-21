@@ -38,7 +38,7 @@ class Pot(models.Model):
             "add and remove games included in the pot. "
             "No picks can be submitted at this time."
         ),
-        Status.OPEN: "The pot is open to pick sheet submissions.",
+        Status.OPEN: "The pot is open and pick sheets can be submitted.",
         Status.CLOSED: (
             "The pot is closed. No further pick sheet submissions are "
             "accepted at this point. It is now time to enter the winning teams."
