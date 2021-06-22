@@ -1,0 +1,7 @@
+build:
+  docker:
+    web: Dockerfile
+release:
+  image: web
+  command:
+    - poetry run ./manage.py createcachetable && poetry run ./manage.py migrate --noinput
