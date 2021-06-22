@@ -13,12 +13,12 @@ RUN env
 COPY pyproject.toml .
 COPY poetry.lock .
 
-RUN $POETRY config virtualenvs.create false
 RUN $POETRY install
 
 COPY . .
 
 EXPOSE 8000
-CMD python manage.py migrate --noinput; \
-    python manage.py runserver 0:8000
+CMD $POETRY run python manage.py migrate --noinput; \
+    $POETRY run gunicorn potluck.wsgi:application -b 0:8000
+    # python manage.py runserver 0:8000
 
