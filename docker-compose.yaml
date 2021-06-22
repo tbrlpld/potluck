@@ -9,7 +9,8 @@ services:
       DATABASE_URL: postgres://potluck:potluck@db:5432/potluck # pragma: allowlist secret
       SECRET_KEY: thisisnotasecrectkey
       DJANGO_SETTINGS_MODULE: potluck.settings.base
-    # command: ["tail", "-f", "/dev/null"]
+      DEBUG: "True"
+    command: ["tail", "-f", "/dev/null"]
     depends_on:
       - db
 
