@@ -4,4 +4,4 @@ build:
 release:
   image: web
   command:
-    - poetry run ./manage.py createcachetable && poetry run ./manage.py migrate --noinput
+    - poetry run python /app/manage.py createcachetable && poetry run python /app/manage.py migrate --noinput
