@@ -17,7 +17,7 @@ RUN env
 COPY pyproject.toml .
 COPY poetry.lock .
 
-RUN poetry install
+RUN poetry install --no-root
 
 COPY --chown=potluck:potluck . .
 
