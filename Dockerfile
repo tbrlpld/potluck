@@ -22,4 +22,5 @@ RUN poetry install --no-root
 COPY --chown=potluck:potluck . .
 
 EXPOSE 8000
-CMD poetry run gunicorn potluck.wsgi:application -b 0:8000
+# CMD poetry run gunicorn potluck.wsgi:application -b 0:8000
+CMD tail -f /dev/null
