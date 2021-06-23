@@ -21,5 +21,4 @@ RUN poetry install
 COPY . .
 
 EXPOSE 8000
-CMD poetry run python manage.py migrate --noinput; \
-    poetry run gunicorn potluck.wsgi:application -b 0:8000
+CMD poetry run gunicorn potluck.wsgi:application -b 0:8000
