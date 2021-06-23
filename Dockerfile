@@ -5,7 +5,7 @@ WORKDIR /app
 RUN useradd -m potluck -s /bin/bash
 USER potluck
 
-ARG POETRY_HOME=/home/potluck/poetry
+ENV POETRY_HOME=/home/potluck/poetry
 
 # Install poetry
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
