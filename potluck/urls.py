@@ -30,7 +30,7 @@ from potluck.pots.views import (
 
 
 def trigger_error(request):
-    division_by_zero = 1 / 0
+    raise RuntimeError("This is on purpose")
 
 
 urlpatterns = [
