@@ -138,3 +138,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+# BASIC AUTH
+BASIC_AUTH_LOGIN = os.environ.get("BASIC_AUTH_LOGIN")
+BASIC_AUTH_PASSWORD = os.environ.get("BASIC_AUTH_PASSWORD")
+if BASIC_AUTH_LOGIN and BASIC_AUTH_PASSWORD:
+    MIDDLEWARE = ["baipw.middleware.BasicAuthIPWhitelistMiddleware"] + MIDDLEWARE
