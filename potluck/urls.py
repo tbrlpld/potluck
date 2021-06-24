@@ -28,11 +28,6 @@ from potluck.pots.views import (
     UpdatePotStatusView,
 )
 
-
-def trigger_error(request):
-    raise RuntimeError("This is on purpose")
-
-
 urlpatterns = [
     path("djng/", admin.site.urls),
     # path("accounts/", include("django.contrib.auth.urls")),
@@ -66,6 +61,4 @@ urlpatterns = [
         GameDeleteView.as_view(),
         name="game_delete",
     ),
-    #
-    path("sentry-debug", trigger_error),
 ]
