@@ -29,7 +29,7 @@ from potluck.pots.views import (
 )
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("djng/", admin.site.urls),
     # path("accounts/", include("django.contrib.auth.urls")),
     # path("", include("potluck.home.urls", name§space="home")),
     #
