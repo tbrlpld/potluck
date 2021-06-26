@@ -25,5 +25,7 @@ USER potluck
 
 COPY --chown=potluck:potluck . .
 
+RUN ./manage.py collectstatic --noinput
+
 EXPOSE 8000
 CMD gunicorn  --bind 0.0.0.0:$PORT potluck.wsgi:application
