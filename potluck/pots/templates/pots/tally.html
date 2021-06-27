@@ -17,4 +17,7 @@
             {% endfor %}
         </ul>
     {% endif %}
+    <p>
+        <a href="{% url 'pot_detail' pot.id %}">Back</a>
+    </p>
 {% endblock content %}

@@ -7,5 +7,7 @@
         {{ form.as_p }}
         <input type="submit" value="Add Game">
     </form>
-
+    <p>
+        <a href="{% url 'pot_detail' pot.id %}">Cancel</a>
+    </p>
 {% endblock content %}
