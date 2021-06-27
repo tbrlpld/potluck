@@ -141,7 +141,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATICFILES_DIRS = [BASE_DIR / "potluck/static/comp"]
+STATICFILES_DIRS = [
+    BASE_DIR / "potluck/static/comp",
+    BASE_DIR / "potluck/static/public",
+]
 STATIC_ROOT = BASE_DIR / "potluck/static/dist"
 STATIC_URL = "/static/"
 
