@@ -35,7 +35,7 @@ USER potluck
 
 COPY --chown=potluck:potluck . .
 
-COPY --chown=potluck:potluck --from=frontend ./potluck/static/dist ./potluck/static/dist
+COPY --chown=potluck:potluck --from=frontend ./potluck/static/comp ./potluck/static/comp
 
 RUN ./manage.py collectstatic --noinput
 
