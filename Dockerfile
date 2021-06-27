@@ -3,8 +3,9 @@ FROM node:14 as frontend
 COPY package.json package-lock.json ./
 RUN npm ci --no-optional --no-audit --progress=false
 
+# The whole project is needed to allow purging of the unused CSS classes.
+COPY . .
 # Compile static files
-COPY ./potluck/static/src/ ./potluck/static/src/
 RUN npm run build:css
 
 FROM python:3.9
