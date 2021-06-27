@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "npx tailwindcss -i potluck/static/src/style.css -o potluck/static/dist/style.css",
+    "build:css": "NODE_ENV=production npx tailwindcss -i potluck/static/src/style.css -o potluck/static/dist/style.css --minify",
     "watch:css": "npx tailwindcss -i potluck/static/src/style.css -o potluck/static/dist/style.css --watch"
   },
   "repository": {
