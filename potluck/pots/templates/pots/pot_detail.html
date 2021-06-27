@@ -3,9 +3,7 @@
 {% block content %}
     <h1>{{ pot.name }} ({{ pot.get_status_display }})</h1>
     <p>
-        <small>
-            {{ pot.status_help_text }}
-        </small>
+        {{ pot.status_help_text }}
     </p>
     {% if pot.games %}
         <ul>
@@ -54,9 +52,10 @@
                 </p>
             {% endif %}
             {% if pot.previous_status %}
-                <p>
+                <details>
+                    <summary>Back</summary>
                     <button type="submit" name="status" value="{{ pot.previous_status }}">{{ pot.previous_status_action_text }}</button>
-                </p>
+                </details>
             {% endif %}
         </form>
     </p>
