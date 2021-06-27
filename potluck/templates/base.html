@@ -10,9 +10,7 @@
 </head>
 <body>
     {% block header %}
-        <header class="text-4xl p-3">
-            <a href="/"><strong>Potluck</strong></a>
-        </header>
+        {% include "components/header.html" %}
     {% endblock header %}
     {% block content %}
     {% endblock %}
