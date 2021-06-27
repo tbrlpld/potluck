@@ -1,3 +1,12 @@
+FROM node:14 as frontend
+
+COPY package.json package-lock.json ./
+RUN npm ci --no-optional --no-audit --progress=false
+
+# Compile static files
+COPY ./potluck/static/src/ ./potluck/static/src/
+RUN npm run build:css
+
 FROM python:3.9
 
 RUN mkdir /app
@@ -24,6 +33,8 @@ RUN poetry install --no-root --no-interaction --no-ansi
 USER potluck
 
 COPY --chown=potluck:potluck . .
+
+COPY --chown=potluck:potluck --from=frontend ./potluck/static/dist ./potluck/static/dist
 
 RUN ./manage.py collectstatic --noinput
 
