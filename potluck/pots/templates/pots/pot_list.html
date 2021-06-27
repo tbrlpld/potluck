@@ -1,16 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Pots</h1>
-    {% if pots  %}
-        <ul>
-            {% for pot in pots  %}
-             <li><a href="{% url 'pot_detail' pot.id %}">{{ pot.name }}</a></li>
-            {% endfor %}
-        </ul>
-        <a href="{% url 'pot_create' %}">Create a new pot</a>
-    {% else %}
-        <p>No pots here</p>
-        <p><strong>Go a head and <a href="{% url 'pot_create' %}">create one</a></strong></p>
-    {% endif %}
+    <main class="p-3">
+        <h1 class="text-xl text-gray-500 font-semibold">Your pots</h1>
+        {% if pots  %}
+            <ul>
+                {% for pot in pots  %}
+                 <li>
+                    <a href="{% url 'pot_detail' pot.id %}">{{ pot.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'pot_create' %}">Create a new pot</a>
+        {% else %}
+            <p class="my-5 py-20 text-center text-yellow-500 bg-yellow-50 border-2 border-yellow-100 rounded-lg">
+                No pots here yet...
+            </p>
+            <p>
+                Go a head and <a href="{% url 'pot_create' %}">create one</a></strong>
+            </p>
+        {% endif %}
+    </main>
 {% endblock content %}
