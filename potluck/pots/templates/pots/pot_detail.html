@@ -43,6 +43,14 @@
             So who won? <a href="{% url 'show_tally' pot.pk %}">Get the tally.</a>
         </p>
     {% endif %}
+    {% with pick_sheet_count=pot.pick_sheets.count %}
+        {% if pick_sheet_count %}
+            <p>
+                <strong>{{ pick_sheet_count }} submitted pick sheet{{ pick_sheet_count|pluralize }}:</strong>
+                {{ pot.pickers_list|join:", " }}
+            </p>
+        {% endif %}
+    {% endwith %}
     <p>
         <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
             {% csrf_token %}

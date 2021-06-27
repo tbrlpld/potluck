@@ -84,3 +84,7 @@ class Pot(models.Model):
     @property
     def status_help_text(self):
         return self._status_help_text.get(self.status)
+
+    @property
+    def pickers_list(self):
+        return self.pick_sheets.all().values_list("picker", flat=True)
