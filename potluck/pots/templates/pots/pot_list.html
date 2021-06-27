@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <main class="p-3">
+    <main class="p-4">
         <h1 class="text-xl text-gray-500 font-semibold">Your pots</h1>
         {% if pots  %}
             <ul>
@@ -13,12 +13,14 @@
             </ul>
             <a href="{% url 'pot_create' %}">Create a new pot</a>
         {% else %}
-            <p class="my-5 py-20 text-center text-yellow-500 bg-yellow-50 border-2 border-yellow-100 rounded-lg">
-                No pots here yet...
-            </p>
-            <p>
-                Go a head and <a href="{% url 'pot_create' %}">create one</a></strong>
-            </p>
+            <div class="my-5 py-20 text-center text-yellow-500 bg-yellow-50 border-2 border-yellow-100 rounded-lg">
+                <p>
+                    👀 No pots here yet...
+                </p>
+                <p class="mt-10">
+                    <a class="p-4 bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white font-semibold rounded-sm" href="{% url 'pot_create' %}">Let's create one</a>
+                </p>
+            </div>
         {% endif %}
     </main>
 {% endblock content %}
