@@ -140,3 +140,4 @@ cython_debug/
 # Other non-python stuff
 .vscode
 **/.DS_Store
+node_modules

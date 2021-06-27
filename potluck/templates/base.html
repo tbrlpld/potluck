@@ -1,11 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Potluck</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
 <body>
     {% block header %}
-        <header>
+        <header class="text-4xl p-3">
             <a href="/"><strong>Potluck</strong></a>
         </header>
     {% endblock header %}

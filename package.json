@@ -1,0 +1,26 @@
+{
+  "name": "potluck",
+  "version": "1.0.0",
+  "description": "Manage your pick'em pool with potluck.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "npx tailwindcss -i potluck/static/src/style.css -o potluck/static/dist/style.css",
+    "watch:css": "npx tailwindcss -i potluck/static/src/style.css -o potluck/static/dist/style.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tbrlpld/potluck.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tbrlpld/potluck/issues"
+  },
+  "homepage": "https://github.com/tbrlpld/potluck#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.2.6",
+    "postcss": "^8.3.5",
+    "tailwindcss": "^2.2.4"
+  }
+}
