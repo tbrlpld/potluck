@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <main class="p-4">
+        {% include "components/heading-1.html" with heading="Create a pot" %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            {# {{ form.as_table }} #}
+
+            {% comment "optional note" %}
+            {{ form.non_field_errors }}
+            {% endcomment %}
+
+            <div>
+                <label class="block font-semibold" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                <p class="text-sm text-gray-500">
+                    {{ form.name.help_text }}
+                </p>
+                {% if form.name.errors %}
+                    <p>
+                        {{ form.name.errors }}
+                    </p>
+                {% endif %}
+                {{ form.name|add_error_class:"bg-red-100"|add_class:"border-2 border-yellow-100" }}
+            </div>
+
+            <input type="submit" value="Create">
+        </form>
+    </main>
+{% endblock content %}

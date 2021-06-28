@@ -2,7 +2,9 @@ from django.db import models
 
 
 class Pot(models.Model):
-    name = models.CharField(max_length=250, null=False, blank=False)
+    name = models.CharField(
+        max_length=250, null=False, blank=False, help_text="What shall we call the pot?"
+    )
 
     class Status(models.TextChoices):
         DRAFT = "DR", "Draft"

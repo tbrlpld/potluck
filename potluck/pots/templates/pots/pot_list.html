@@ -2,7 +2,7 @@
 
 {% block content %}
     <main class="p-4">
-        <h1 class="text-xl text-gray-500 font-semibold">Your pots</h1>
+        {% include "components/heading-1.html" with heading="Your pots" %}
         {% if pots  %}
             <ul>
                 {% for pot in pots  %}
