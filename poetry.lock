@@ -125,6 +125,14 @@ Django = ">=1.8,<4"
 lint = ["isort (==4.3.21)", "flake8 (==3.8.3)", "black (==19.10b0)"]
 
 [[package]]
+name = "django-widget-tweaks"
+version = "1.4.8"
+description = "Tweak the form field rendering in templates, not in python-level form definitions."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "factory-boy"
 version = "3.2.0"
 description = "A versatile test fixtures replacement based on thoughtbot's factory_bot for Ruby."
@@ -478,7 +486,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "db42d6e913884993b916ecb2b8f9e2bb73d2b66ad282cd20af8af6f3b256e523"
+content-hash = "15fcfb5772b4d9134d86d4f06cdba6d322f4780734db7c860a3f00f1ba38fc90"
 
 [metadata.files]
 appdirs = [
@@ -523,6 +531,10 @@ django = [
 django-basic-auth-ip-whitelist = [
     {file = "django-basic-auth-ip-whitelist-0.3.4.tar.gz", hash = "sha256:b148082b336e276f328b4cad48744f160469bfc34e8f5bac0ef449abc297bc4e"},
     {file = "django_basic_auth_ip_whitelist-0.3.4-py3-none-any.whl", hash = "sha256:9d20210755b4a2db069326cedafa589453386cebe147ed0a9f1f9b55da927b02"},
+]
+django-widget-tweaks = [
+    {file = "django-widget-tweaks-1.4.8.tar.gz", hash = "sha256:9f91ca4217199b7671971d3c1f323a2bec71a0c27dec6260b3c006fa541bc489"},
+    {file = "django_widget_tweaks-1.4.8-py2.py3-none-any.whl", hash = "sha256:f80bff4a8a59b278bb277a405a76a8b9a884e4bae7a6c70e78a39c626cd1c836"},
 ]
 factory-boy = [
     {file = "factory_boy-3.2.0-py2.py3-none-any.whl", hash = "sha256:1d3db4b44b8c8c54cdd8b83ae4bdb9aeb121e464400035f1f03ae0e1eade56a4"},
