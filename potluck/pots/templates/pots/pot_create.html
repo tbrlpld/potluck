@@ -3,13 +3,10 @@
 {% block content %}
     <main class="p-4">
         {% include "components/heading-1.html" with heading="Create a pot" %}
-        <form action="" method="POST">
+        <form action="" method="POST" class="my-5 p-5 text-yellow-500 bg-yellow-50 border-2 border-yellow-100 rounded-lg">
             {% csrf_token %}
-            {# {{ form.as_table }} #}
 
-            {% comment "optional note" %}
             {{ form.non_field_errors }}
-            {% endcomment %}
 
             <div>
                 <label class="block font-semibold" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
@@ -21,10 +18,11 @@
                         {{ form.name.errors }}
                     </p>
                 {% endif %}
-                {{ form.name|add_error_class:"bg-red-100"|add_class:"border-2 border-yellow-100" }}
+                <div class="h-1"></div>
+                {{ form.name|add_error_class:"bg-red-100"|add_class:"p-1 w-full border-2 border-yellow-100 rounded-sm" }}
             </div>
-
-            <input type="submit" value="Create">
+            <div class="h-4"></div>
+            <button class="p-2 btn" type="submit">Create</button>
         </form>
     </main>
 {% endblock content %}
