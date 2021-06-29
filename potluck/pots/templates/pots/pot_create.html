@@ -3,7 +3,7 @@
 {% block content %}
     <main class="p-4">
         {% include "components/heading-1.html" with heading="Create a pot" %}
-        <form action="" method="POST" class="my-5 p-5 text-yellow-500 bg-yellow-50 border-2 border-yellow-100 rounded-lg">
+        <form action="" method="POST" class="my-5 p-5 box">
             {% csrf_token %}
 
             {{ form.non_field_errors }}
@@ -21,8 +21,10 @@
                 <div class="h-1"></div>
                 {{ form.name|add_error_class:"bg-red-100"|add_class:"p-1 w-full border-2 border-yellow-100 rounded-sm" }}
             </div>
-            <div class="h-4"></div>
-            <button class="p-2 btn" type="submit">Create</button>
+            <div class="mt-4 flex items-baseline justify-between">
+                <button class="p-2 btn" type="submit">Create</button>
+                <a class="hover:text-yellow-600 active:text-yellow-700" href="{% url 'pots_list' %}">Cancel</a>
+            </div>
         </form>
     </main>
 {% endblock content %}
