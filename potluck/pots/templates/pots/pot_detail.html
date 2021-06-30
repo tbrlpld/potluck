@@ -7,7 +7,7 @@
     <p class="my-2 text-sm text-gray-500">
         {{ pot.status_help_text }}
     </p>
-    {% if pot.games %}
+    {% if pot.games.exist %}
         <ul>
             {% for game in pot.games.all  %}
                 <li style="padding-bottom: 1rem">{{ game }}
@@ -20,39 +20,42 @@
                 </li>
             {% endfor %}
         </ul>
-    {% else %}
-        <p>
-            No games in this pot yet.
-        </p>
-    {% endif %}
-    {% if pot.status == pot.Status.DRAFT %}
-        <p>
-            <a href="{% url 'add_game' pot.pk %}">Add game</a>
-        </p>
-    {% elif pot.status == pot.Status.OPEN %}
-        <p>
-            Share the following link with everybody to submit their pick sheets:
+        {% if pot.status == pot.Status.DRAFT %}
             <p>
-                <a id="shareLink" href="{{ picks_url }}">{{ picks_url }}</a>
+                <a href="{% url 'add_game' pot.pk %}">Add game</a>
             </p>
-        </p>
-    {% elif pot.status == pot.Status.CLOSED %}
-        <p>
-            <a href="{% url 'set_winners' pot.pk %}">Set winning teams</a>
-        </p>
-    {% elif pot.status == pot.Status.TALLY %}
-        <p>
-            So who won? <a href="{% url 'show_tally' pot.pk %}">Get the tally.</a>
-        </p>
-    {% endif %}
-    {% with pick_sheet_count=pot.pick_sheets.count %}
-        {% if pick_sheet_count %}
+        {% elif pot.status == pot.Status.OPEN %}
             <p>
-                <strong>{{ pick_sheet_count }} submitted pick sheet{{ pick_sheet_count|pluralize }}:</strong>
-                {{ pot.pickers_list|join:", " }}
+                Share the following link with everybody to submit their pick sheets:
+                <p>
+                    <a id="shareLink" href="{{ picks_url }}">{{ picks_url }}</a>
+                </p>
+            </p>
+        {% elif pot.status == pot.Status.CLOSED %}
+            <p>
+                <a href="{% url 'set_winners' pot.pk %}">Set winning teams</a>
+            </p>
+        {% elif pot.status == pot.Status.TALLY %}
+            <p>
+                So who won? <a href="{% url 'show_tally' pot.pk %}">Get the tally.</a>
             </p>
         {% endif %}
-    {% endwith %}
+
+        {% with pick_sheet_count=pot.pick_sheets.count %}
+            {% if pick_sheet_count %}
+                <p>
+                    <strong>{{ pick_sheet_count }} submitted pick sheet{{ pick_sheet_count|pluralize }}:</strong>
+                    {{ pot.pickers_list|join:", " }}
+                </p>
+            {% endif %}
+        {% endwith %}
+    {% else %}
+        <div class="my-4">
+            {% url 'add_game' pot.pk as add_game_url %}
+            {% include "components/action-box.html" with paragraph="No games in this pot yet 👀" action_text="Add the first game" action_url=add_game_url %}
+        </div>
+    {% endif %}
+
     <p>
         <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
             {% csrf_token %}
@@ -69,11 +72,13 @@
             {% endif %}
         </form>
     </p>
+
     {% if pot.status == pot.Status.DRAFT %}
         <p>
             <a href="{% url 'pot_delete' pot.id %}">Delete</a>
         </p>
     {% endif %}
+
     {% if pot.status == pot.Status.OPEN %}
         <script type="text/javascript">
             const shareLink = document.getElementById("shareLink")
