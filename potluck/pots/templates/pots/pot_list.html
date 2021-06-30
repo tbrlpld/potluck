@@ -15,13 +15,9 @@
         </ul>
         <a href="{% url 'pot_create' %}" class="inline-block py-1 px-2 btn">Create a new pot</a>
     {% else %}
-        <div class="my-5 py-20 text-center box">
-            <p>
-                👀 No pots here yet...
-            </p>
-            <p class="mt-10">
-                <a class="inline-block p-4 btn" href="{% url 'pot_create' %}">Let's create one</a>
-            </p>
+        <div class="my-5">
+            {% url 'pot_create' as create_pot_url %}
+            {% include "components/action-box.html" with paragraph="👀 No pots here yet..." action_text="Let's create one" action_url=create_pot_url %}
         </div>
     {% endif %}
 {% endblock content %}
