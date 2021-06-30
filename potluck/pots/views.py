@@ -32,6 +32,12 @@ class PotCreateView(generic.CreateView):
     fields = ("name",)
 
 
+class PotDeleteView(generic.DeleteView):
+    model = Pot
+    template_name = "pots/pot_delete.html"
+    success_url = urls.reverse_lazy("pots_list")
+
+
 class UpdatePotStatusView(generic.UpdateView):
     model = Pot
     fields = ("status",)

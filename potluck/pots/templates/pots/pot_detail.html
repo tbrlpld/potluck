@@ -67,6 +67,11 @@
             {% endif %}
         </form>
     </p>
+    {% if pot.status == pot.Status.DRAFT %}
+        <p>
+            <a href="{% url 'pot_delete' pot.id %}">Delete</a>
+        </p>
+    {% endif %}
     {% if pot.status == pot.Status.OPEN %}
         <script type="text/javascript">
             const shareLink = document.getElementById("shareLink")

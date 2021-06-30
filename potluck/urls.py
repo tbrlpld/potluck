@@ -21,6 +21,7 @@ from potluck.picks.views import pick_create_view
 from potluck.pots.views import (
     AddGameView,
     PotCreateView,
+    PotDeleteView,
     PotDetailView,
     PotListView,
     SetWinningTeamsView,
@@ -36,6 +37,7 @@ urlpatterns = [
     path("", PotListView.as_view(), name="pots_list"),
     path("pots/create/", PotCreateView.as_view(), name="pot_create"),
     path("pots/<int:pk>/", PotDetailView.as_view(), name="pot_detail"),
+    path("pots/<int:pk>/delete", PotDeleteView.as_view(), name="pot_delete"),
     path(
         "pots/<int:pk>/update-status/",
         UpdatePotStatusView.as_view(),

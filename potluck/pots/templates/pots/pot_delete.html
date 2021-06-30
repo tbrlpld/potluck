@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    {% include "components/heading-1.html" with heading="Delete pot" %}
+    <form action="" method="POST" class="my-5 p-5 text-red-500 bg-red-50 border-2 border-red-200 rounded-lg">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <h2 class="text-2xl font-semibold">{{ pot }}</h2>
+        <p class="mt-4">
+            Are you sure you want to delete your pot?
+        </p>
+        <p class="mt-4 font-semibold">
+            This is a destructive action that can not be reverted!
+        </p>
+
+        <div class="mt-4 flex items-baseline justify-between">
+            <button class="p-2 bg-red-500 hover:bg-red-700 active:bg-red-800 text-white font-semibold rounded-sm" type="submit">Yes, delete 💣 </button>
+            <a class="hover:text-red-700 active:text-red-800" href="{% url 'pots_list' %}">No, keep</a>
+        </div>
+    </form>
+{% endblock content %}
