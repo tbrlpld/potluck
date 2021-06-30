@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{{ pot.name }} ({{ pot.get_status_display }})</h1>
-    <p>
+    <header>
+        {% include "components/pot-heading.html" with heading=pot.name eyebrow=pot.get_status_display %}
+    </header>
+    <p class="my-2 text-sm text-gray-500">
         {{ pot.status_help_text }}
     </p>
     {% if pot.games %}
