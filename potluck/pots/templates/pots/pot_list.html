@@ -2,15 +2,15 @@
 
 {% block content %}
     {% include "components/heading-1.html" with heading="Your pots" %}
-    {% if pots  %}
-        <ul>
+    {% if pots %}
+        <ul class="my-4">
             {% for pot in pots  %}
              <li>
-                <a href="{% url 'pot_detail' pot.id %}">{{ pot.name }}</a>
+                <a href="{% url 'pot_detail' pot.id %}" class="block my-3 p-2 text-xl text-yellow-500 font-semibold bg-yellow-50 hover:border-yellow-200 active:bg-yellow-100 border border-yellow-100 rounded">{{ pot.name }}</a>
             </li>
             {% endfor %}
         </ul>
-        <a href="{% url 'pot_create' %}">Create a new pot</a>
+        <a href="{% url 'pot_create' %}" class="inline-block py-1 px-2 btn">Create a new pot</a>
     {% else %}
         <div class="my-5 py-20 text-center box">
             <p>

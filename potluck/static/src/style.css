@@ -8,7 +8,7 @@
 }
 
 .btn {
-    @apply bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white font-semibold rounded-sm
+    @apply bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white font-semibold rounded
 }
 
 .errorlist {
