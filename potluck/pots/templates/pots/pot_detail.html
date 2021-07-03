@@ -56,22 +56,23 @@
         </div>
     {% endif %}
 
-    <p>
-        <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
-            {% csrf_token %}
-            {% if pot.next_status %}
-                <p>
-                    <button type="submit" name="status" value="{{ pot.next_status }}">{{ pot.next_status_action_text }}</button>
-                </p>
-            {% endif %}
-            {% if pot.previous_status %}
-                <details>
-                    <summary>Back</summary>
-                    <button type="submit" name="status" value="{{ pot.previous_status }}">{{ pot.previous_status_action_text }}</button>
-                </details>
-            {% endif %}
-        </form>
-    </p>
+    <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
+        {% csrf_token %}
+        {% if pot.next_status %}
+            <p>
+                <button class="p-4 w-full border-2 border-yellow-100 text-yellow-500 text-right rounded-lg hover:bg-yellow-50 active:bg-yellow-100 active:border-yellow-200" type="submit" name="status" value="{{ pot.next_status }}">
+                    <div class="text-gray-500">Next</div>
+                    <div class="text-sm">{{ pot.next_status_action_text }}</div>
+                </button>
+            </p>
+        {% endif %}
+        {% if pot.previous_status %}
+            <details>
+                <summary>Back</summary>
+                <button type="submit" name="status" value="{{ pot.previous_status }}">{{ pot.previous_status_action_text }}</button>
+            </details>
+        {% endif %}
+    </form>
 
     {% if pot.status == pot.Status.DRAFT %}
         <p>
