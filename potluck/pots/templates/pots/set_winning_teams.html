@@ -1,14 +1,53 @@
 {% extends "base.html" %}
-
+{% load widget_tweaks %}
 
 {% block content %}
-    <h1>{{ pot.name }}: Set winning team for each game</h1>
+    {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Set winning teams" %}
+    {# <h1>{{ pot.name }}: Set winning team for each game</h1> #}
+    <p class="my-4 text-gray-500 text-sm">
+        For each game, pick the team that actually won.
+    </p>
     <form action="" method="POST">
         {% csrf_token %}
-        {{ form }}
+        <p>
+            {{ form.non_field_errors }}
+        </p>
+
+        {# {{ form }} #}
+
+        {{ form.management_form }}
+
+        {% for game_form in form %}
+            <div class="box">
+                {% for field in game_form %}
+                    FIELD
+                    <p>
+                        {{ field.name }}
+                    </p>
+                    <p>
+                        {{ field.id_for_label}}
+                    </p>
+                    <p>
+                        {{ field.field.choices }}
+                    </p>
+                    <p>
+                        {{ field }}
+                    </p>
+                {% endfor %}
+
+                {% comment %}
+
+                {% for team in game_form.winning_team %}
+                    {{ team.id_for_label }}
+                {% endfor %}
+                {% endcomment %}
+
+            </div>
+        {% endfor %}
+
         <button type="submit">
             Set winners
-        </button> >
+        </button>
     </form>
     <p>
         <a href="{% url 'pot_detail' pot.id %}">Cancel</a>

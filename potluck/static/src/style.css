@@ -16,7 +16,7 @@ input[type="password"] {
 }
 
 .btn {
-    @apply bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white font-semibold rounded
+    @apply bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white text-center font-semibold rounded
 }
 
 .errorlist {

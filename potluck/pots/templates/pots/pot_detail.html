@@ -46,9 +46,9 @@
                 </div>
             </div>
         {% elif pot.status == pot.Status.CLOSED %}
-            <p>
-                <a href="{% url 'set_winners' pot.pk %}">Set winning teams</a>
-            </p>
+            <div class="my-4">
+                <a href="{% url 'set_winners' pot.pk %}" class="block p-4 btn">Set winning teams</a>
+            </div>
         {% elif pot.status == pot.Status.TALLY %}
             <p>
                 So who won? <a href="{% url 'show_tally' pot.pk %}">Get the tally.</a>
