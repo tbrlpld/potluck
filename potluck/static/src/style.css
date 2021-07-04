@@ -14,3 +14,7 @@
 .errorlist {
     @apply mt-1 text-sm font-semibold text-red-500
 }
+
+.link {
+    @apply text-yellow-500 hover:text-yellow-600 hover:underline active:text-yellow-700;
+}
