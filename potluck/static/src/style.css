@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+input {
+    @apply appearance-none border-2 border-yellow-100 rounded
+}
 
 .box {
     @apply text-yellow-500 bg-yellow-50 border-2 border-yellow-100 rounded-lg
