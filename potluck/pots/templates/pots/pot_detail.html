@@ -2,7 +2,7 @@
 
 {% block content %}
     <header>
-        {% include "components/pot-heading.html" with heading=pot.name eyebrow=pot.get_status_display %}
+        {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow=pot.get_status_display %}
     </header>
     <p class="my-2 text-sm text-gray-500">
         {{ pot.status_help_text }}
