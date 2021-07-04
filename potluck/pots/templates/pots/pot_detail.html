@@ -10,11 +10,20 @@
     {% if pot.games.exists %}
         <ul class="my-4">
             {% for game in pot.games.all  %}
-                <li class="p-2 flex flex-row justify-between items-baseline bg-yellow-50 odd:bg-yellow-100 first:rounded-t-lg last:rounded-b-lg">
-                    <div>
-                        {{ game }}
+                <li class="p-3 flex flex-row justify-between items-center bg-yellow-50 odd:bg-yellow-100 first:rounded-t-lg last:rounded-b-lg">
+                    <div class="w-full text-center">
+                        <div>
+                            {{ game.teams.first }}
+                        </div>
+                        <div>
+                            vs
+                        </div>
+                        <div>
+                            {{ game.teams.last }}
+                        </div>
                     </div>
                     {% if pot.status == pot.Status.DRAFT %}
+                        <div class="w-3"></div>
                         <form action="{% url 'game_delete' game.pk %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="px-2 py-0.5 text-sm font-semibold text-white bg-yellow-300 hover:bg-yellow-400 active:bg-yellow-500 rounded">
