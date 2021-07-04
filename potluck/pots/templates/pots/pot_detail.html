@@ -37,12 +37,14 @@
         {% if pot.status == pot.Status.DRAFT %}
             <a href="{% url 'add_game' pot.pk %}" class="block my-4 p-4 btn text-center ">Add game</a>
         {% elif pot.status == pot.Status.OPEN %}
-            <p>
-                Share the following link with everybody to submit their pick sheets:
-                <p>
-                    <a id="shareLink" href="{{ picks_url }}">{{ picks_url }}</a>
+            <div class="my-8">
+                <p class="text-gray-500 text-sm">
+                    Share the following link with everybody to submit their pick sheets:
                 </p>
-            </p>
+                <div class="flex flex-row my-2 p-4 box font-semibold">
+                    <a id="shareLink" href="{{ picks_url }}" class="block w-full">{{ picks_url }}</a>
+                </div>
+            </div>
         {% elif pot.status == pot.Status.CLOSED %}
             <p>
                 <a href="{% url 'set_winners' pot.pk %}">Set winning teams</a>
@@ -99,7 +101,8 @@
     {% if pot.status == pot.Status.OPEN %}
         <script type="text/javascript">
             const shareLink = document.getElementById("shareLink")
-            const shareLinkURL = shareLink.innerHTML
+            // const shareLinkURL = shareLink.innerHTML
+            const shareLinkURL = shareLink.value
 
             const linkContainer = shareLink.parentElement
             const button = document.createElement("button")
