@@ -16,8 +16,8 @@
         </p>
 
         <div class="mt-4 flex items-baseline justify-between">
-            <button class="p-2 bg-red-500 hover:bg-red-700 active:bg-red-800 text-white font-semibold rounded-sm" type="submit">Yes, delete 💣 </button>
-            <a class="hover:text-red-700 active:text-red-800" href="{% url 'pots_list' %}">No, keep</a>
+            <button class="px-3 py-2 bg-red-500 hover:bg-red-700 active:bg-red-800 text-white font-semibold rounded-sm" type="submit">Yes, delete 💣 </button>
+            <a class="hover:underline hover:text-red-700 active:line-through active:text-red-400" href="{% url 'pot_detail' pot.pk %}">No, keep</a>
         </div>
     </form>
 {% endblock content %}

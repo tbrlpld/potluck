@@ -1,4 +1,5 @@
 module.exports = {
+    mode: "jit",
     purge: [
         './potluck/**/*.html',
         './potluck/**/*.js',
@@ -7,10 +8,11 @@ module.exports = {
     theme: {
         extend: {},
     },
-    variants: {
-      extend: {
-       backgroundColor: ['active'],
-      }
-    },
+    // variants: {
+    //   extend: {
+    //    backgroundColor: ['active'],
+    //    textColor: ['active'],
+    //   }
+    // },
     plugins: [],
 }

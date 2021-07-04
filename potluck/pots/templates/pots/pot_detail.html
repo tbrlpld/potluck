@@ -56,29 +56,33 @@
         </div>
     {% endif %}
 
-    <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
-        {% csrf_token %}
-        {% if pot.next_status %}
-            <p>
-                <button class="p-4 w-full border-2 border-yellow-100 text-yellow-500 text-right rounded-lg hover:bg-yellow-50 active:bg-yellow-100 active:border-yellow-200" type="submit" name="status" value="{{ pot.next_status }}">
-                    <div class="text-gray-500">Next</div>
-                    <div class="text-sm">{{ pot.next_status_action_text }}</div>
+    {% if pot.next_status %}
+        <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
+            {% csrf_token %}
+            <button class="p-4 w-full border-2 border-yellow-100 text-yellow-500 text-right rounded-lg hover:bg-yellow-50 active:bg-yellow-100 active:border-yellow-200" type="submit" name="status" value="{{ pot.next_status }}">
+                <div class="text-gray-500">Next</div>
+                <div class="text-sm">{{ pot.next_status_action_text }}</div>
+            </button>
+        </form>
+    {% endif %}
+
+    <details class="mt-8">
+        <summary class="mb-2 text-sm text-gray-500">more...</summary>
+        {% if pot.previous_status %}
+            <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
+                {% csrf_token %}
+                <button class="p-4 w-full border-2 border-yellow-100 text-yellow-500 text-left rounded-lg hover:bg-yellow-50 active:bg-yellow-100 active:border-yellow-200" type="submit" name="status" value="{{ pot.previous_status }}">
+                    <div class="text-gray-500">Back</div>
+                    <div class="text-sm">{{ pot.previous_status_action_text }}</div>
                 </button>
+            </form>
+        {% endif %}
+        {% if pot.status == pot.Status.DRAFT %}
+            <p>
+                <a class="text-red-700 hover:underline active:text-red-400" href="{% url 'pot_delete' pot.id %}">Delete the pot</a>
             </p>
         {% endif %}
-        {% if pot.previous_status %}
-            <details>
-                <summary>Back</summary>
-                <button type="submit" name="status" value="{{ pot.previous_status }}">{{ pot.previous_status_action_text }}</button>
-            </details>
-        {% endif %}
-    </form>
-
-    {% if pot.status == pot.Status.DRAFT %}
-        <p>
-            <a href="{% url 'pot_delete' pot.id %}">Delete</a>
-        </p>
-    {% endif %}
+    </details>
 
     {% if pot.status == pot.Status.OPEN %}
         <script type="text/javascript">
