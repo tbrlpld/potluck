@@ -8,7 +8,7 @@
         {{ pot.status_help_text }}
     </p>
     {% if pot.games.exists %}
-        <ul>
+        <ul class="my-4">
             {% for game in pot.games.all  %}
                 <li class="p-2 flex flex-row justify-between items-baseline bg-yellow-50 odd:bg-yellow-100 first:rounded-t-lg last:rounded-b-lg">
                     <div>
@@ -17,7 +17,9 @@
                     {% if pot.status == pot.Status.DRAFT %}
                         <form action="{% url 'game_delete' game.pk %}" method="post">
                             {% csrf_token %}
-                            <input type="submit" value="Delete" class="px-2 py-0.5 text-sm font-semibold bg-yellow-300 hover:bg-yellow-400 text-white rounded">
+                            <button type="submit" class="px-2 py-0.5 text-sm font-semibold text-white bg-yellow-300 hover:bg-yellow-400 active:bg-yellow-500 rounded">
+                                Delete
+                            </button>
                         </form>
                     {% endif %}
                 </li>
@@ -60,7 +62,7 @@
     {% if pot.next_status %}
         <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
             {% csrf_token %}
-            <button class="p-4 w-full border-2 border-yellow-100 text-yellow-500 text-right rounded-lg hover:bg-yellow-50 active:bg-yellow-100 active:border-yellow-200" type="submit" name="status" value="{{ pot.next_status }}">
+            <button type="submit" name="status" value="{{ pot.next_status }}" class="p-4 w-full border-2 border-yellow-100 text-yellow-500 text-right rounded-lg hover:bg-yellow-50 active:bg-yellow-100 active:border-yellow-200">
                 <div class="text-gray-500">Next</div>
                 <div class="text-sm">{{ pot.next_status_action_text }}</div>
             </button>

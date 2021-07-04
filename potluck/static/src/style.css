@@ -2,7 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-input {
+/*
+ * Remove default apparance for input fields (which has an undesirable inner share on iOS)
+ */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
     @apply appearance-none border-2 border-yellow-100 rounded
 }
 
