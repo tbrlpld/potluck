@@ -21,17 +21,16 @@
         {% for team_id, team_label in form.teams.field.choices %}
             <li class="my-2">
                 <input type="checkbox" name="teams" value="{{ team_id }}" id="id_teams_{{ forloop.counter0 }}" class="hidden" >
-                <label class="block p-4 box font-bold text-center checked-checkbox-label" for="id_teams_{{ forloop.counter0 }}">
+                <label class="block p-4 box hover:bg-yellow-100 font-bold text-center checked-checkbox-label" for="id_teams_{{ forloop.counter0 }}">
                     {{ team_label }}
                 </label>
             </li>
         {% endfor %}
         </ul>
 
-
-        <input type="submit" value="Add Game">
+        <div class="mt-8 flex flex-row justify-between items-baseline">
+            <input type="submit" value="Add Game" class="p-4 btn">
+            <a class="link" href="{% url 'pot_detail' pot.id %}">Cancel</a>
+        </div>
     </form>
-    <p>
-        <a class="link" href="{% url 'pot_detail' pot.id %}">Cancel</a>
-    </p>
 {% endblock content %}
