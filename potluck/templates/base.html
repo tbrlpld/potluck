@@ -8,13 +8,13 @@
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
     <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
 </head>
-<body class="text-yellow-500">
+<body class="flex flex-col text-yellow-500">
     <header class="p-3 text-xl font-semibold">
         {% block header %}
             {% include "components/header.html" %}
         {% endblock header %}
     </header>
-    <main class="p-4">
+    <main class="self-center w-full max-w-xl grow p-4">
         {% block content %}
         {% endblock %}
     </main>
