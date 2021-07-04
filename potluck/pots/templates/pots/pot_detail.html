@@ -7,23 +7,24 @@
     <p class="my-2 text-sm text-gray-500">
         {{ pot.status_help_text }}
     </p>
-    {% if pot.games.count != 0 %}
+    {% if pot.games.exists %}
         <ul>
             {% for game in pot.games.all  %}
-                <li style="padding-bottom: 1rem">{{ game }}
+                <li class="p-2 flex flex-row justify-between items-baseline bg-yellow-50 odd:bg-yellow-100 first:rounded-t-lg last:rounded-b-lg">
+                    <div>
+                        {{ game }}
+                    </div>
                     {% if pot.status == pot.Status.DRAFT %}
-                        <form style="display: inline-block; margin-left: 1rem" action="{% url 'game_delete' game.pk %}" method="post">
+                        <form action="{% url 'game_delete' game.pk %}" method="post">
                             {% csrf_token %}
-                            <input type="submit" value="Delete">
+                            <input type="submit" value="Delete" class="px-2 py-0.5 text-sm font-semibold bg-yellow-300 hover:bg-yellow-400 text-white rounded">
                         </form>
                     {% endif %}
                 </li>
             {% endfor %}
         </ul>
         {% if pot.status == pot.Status.DRAFT %}
-            <p>
-                <a href="{% url 'add_game' pot.pk %}">Add game</a>
-            </p>
+            <a href="{% url 'add_game' pot.pk %}" class="block my-4 p-4 btn text-center ">Add game</a>
         {% elif pot.status == pot.Status.OPEN %}
             <p>
                 Share the following link with everybody to submit their pick sheets:
