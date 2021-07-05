@@ -5,7 +5,7 @@
 
 {% block content %}
     {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Add game" %}
-    <p class="my-4 text-gray-500">Pick the teams that are competing in this game.</p>
+    <p class="my-4 text-gray-500"><strong class="font-semibold">Pick the 2 teams</strong> that are competing in this game.</p>
     <form action="" method="POST">
         {% csrf_token %}
         {# {{ form.as_p }} #}
@@ -31,7 +31,7 @@
         {% endfor %}
 
         <div class="mt-8 flex flex-row justify-between items-baseline">
-            <button type="submit"  class="p-4 btn">Add game</button>
+            <button type="submit"  class="px-4 py-3 btn">Add game</button>
             <a class="link" href="{% url 'pot_detail' pot.id %}">Cancel</a>
         </div>
     </form>
