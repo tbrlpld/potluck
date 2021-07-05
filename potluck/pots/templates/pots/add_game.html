@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load widget_tweaks %}
+{% load utils %}
 
 {% block content %}
     {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Add game" %}
@@ -11,22 +12,18 @@
 
         {{ form.non_field_errors }}
 
-        {# Hidden field needed to associate pot in the form #}
-        {{ form.pot }}
-
-        {{ form.teams.errors }}
-
-        {# https://stackoverflow.com/questions/733880/iterate-over-choices-in-checkboxselectmultiple#734025 #}
-        <ul>
-        {% for team_id, team_label in form.teams.field.choices %}
-            <li class="my-2">
-                <input type="checkbox" name="teams" value="{{ team_id }}" id="id_teams_{{ forloop.counter0 }}" class="hidden" >
-                <label class="block p-4 box hover:bg-yellow-100 font-bold text-center checked-checkbox-label" for="id_teams_{{ forloop.counter0 }}">
-                    {{ team_label }}
-                </label>
-            </li>
+        {% for field in form %}
+            {% if field.name == "teams" %}
+                {% for box in form.teams %}
+                    {{ box.tag|inject_input_class:"hidden" }}
+                    <label for="{{ box.id_for_label }}" class="block my-2 p-4 box hover:bg-yellow-100 font-bold text-center checked-checkbox-label">
+                        {{ box.choice_label }}
+                    </label>
+                {% endfor %}
+            {% else %}
+                {{ field }}
+            {% endif %}
         {% endfor %}
-        </ul>
 
         <div class="mt-8 flex flex-row justify-between items-baseline">
             <button type="submit"  class="p-4 btn">Add game</button>
