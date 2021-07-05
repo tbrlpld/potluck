@@ -56,9 +56,12 @@
                 <a href="{% url 'set_winners' pot.pk %}" class="block p-4 btn">Set winning teams</a>
             </div>
         {% elif pot.status == pot.Status.TALLY %}
-            <p>
-                So who won? <a href="{% url 'show_tally' pot.pk %}">Get the tally.</a>
-            </p>
+            <div>
+                <p class="text-gray-500 text-sm">
+                    So who won?
+                </p>
+                <a href="{% url 'show_tally' pot.pk %}" class="block my-2 px-4 py-3 btn">Get the tally</a>
+            </div>
         {% endif %}
 
         {% with pick_sheet_count=pot.pick_sheets.count %}
