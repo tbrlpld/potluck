@@ -37,6 +37,12 @@ ALLOWED_HOSTS = [
     host.strip() for host in os.environ.get("ALLOWED_HOSTS", "").split(",") if host
 ]
 
+if DEBUG:
+    # The internal ips settings is needed to activate the debug toolbar.
+    INTERNAL_IPS = [
+        ip.strip() for ip in os.environ.get("INTERNAL_IPS", "").split(",") if ip
+    ]
+
 
 # Application definition
 
@@ -56,6 +62,9 @@ INSTALLED_APPS = [
     "widget_tweaks",
 ]
 
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -66,6 +75,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
 ROOT_URLCONF = "potluck.urls"
 

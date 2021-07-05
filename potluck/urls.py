@@ -13,8 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+import debug_toolbar
 
 from potluck.games.views import GameDeleteView
 from potluck.picks.views import pick_create_view
@@ -64,3 +67,6 @@ urlpatterns = [
         name="game_delete",
     ),
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(path('__debug__/', include(debug_toolbar.urls)))

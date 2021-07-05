@@ -9,6 +9,7 @@ services:
       DATABASE_URL: postgres://potluck:potluck@db:5432/potluck # pragma: allowlist secret
       SECRET_KEY: thisisnotasecrectkey
       DEBUG: "True"
+      INTERNAL_IPS: "172.20.0.1"
     command: ["tail", "-f", "/dev/null"]
     depends_on:
       - db
