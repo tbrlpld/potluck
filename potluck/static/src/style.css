@@ -27,6 +27,6 @@ input[type="password"] {
     @apply text-yellow-500 hover:text-yellow-600 hover:underline active:text-yellow-700;
 }
 
-input[type="checkbox"]:checked + label.checked-checkbox-label {
-    @apply text-yellow-700 bg-yellow-200 border-2 border-yellow-300 rounded-lg
+input:checked + label.checked-input-label {
+    @apply text-yellow-700 bg-yellow-200 border-yellow-300
 }
