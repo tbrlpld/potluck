@@ -47,7 +47,8 @@ class Pot(models.Model):
         ),
         Status.TALLY: (
             "The pot is closed and the winning teams are known. "
-            "Now it's time to tally the submissions and find out who won."
+            "Now it's time to tally the submissions and find out "
+            "who has the most correct picks on their pick sheet."
         ),
     }
 
