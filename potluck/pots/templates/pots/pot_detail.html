@@ -110,8 +110,7 @@
     {% if pot.status == pot.Status.OPEN %}
         <script type="text/javascript">
             const shareLink = document.getElementById("shareLink")
-            // const shareLinkURL = shareLink.innerHTML
-            const shareLinkURL = shareLink.value
+            const shareLinkURL = shareLink.innerHTML
 
             const linkContainer = shareLink.parentElement
             const button = document.createElement("button")
