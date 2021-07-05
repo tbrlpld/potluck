@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
     mode: "jit",
     purge: [
@@ -6,7 +8,13 @@ module.exports = {
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {
-        extend: {},
+        extend: {
+            screens: {
+                // Approx. iPhone 5 horizontal orientation
+                "xs": "560px",
+                ...defaultTheme.screens,
+            }
+        },
     },
     // variants: {
     //   extend: {

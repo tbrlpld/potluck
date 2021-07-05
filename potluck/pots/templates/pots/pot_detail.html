@@ -11,15 +11,19 @@
         <ul class="my-4">
             {% for game in pot.games.all  %}
                 <li class="p-3 flex flex-row justify-between items-center bg-yellow-50 odd:bg-yellow-100 first:rounded-t-lg last:rounded-b-lg">
-                    <div class="w-full text-center">
-                        <div>
-                            {{ game.teams.first }}
+                    <div class="w-full flex flex-col xs:flex-row justify-between items-center">
+                        <div class="flex-1 flex justify-center">
+                            <div class="flex-initial text-center">
+                                {{ game.teams.first }}
+                            </div>
                         </div>
-                        <div>
+                        <div class="flex-initial mx-2">
                             vs
                         </div>
-                        <div>
-                            {{ game.teams.last }}
+                        <div class="flex-1 flex justify-center">
+                            <div class="flex-initial text-center">
+                                {{ game.teams.last }}
+                            </div>
                         </div>
                     </div>
                     {% if pot.status == pot.Status.DRAFT %}
