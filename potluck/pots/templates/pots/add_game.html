@@ -10,12 +10,17 @@
         {% csrf_token %}
         {# {{ form.as_p }} #}
 
-        {{ form.non_field_errors }}
+        {% if form.non_field_errors %}
+            <p>
+                {{ form.non_field_errors }}
+            </p>
+        {% endif %}
 
         {% for field in form %}
+            {{ field.errors }}
             {% if field.name == "teams" %}
                 {% for box in form.teams %}
-                    {{ box.tag|inject_input_class:"hidden" }}
+                    {{ box.tag|inject_class:"hidden" }}
                     <label for="{{ box.id_for_label }}" class="block my-2 p-4 box hover:bg-yellow-100 font-bold text-center checked-checkbox-label">
                         {{ box.choice_label }}
                     </label>

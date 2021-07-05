@@ -5,5 +5,5 @@ register = template.Library()
 
 
 @register.filter
-def inject_input_class(value, attr):
+def inject_class(value, attr):
     return mark_safe(value[:-1] + f' class="{attr}">')
