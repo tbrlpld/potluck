@@ -12,19 +12,21 @@
             {% for game in pot.games.all  %}
                 <li class="p-3 flex flex-row justify-between items-center bg-yellow-50 odd:bg-yellow-100 first:rounded-t-lg last:rounded-b-lg">
                     <div class="w-full flex flex-col xs:flex-row justify-between items-center">
-                        <div class="flex-1 flex justify-center">
-                            <div class="flex-initial text-center">
-                                {{ game.teams.first }}
+                        {% for team in game.teams.all %}
+                            <div class="flex-1 flex justify-center">
+                                <div class="flex-initial text-center">
+                                    {% if team == game.winning_team %}
+                                        <span class="text-xl">👑</span>
+                                    {% endif %}
+                                    {{ team.name }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="flex-initial mx-2">
-                            vs
-                        </div>
-                        <div class="flex-1 flex justify-center">
-                            <div class="flex-initial text-center">
-                                {{ game.teams.last }}
-                            </div>
-                        </div>
+                            {% if not forloop.last %}
+                                <div class="flex-initial mx-2">
+                                    vs
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                     {% if pot.status == pot.Status.DRAFT %}
                         <div class="w-3"></div>
