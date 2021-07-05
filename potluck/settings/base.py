@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "potluck.pots",
     "potluck.registration",
     "potluck.teams",
+    "potluck.utils",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
