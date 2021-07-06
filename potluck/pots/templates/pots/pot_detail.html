@@ -61,8 +61,12 @@
                 <p class="text-gray-500 text-sm">
                     Share the following link with everybody to submit their pick sheets:
                 </p>
-                <div class="flex flex-row my-2 p-4 items-center box font-semibold">
-                    <a id="shareLink" href="{{ picks_url }}" class="block w-full">{{ picks_url }}</a>
+                <div class="flex flex-row my-2 p-4 justify-between items-center box font-semibold">
+                    <div class="flex-1 flex-shrink break-all">
+                        <a id="shareLink" href="{{ picks_url }}">{{ picks_url }}</a>
+                    </div>
+                    <div id="shareLinkButtonContainer" class="ml-2 flex-shrink-0">
+                    </div>
                 </div>
             </div>
         {% elif pot.status == pot.Status.CLOSED %}
@@ -120,7 +124,7 @@
             const shareLink = document.getElementById("shareLink")
             const shareLinkURL = shareLink.innerHTML
 
-            const linkContainer = shareLink.parentElement
+            const shareLinkButtonContainer = document.getElementById("shareLinkButtonContainer")
             const button = document.createElement("button")
             button.className= "px-2 py-1 border-2 border-yellow-200 hover:border-yellow-300 hover:bg-yellow-100 active:bg-yellow-200 rounded-md"
 
@@ -136,7 +140,7 @@
                     navigator.share(shareData)
                 }
                 button.addEventListener("click", shareClickHandler)
-                linkContainer.appendChild(button)
+                shareLinkButtonContainer.appendChild(button)
 
             } else {
                 if (navigator.clipboard) {
@@ -153,7 +157,7 @@
                         )
                     }
                     button.addEventListener("click", copyClickHandler)
-                    linkContainer.appendChild(button)
+                    shareLinkButtonContainer.appendChild(button)
                 }
             }
         </script>
