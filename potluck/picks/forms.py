@@ -10,7 +10,7 @@ class CreatePickSheetForm(forms.ModelForm):
         widgets = {
             "pot": forms.HiddenInput(),
         }
-        labels = {"picker": "Your name"}
+        labels = {"picker": "Name"}
 
 
 class CreatePickForm(forms.ModelForm):

@@ -1,0 +1,17 @@
+{% load utils %}
+
+<div class="flex flex-row justify-between items-center">
+    {% for radio in field %}
+        <div class="flex-1 flex justify-center">
+            {{ radio.tag|insert:'-1, class="hidden"'|safe }}
+            <label for="{{ radio.id_for_label }}" class="block flex-initial p-2 box hover:bg-yellow-100 font-bold text-center checked-input-label">
+                {{ radio.choice_label }}
+            </label>
+        </div>
+        {% if forloop.counter0 == 0 %}
+            <div class="flex-initial mx-2">
+                vs
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

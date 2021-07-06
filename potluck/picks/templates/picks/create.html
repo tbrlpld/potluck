@@ -1,15 +1,53 @@
 {% extends 'base.html' %}
 
-{% block header %}{% endblock header %}
+{% load widget_tweaks %}
+
+{% block header %}
+    {% include "components/header.html" with inactive=True %}
+{% endblock header %}
 
 {% block content %}
-    <p>{{ pot.name }}</p>
-    <h1>Take your picks!</h1>
+    {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Submit your pick sheet" %}
+
     <form action="" method="post">
         {% csrf_token %}
-        {{ create_pick_sheet_form.as_p }}
 
-        {{ create_pick_formset.as_p }}
-        <input type="submit" value="Place picks">
+        <div  class="my-4 p-4 box">
+            <div>
+                {{ create_pick_sheet_form.non_field_errors }}
+                {% for field in create_pick_sheet_form %}
+                    {% if not field.is_hidden %}
+                        <div>
+                            <div class="font-semibold">{{ field.label }}</div>
+                            <div class="text-sm text-gray-500">{{ field.help_text }}</div>
+                            {{ field|add_class:"my-1 w-full" }}
+                        </div>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="mt-8">
+                {{ create_pick_formset.management_form }}
+                {{ create_pick_formset.non_field_errors }}
+                {% for game_form in create_pick_formset %}
+                    {% for field in game_form %}
+                        {{ field.errors }}
+                        {% if field.name == "picked_team" %}
+                            <div class="my-4">
+                                {% include "components/team-radio-select.html" with field=field %}
+                            </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <button type="submit" class="block px-4 py-3 btn">
+            Submit pick sheet
+        </button>
     </form>
 {% endblock content %}

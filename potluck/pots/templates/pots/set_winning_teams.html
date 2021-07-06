@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
-{% load utils %}
 
 {% block content %}
     {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Set winning teams" %}
@@ -20,20 +19,8 @@
         {% for game_form in form %}
                 {% for field in game_form %}
                     {% if field.name == "winning_team" %}
-                        <div class="my-4 flex flex-row justify-between items-center p-3 box">
-                            {% for radio in field|add_class:"test" %}
-                                <div class="flex-1 flex justify-center">
-                                    {{ radio.tag|insert:'-1, class="hidden"'|safe }}
-                                    <label for="{{ radio.id_for_label }}" class="block flex-initial p-2 box hover:bg-yellow-100 font-bold text-center checked-input-label">
-                                        {{ radio.choice_label }}
-                                    </label>
-                                </div>
-                                {% if forloop.counter0 == 0 %}
-                                    <div class="flex-initial mx-2">
-                                        vs
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
+                        <div class="my-4 p-3 box">
+                            {% include "components/team-radio-select.html" with field=field %}
                         </div>
                     {% else %}
                         {{ field }}

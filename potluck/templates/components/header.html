@@ -1,5 +1,5 @@
 {% load static %}
-<a class="text-gray-900" href="/">
+<a class="text-gray-900" {% if not inactive %}href="/"{% endif %}>
     <img src="{% static 'favicon/android-chrome-192x192.png' %}" class="inline h-8 pb-1">
     Potluck
 </a>

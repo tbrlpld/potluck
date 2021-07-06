@@ -29,7 +29,9 @@ PickSheetMangerFromQueryset = PickSheetManager.from_queryset(PickSheetQueryset)
 
 
 class PickSheet(models.Model):
-    picker = models.CharField(max_length=100, help_text="Name of the person picking")
+    picker = models.CharField(
+        max_length=100, help_text="Who is submitting this pick sheet?"
+    )
     pot = models.ForeignKey(Pot, on_delete=models.CASCADE, related_name="pick_sheets")
 
     objects = PickSheetMangerFromQueryset()
