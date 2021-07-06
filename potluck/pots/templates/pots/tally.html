@@ -1,23 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{{ pot.name }}: Tally</h1>
-        {% if picks %}
+    {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Tally" %}
+
+    {% if picks %}
         {% regroup picks by correct_count as pick_groups_by_correct_count %}
-        <ul>
+        <ul class="my-4">
             {% for group in pick_groups_by_correct_count %}
-                <li>
-                    <h3>{{ group.grouper }} correct picks</h3>
+                <li class="p-4">
+                    <h2 class="flex flex-row items-start">
+                        <div class="mr-2 text-4xl font-semibold">{{ group.grouper }}</div>
+                        <div class="pt-1 text-sm leading-none">Correct picks</div>
+                    </h2>
                     <ul>
                         {% for pick in group.list %}
-                            <li>{{ pick.picker }}</li>
+                            <li class="font-semibold">{{ pick.picker }}</li>
                         {% endfor %}
                     </ul>
                 </li>
             {% endfor %}
         </ul>
+    {% else %}
+        <div class="my-4 p-4 box text-center">
+            <div>👀❓</div>
+            <p class="mt-2">Looks like no pick sheets have been submitted.</p>
+        </div>
     {% endif %}
+
     <p>
-        <a href="{% url 'pot_detail' pot.id %}">Back</a>
+        <a href="{% url 'pot_detail' pot.id %}" class="link">Back</a>
     </p>
+
 {% endblock content %}
