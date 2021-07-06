@@ -7,6 +7,19 @@
     <p class="my-2 text-sm text-gray-500">
         {{ pot.status_help_text }}
     </p>
+
+    {% with pick_sheet_count=pot.pick_sheets.count %}
+        {% if pick_sheet_count %}
+            <div class="my-4 flex flex-row items-start">
+                <div class="-mt-1 mr-2 text-4xl font-semibold">{{ pick_sheet_count }}</div>
+                <div>
+                    <div class="font-semibold leading-4">Submitted pick sheet{{ pick_sheet_count|pluralize }}</div>
+                    <div class="text-gray-500 text-xs">{{ pot.pickers_list|join:", " }}</div>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
     {% if pot.games.exists %}
         <ul class="my-4">
             {% for game in pot.games.all  %}
@@ -40,6 +53,7 @@
                 </li>
             {% endfor %}
         </ul>
+
         {% if pot.status == pot.Status.DRAFT %}
             <a href="{% url 'add_game' pot.pk %}" class="block my-4 p-4 btn text-center ">Add game</a>
         {% elif pot.status == pot.Status.OPEN %}
@@ -64,19 +78,13 @@
             </div>
         {% endif %}
 
-        {% with pick_sheet_count=pot.pick_sheets.count %}
-            {% if pick_sheet_count %}
-                <p>
-                    <strong>{{ pick_sheet_count }} submitted pick sheet{{ pick_sheet_count|pluralize }}:</strong>
-                    {{ pot.pickers_list|join:", " }}
-                </p>
-            {% endif %}
-        {% endwith %}
     {% else %}
+
         <div class="my-4">
             {% url 'add_game' pot.pk as add_game_url %}
             {% include "components/action-box.html" with paragraph="No games in this pot yet 👀" action_text="Add the first game" action_url=add_game_url %}
         </div>
+
     {% endif %}
 
     {% if pot.next_status %}
