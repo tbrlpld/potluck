@@ -7,7 +7,7 @@
 {% endblock header %}
 
 {% block content %}
-    {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Submit your pick sheet" %}
+    {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Pick sheet" %}
 
     <form action="" method="post">
         {% csrf_token %}
@@ -28,14 +28,16 @@
                 {% endfor %}
             </div>
 
-            <div class="mt-8">
+            <div class="mt-6">
                 {{ create_pick_formset.management_form }}
                 {{ create_pick_formset.non_field_errors }}
+                <h2 class="font-semibold">Picks</h2>
+                <div class="text-sm text-gray-500">For each game, pick the team you think is most likely to win.</div>
                 {% for game_form in create_pick_formset %}
                     {% for field in game_form %}
                         {{ field.errors }}
                         {% if field.name == "picked_team" %}
-                            <div class="my-4">
+                            <div class="mt-4">
                                 {% include "components/team-radio-select.html" with field=field %}
                             </div>
                         {% else %}
@@ -46,7 +48,7 @@
             </div>
         </div>
 
-        <button type="submit" class="block px-4 py-3 btn">
+        <button type="submit" class="block w-full px-4 py-3 btn">
             Submit pick sheet
         </button>
     </form>
