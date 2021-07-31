@@ -1,4 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
+const colors = require('tailwindcss/colors')
 
 module.exports = {
     mode: "jit",
@@ -8,6 +9,10 @@ module.exports = {
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {
+        colors: {
+            ...colors,
+            primary: colors.sky,
+        },
         extend: {
             screens: {
                 // Approx. iPhone 5 horizontal orientation

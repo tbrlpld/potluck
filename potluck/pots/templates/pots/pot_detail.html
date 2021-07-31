@@ -23,7 +23,7 @@
     {% if pot.games.exists %}
         <ul class="my-4">
             {% for game in pot.games.all  %}
-                <li class="p-3 flex flex-row justify-between items-center bg-yellow-50 odd:bg-yellow-100 first:rounded-t-lg last:rounded-b-lg">
+                <li class="p-3 flex flex-row justify-between items-center bg-primary-50 odd:bg-primary-100 first:rounded-t-lg last:rounded-b-lg">
                     <div class="w-full flex flex-col xs:flex-row justify-between items-center">
                         {% for team in game.teams.all %}
                             <div class="flex-1 flex justify-center">
@@ -45,7 +45,7 @@
                         <div class="w-3"></div>
                         <form action="{% url 'game_delete' game.pk %}" method="post">
                             {% csrf_token %}
-                            <button type="submit" class="px-2 py-0.5 text-sm font-semibold text-white bg-yellow-300 hover:bg-yellow-400 active:bg-yellow-500 rounded">
+                            <button type="submit" class="px-2 py-0.5 text-sm font-semibold text-white bg-primary-300 hover:bg-primary-400 active:bg-primary-500 rounded">
                                 Delete
                             </button>
                         </form>
@@ -94,7 +94,7 @@
     {% if pot.next_status %}
         <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
             {% csrf_token %}
-            <button type="submit" name="status" value="{{ pot.next_status }}" class="p-4 w-full border-2 border-yellow-100 text-yellow-500 text-right rounded-lg hover:bg-yellow-50 active:bg-yellow-100 active:border-yellow-200">
+            <button type="submit" name="status" value="{{ pot.next_status }}" class="p-4 w-full border-2 border-primary-100 text-primary-500 text-right rounded-lg hover:bg-primary-50 active:bg-primary-100 active:border-primary-200">
                 <div class="text-gray-500">Next</div>
                 <div class="text-sm">{{ pot.next_status_action_text }}</div>
             </button>
@@ -106,7 +106,7 @@
         {% if pot.previous_status %}
             <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
                 {% csrf_token %}
-                <button class="p-4 w-full border-2 border-yellow-100 text-yellow-500 text-left rounded-lg hover:bg-yellow-50 active:bg-yellow-100 active:border-yellow-200" type="submit" name="status" value="{{ pot.previous_status }}">
+                <button class="p-4 w-full border-2 border-primary-100 text-primary-500 text-left rounded-lg hover:bg-primary-50 active:bg-primary-100 active:border-primary-200" type="submit" name="status" value="{{ pot.previous_status }}">
                     <div class="text-gray-500">Back</div>
                     <div class="text-sm">{{ pot.previous_status_action_text }}</div>
                 </button>
@@ -126,7 +126,7 @@
 
             const shareLinkButtonContainer = document.getElementById("shareLinkButtonContainer")
             const button = document.createElement("button")
-            button.className= "px-2 py-1 border-2 border-yellow-200 hover:border-yellow-300 hover:bg-yellow-100 active:bg-yellow-200 rounded-md"
+            button.className= "px-2 py-1 border-2 border-primary-200 hover:border-primary-300 hover:bg-primary-100 active:bg-primary-200 rounded-md"
 
             if (navigator.share) {
 

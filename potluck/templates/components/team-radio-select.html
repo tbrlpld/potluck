@@ -4,7 +4,7 @@
     {% for radio in field %}
         <div class="flex-1 flex justify-center">
             {{ radio.tag|insert:'-1, class="hidden"'|safe }}
-            <label for="{{ radio.id_for_label }}" class="block flex-initial p-2 box hover:bg-yellow-100 font-bold text-center checked-input-label">
+            <label for="{{ radio.id_for_label }}" class="block flex-initial p-2 box hover:bg-primary-100 font-bold text-center checked-input-label">
                 {{ radio.choice_label }}
             </label>
         </div>

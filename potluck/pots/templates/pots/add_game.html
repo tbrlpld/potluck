@@ -21,7 +21,7 @@
             {% if field.name == "teams" %}
                 {% for box in form.teams %}
                     {{ box.tag|insert:'-1, class="hidden"'|safe }}
-                    <label for="{{ box.id_for_label }}" class="block my-2 p-4 box hover:bg-yellow-100 font-bold text-center checked-input-label">
+                    <label for="{{ box.id_for_label }}" class="block my-2 p-4 box hover:bg-primary-100 font-bold text-center checked-input-label">
                         {{ box.choice_label }}
                     </label>
                 {% endfor %}

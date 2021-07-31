@@ -6,7 +6,7 @@
         <ul class="my-4">
             {% for pot in pots  %}
              <li>
-                <a href="{% url 'pot_detail' pot.id %}" class="block my-3 p-2 text-yellow-500 hover:text-yellow-600 hover:bg-yellow-50 active:bg-yellow-100 border-2 border-yellow-100 hover:border-yellow-200 rounded">
+                <a href="{% url 'pot_detail' pot.id %}" class="block my-3 p-2 text-primary-500 hover:text-primary-600 hover:bg-primary-50 active:bg-primary-100 border-2 border-primary-100 hover:border-primary-200 rounded">
                     <h2 class="text-xl font-semibold">{{ pot.name }}</h2>
                     <div class="text-xs font-normal text-gray-400">{{ pot.get_status_display }}</div>
                 </a>
