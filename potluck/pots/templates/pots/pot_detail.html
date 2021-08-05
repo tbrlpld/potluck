@@ -94,8 +94,8 @@
     {% if pot.next_status %}
         <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
             {% csrf_token %}
-            <button type="submit" name="status" value="{{ pot.next_status }}" class="p-4 w-full border-2 border-primary-100 text-primary-500 text-right rounded-lg hover:bg-primary-50 active:bg-primary-100 active:border-primary-200">
-                <div class="text-gray-500">Next</div>
+            <button type="submit" name="status" value="{{ pot.next_status }}" class="p-4 w-full border border-primary-100 text-primary-500 text-right rounded-sm hover:bg-primary-50 active:bg-primary-100 active:border-primary-200">
+                <div class="text-gray-900">Next</div>
                 <div class="text-sm">{{ pot.next_status_action_text }}</div>
             </button>
         </form>
@@ -106,8 +106,8 @@
         {% if pot.previous_status %}
             <form action="{% url 'pot_update_status' pot.pk %}" method="POST">
                 {% csrf_token %}
-                <button class="p-4 w-full border-2 border-primary-100 text-primary-500 text-left rounded-lg hover:bg-primary-50 active:bg-primary-100 active:border-primary-200" type="submit" name="status" value="{{ pot.previous_status }}">
-                    <div class="text-gray-500">Back</div>
+                <button class="p-4 w-full border border-primary-100 text-primary-500 text-left rounded-sm hover:bg-primary-50 active:bg-primary-100 active:border-primary-200" type="submit" name="status" value="{{ pot.previous_status }}">
+                    <div class="text-gray-900">Back</div>
                     <div class="text-sm">{{ pot.previous_status_action_text }}</div>
                 </button>
             </form>

@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% block content %}
     {% include "components/heading-1.html" with heading="Delete pot" %}
-    <form action="" method="POST" class="my-5 p-5 text-red-500 bg-red-50 border-2 border-red-200 rounded-lg">
+    <form action="" method="POST" class="my-5 p-5 text-red-500 bg-red-50 border border-red-200 rounded-sm">
         {% csrf_token %}
 
         {{ form.non_field_errors }}

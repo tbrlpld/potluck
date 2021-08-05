@@ -12,11 +12,11 @@ input[type="password"] {
 }
 
 .box {
-    @apply text-primary-500 bg-primary-50 border-2 border-primary-100 rounded-lg
+    @apply text-primary-500 bg-primary-50 border border-primary-100 rounded-sm
 }
 
 .btn {
-    @apply bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-white text-center font-semibold rounded
+    @apply bg-primary-800 hover:bg-primary-600 active:bg-primary-900 text-white text-center font-semibold rounded-sm
 }
 
 .errorlist {
@@ -24,7 +24,7 @@ input[type="password"] {
 }
 
 .link {
-    @apply text-primary-500 hover:text-primary-600 hover:underline active:text-primary-700;
+    @apply text-primary-800 hover:text-primary-600 hover:underline active:text-primary-900
 }
 
 input:checked + label.checked-input-label {
