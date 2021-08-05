@@ -8,7 +8,7 @@
         {{ form.non_field_errors }}
 
         <div>
-            <label class="block font-semibold" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+            <label class="block font-semibold text-primary-900" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
             <p class="text-sm text-gray-500">
                 {{ form.name.help_text }}
             </p>
@@ -21,7 +21,7 @@
             {{ form.name|add_error_class:"bg-red-100"|add_class:"p-1 w-full" }}
         </div>
         <div class="mt-4 flex items-baseline justify-between">
-            <button class="p-2 btn" type="submit">Create</button>
+            <button class="px-2 py-1 btn" type="submit">Create</button>
             <a class="link" href="{% url 'pots_list' %}">Cancel</a>
         </div>
     </form>

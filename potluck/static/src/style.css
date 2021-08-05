@@ -24,7 +24,7 @@ input[type="password"] {
 }
 
 .link {
-    @apply text-primary-500 hover:text-primary-600 hover:underline active:text-primary-700;
+    @apply text-primary-800 hover:text-primary-600 hover:underline active:text-primary-900
 }
 
 input:checked + label.checked-input-label {
