@@ -12,7 +12,7 @@ input[type="password"] {
 }
 
 .box {
-    @apply text-primary-500 bg-primary-50 border-2 border-primary-100 rounded-lg
+    @apply text-primary-500 bg-primary-50 border border-primary-100 rounded-sm
 }
 
 .btn {
