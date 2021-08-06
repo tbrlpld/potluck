@@ -18,6 +18,8 @@ services:
     image: "postgres:13"
     expose:
       - 5432
+    volumes:
+      - ./dbdump:/dbdump
     environment:
       POSTGRES_USER: potluck
       POSTGRES_PASSWORD: potluck
