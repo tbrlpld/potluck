@@ -12,15 +12,6 @@ from potluck.pots.tests.factories import PotFactory
 class TestPickCreateView:
     def test_get_success(self):
         pot = PotFactory.create()
-        url = urls.reverse("pick_create", kwargs={"pot_id": pot.id})
-        client = test.Client()
-
-        response = client.get(url)
-
-        assert response.status_code == http.HTTPStatus.OK
-
-    def test_get_display_game_titles(self):
-        pot = PotFactory.create()
         game_1 = pot.games.first()
         game_2 = pot.games.last()
         url = urls.reverse("pick_create", kwargs={"pot_id": pot.id})
@@ -28,6 +19,7 @@ class TestPickCreateView:
 
         response = client.get(url)
 
+        assert response.status_code == http.HTTPStatus.OK
         assert str(game_1.teams.first()) in str(response.content)
         assert str(game_1.teams.last()) in str(response.content)
         assert str(game_2.teams.first()) in str(response.content)
