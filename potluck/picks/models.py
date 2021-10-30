@@ -55,16 +55,6 @@ class PickQueryset(models.QuerySet):
         )
 
 
-class PickManager(models.Manager):
-    def get_queryset(self):
-        queryset = PickQueryset(self.model, using=self._db)
-        queryset = queryset.annotate_is_correct()
-        return queryset
-
-
-PickMangerFromQueryset = PickManager.from_queryset(PickQueryset)
-
-
 class Pick(models.Model):
     pick_sheet = models.ForeignKey(
         PickSheet,
@@ -86,7 +76,7 @@ class Pick(models.Model):
         blank=False,
     )
 
-    objects = PickMangerFromQueryset()
+    objects = PickQueryset.as_manager()
 
     def __str__(self):
         return f"Pick {self.id}: {self.pick_sheet.picker} ({self.game})"
