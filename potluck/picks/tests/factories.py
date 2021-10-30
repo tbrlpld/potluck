@@ -10,7 +10,6 @@ class PickSheetFactory(factory.django.DjangoModelFactory):
         model = PickSheet
 
     picker = factory.Faker("first_name")
-    pot = factory.SubFactory(PotFactory)
 
 
 class PickFactory(factory.django.DjangoModelFactory):

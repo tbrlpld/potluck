@@ -7,7 +7,7 @@ from potluck.teams.models import Team
 
 class PickSheetQueryset(models.QuerySet):
     def annotate_correct_count(self):
-        correct_picks = Pick.objects.filter(
+        correct_picks = Pick.objects.annotate_is_correct().filter(
             is_correct=True,
         )
         annotated_pick_sheets = self.annotate(
@@ -40,8 +40,7 @@ class PickSheet(models.Model):
         return f"PickSheet {self.id}: {self.picker} ({self.pot})"
 
     def count_correct(self):
-        correct_picks = self.picks.filter(is_correct=True)
-        # print(corrent_game_picks.query)
+        correct_picks = self.picks.annotate_is_correct().filter(is_correct=True)
         return correct_picks.count()
 
 
