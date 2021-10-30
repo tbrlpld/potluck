@@ -56,7 +56,7 @@ class Pot(models.Model):
         return self.name
 
     def get_tally(self):
-        return self.pick_sheets.order_by("-correct_count")
+        return self.pick_sheets.annotate_correct_count().order_by("-correct_count")
 
     @property
     def next_status(self):

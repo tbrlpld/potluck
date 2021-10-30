@@ -7,7 +7,7 @@ from potluck.teams.models import Team
 
 class PickSheetQueryset(models.QuerySet):
     def annotate_correct_count(self):
-        correct_picks = Pick.objects.filter(
+        correct_picks = Pick.objects.annotate_is_correct().filter(
             is_correct=True,
         )
         annotated_pick_sheets = self.annotate(
@@ -18,30 +18,19 @@ class PickSheetQueryset(models.QuerySet):
         return annotated_pick_sheets
 
 
-class PickSheetManager(models.Manager):
-    def get_queryset(self):
-        queryset = PickSheetQueryset(self.model, using=self._db)
-        queryset = queryset.annotate_correct_count()
-        return queryset
-
-
-PickSheetMangerFromQueryset = PickSheetManager.from_queryset(PickSheetQueryset)
-
-
 class PickSheet(models.Model):
     picker = models.CharField(
         max_length=100, help_text="Who is submitting this pick sheet?"
     )
     pot = models.ForeignKey(Pot, on_delete=models.CASCADE, related_name="pick_sheets")
 
-    objects = PickSheetMangerFromQueryset()
+    objects = PickSheetQueryset.as_manager()
 
     def __str__(self):
         return f"PickSheet {self.id}: {self.picker} ({self.pot})"
 
     def count_correct(self):
-        correct_picks = self.picks.filter(is_correct=True)
-        # print(corrent_game_picks.query)
+        correct_picks = self.picks.annotate_is_correct().filter(is_correct=True)
         return correct_picks.count()
 
 
@@ -53,16 +42,6 @@ class PickQueryset(models.QuerySet):
                 output_field=models.BooleanField(),
             )
         )
-
-
-class PickManager(models.Manager):
-    def get_queryset(self):
-        queryset = PickQueryset(self.model, using=self._db)
-        queryset = queryset.annotate_is_correct()
-        return queryset
-
-
-PickMangerFromQueryset = PickManager.from_queryset(PickQueryset)
 
 
 class Pick(models.Model):
@@ -86,7 +65,7 @@ class Pick(models.Model):
         blank=False,
     )
 
-    objects = PickMangerFromQueryset()
+    objects = PickQueryset.as_manager()
 
     def __str__(self):
         return f"Pick {self.id}: {self.pick_sheet.picker} ({self.game})"
