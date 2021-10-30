@@ -28,8 +28,10 @@ class TestPickCreateView:
 
         response = client.get(url)
 
-        assert str(game_1) in str(response.content)
-        assert str(game_2) in str(response.content)
+        assert str(game_1.teams.first()) in str(response.content)
+        assert str(game_1.teams.last()) in str(response.content)
+        assert str(game_2.teams.first()) in str(response.content)
+        assert str(game_2.teams.last()) in str(response.content)
 
     def test_post_creates_pick_and_game_picks(self):
         pot = PotFactory.create()
