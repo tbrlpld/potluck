@@ -4,60 +4,63 @@ from django import test, urls
 
 import pytest
 
-from potluck.picks.models import Pick, PickSheet
+from potluck.games.tests.factories import GameFactory
+from potluck.picks.models import PickSheet
 from potluck.pots.tests.factories import PotFactory
+from potluck.teams.tests.factories import TeamFactory
 
 
 @pytest.mark.django_db
 class TestPickCreateView:
-    def test_get_success(self):
-        pot = PotFactory.create()
-        url = urls.reverse("pick_create", kwargs={"pot_id": pot.id})
+    @pytest.fixture
+    def setup_pot_with_two_games(self):
+        self.team_1 = TeamFactory.create()
+        self.team_2 = TeamFactory.create()
+        self.team_3 = TeamFactory.create()
+        self.team_4 = TeamFactory.create()
+        self.pot = PotFactory.create()
+        self.game_1 = GameFactory.create(pot=self.pot)
+        self.game_1.teams.set((self.team_1, self.team_2))
+        self.game_2 = GameFactory.create(pot=self.pot)
+        self.game_2.teams.set((self.team_3, self.team_4))
+
+    def test_get_success(self, setup_pot_with_two_games):
+        self.team_5 = TeamFactory.create()
+        url = urls.reverse("pick_create", kwargs={"pot_id": self.pot.id})
         client = test.Client()
 
         response = client.get(url)
 
         assert response.status_code == http.HTTPStatus.OK
+        assert self.team_1.name in str(response.content)
+        assert self.team_2.name in str(response.content)
+        assert self.team_3.name in str(response.content)
+        assert self.team_4.name in str(response.content)
+        assert self.team_5.name not in str(response.content)
 
-    def test_get_display_game_titles(self):
-        pot = PotFactory.create()
-        game_1 = pot.games.first()
-        game_2 = pot.games.last()
-        url = urls.reverse("pick_create", kwargs={"pot_id": pot.id})
-        client = test.Client()
-
-        response = client.get(url)
-
-        assert str(game_1) in str(response.content)
-        assert str(game_2) in str(response.content)
-
-    def test_post_creates_pick_and_game_picks(self):
-        pot = PotFactory.create()
-        game_1 = pot.games.first()
-        game_2 = pot.games.last()
-        picked_team_1 = game_1.teams.first()
-        picked_team_2 = game_2.teams.first()
+    def test_post_creates_pick_and_game_picks(self, setup_pot_with_two_games):
+        picked_team_1 = self.game_1.teams.first()
+        picked_team_2 = self.game_2.teams.first()
         picker_name = "Test Picker"
         data = {
-            "pot": pot.id,
+            "pot": self.pot.id,
             "picker": picker_name,
             "form-INITIAL_FORMS": 2,
             "form-TOTAL_FORMS": 2,
             "form-MAX_NUM_FORMS": 2,
             "form-MIN_NUM_FORMS": 2,
-            "form-0-game": game_1.id,
+            "form-0-game": self.game_1.id,
             "form-0-picked_team": picked_team_1.id,
-            "form-1-game": game_2.id,
+            "form-1-game": self.game_2.id,
             "form-1-picked_team": picked_team_2.id,
         }
-        url = urls.reverse("pick_create", kwargs={"pot_id": pot.id})
+        url = urls.reverse("pick_create", kwargs={"pot_id": self.pot.id})
         client = test.Client()
 
         response = client.post(url, data=data, follow=True)
 
         assert response.status_code == http.HTTPStatus.OK
-        assert PickSheet.objects.count() == 1
-        assert Pick.objects.count() == 2
-        pick_sheet = PickSheet.objects.first()
+        pick_sheet = PickSheet.objects.filter(pot=self.pot).first()
+        assert pick_sheet.picks.count() == 2
         assert pick_sheet.picks.first().picked_team == picked_team_1
         assert pick_sheet.picks.last().picked_team == picked_team_2

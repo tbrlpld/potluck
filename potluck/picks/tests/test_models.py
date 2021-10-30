@@ -5,17 +5,24 @@ from potluck.games.tests.factories import GameFactory
 from potluck.picks.models import Pick, PickSheet
 from potluck.picks.tests.factories import PickFactory, PickSheetFactory
 from potluck.pots.models import Pot
+from potluck.pots.tests.factories import PotFactory
 from potluck.teams.models import Team
+from potluck.teams.tests.factories import TeamFactory
 
 
 @pytest.mark.django_db
 class TestPick:
     @pytest.fixture
     def setup(self):
-        self.pick_sheet = PickSheetFactory.create()
-        self.pot = self.pick_sheet.pot
-        self.game_1 = self.pot.games.first()
-        self.game_2 = self.pot.games.last()
+        team_1 = TeamFactory.create()
+        team_2 = TeamFactory.create()
+        team_3 = TeamFactory.create()
+        team_4 = TeamFactory.create()
+        self.pot = PotFactory.create()
+        self.game_1 = GameFactory.create(pot=self.pot)
+        self.game_1.teams.set((team_1, team_2))
+        self.game_2 = GameFactory.create(pot=self.pot)
+        self.game_2.teams.set((team_3, team_4))
 
         self.game_1_winning_team = self.game_1.teams.first()
         self.game_1_loosing_team = self.game_1.teams.last()
@@ -26,6 +33,8 @@ class TestPick:
         self.game_2_loosing_team = self.game_2.teams.last()
         self.game_2.winning_team = self.game_2_winning_team
         self.game_2.save()
+
+        self.pick_sheet = PickSheetFactory.create(pot=self.pot)
 
         assert Pot.objects.count() == 1
         assert PickSheet.objects.count() == 1
@@ -298,12 +307,21 @@ class TestPick:
 
 @pytest.mark.django_db
 class TestGamePick:
-    def test_is_correct_annotation_is_true_if_picked_team_matches_winning_team(self):
-        game = GameFactory.create()
-        winning_team = game.teams.first()
-        game.winning_team = winning_team
-        game.save()  # Game needs to be able to check equality in the DB
-        pick = PickFactory(game=game, picked_team=winning_team)
+    @pytest.fixture
+    def setup_game_with_two_teams(self):
+        self.team_1 = TeamFactory.create()
+        self.team_2 = TeamFactory.create()
+        self.game = GameFactory.create()
+        self.game.teams.set((self.team_1, self.team_2))
+
+    def test_is_correct_annotation_is_true_if_picked_team_matches_winning_team(
+        self,
+        setup_game_with_two_teams,
+    ):
+        winning_team = self.game.teams.first()
+        self.game.winning_team = winning_team
+        self.game.save()  # Game needs to be able to check equality in the DB
+        pick = PickFactory(game=self.game, picked_team=winning_team)
         # To get the annotation, you need to retrieve the object from the manager
         pick = Pick.objects.get(pk=pick.id)
 
@@ -313,13 +331,13 @@ class TestGamePick:
 
     def test_is_correct_annotation_is_false_if_picked_team_not_matches_winning_team(
         self,
+        setup_game_with_two_teams,
     ):
-        game = GameFactory.create()
-        winning_team = game.teams.first()
-        loosing_team = game.teams.last()
-        game.winning_team = winning_team
-        game.save()  # Game needs to be able to check equality in the DB
-        pick = PickFactory(game=game, picked_team=loosing_team)
+        winning_team = self.game.teams.first()
+        loosing_team = self.game.teams.last()
+        self.game.winning_team = winning_team
+        self.game.save()  # Game needs to be able to check equality in the DB
+        pick = PickFactory(game=self.game, picked_team=loosing_team)
         # To get the annotation, you need to retrieve the object from the manager
         pick = Pick.objects.get(pk=pick.id)
 

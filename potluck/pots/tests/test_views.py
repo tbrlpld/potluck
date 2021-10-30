@@ -5,9 +5,11 @@ from django.urls import reverse
 
 import pytest
 
+from potluck.games.tests.factories import GameFactory
 from potluck.picks.tests.factories import PickFactory, PickSheetFactory
 from potluck.pots.models import Pot
 from potluck.pots.tests.factories import PotFactory
+from potluck.teams.tests.factories import TeamFactory
 
 
 @pytest.mark.django_db
@@ -100,9 +102,15 @@ class TestGameAddView:
 class TestSetWinningTeamsView:
     @pytest.fixture
     def setup(self):
+        self.team_1 = TeamFactory.create()
+        self.team_2 = TeamFactory.create()
+        self.team_3 = TeamFactory.create()
+        self.team_4 = TeamFactory.create()
         self.pot = PotFactory.create()
-        self.game1 = self.pot.games.first()
-        self.game2 = self.pot.games.last()
+        self.game1 = GameFactory.create(pot=self.pot)
+        self.game1.teams.set((self.team_1, self.team_2))
+        self.game2 = GameFactory.create(pot=self.pot)
+        self.game2.teams.set((self.team_3, self.team_4))
         self.url = reverse("add_game", kwargs={"pot_id": self.pot.id})
         self.client = Client()
         assert self.pot.games.count() == 2
@@ -116,26 +124,31 @@ class TestSetWinningTeamsView:
         response = self.client.get(self.url)
 
         assert response.status_code == HTTPStatus.OK
-        for team in self.game1.teams.all():
-            assert team.name in str(response.content)
-        for team in self.game2.teams.all():
-            assert team.name in str(response.content)
+        assert self.team_1.name in str(response.content)
+        assert self.team_2.name in str(response.content)
+        assert self.team_3.name in str(response.content)
+        assert self.team_4.name in str(response.content)
 
 
 @pytest.mark.django_db
 class TestTallyView:
     @pytest.fixture
     def setup(self):
+        team_1 = TeamFactory.create()
+        team_2 = TeamFactory.create()
+        team_3 = TeamFactory.create()
+        team_4 = TeamFactory.create()
         pot = PotFactory.create()
+        game_1 = GameFactory.create(pot=pot)
+        game_1.teams.set((team_1, team_2))
+        game_2 = GameFactory.create(pot=pot)
+        game_2.teams.set((team_3, team_4))
 
-        game_1 = pot.games.first()
-        game_1_winning_team = game_1.teams.first()
-        game_1_loosing_team = game_1.teams.last()  # noqa: F841
+        game_1_winning_team = team_1
         game_1.set_winning_team(game_1_winning_team)
 
-        game_2 = pot.games.first()
-        game_2_winning_team = game_2.teams.first()
-        game_2_loosing_team = game_2.teams.last()
+        game_2_winning_team = team_3
+        game_2_loosing_team = team_4
         game_2.set_winning_team(game_2_winning_team)
 
         # Pick 1 with 1 correct game pick

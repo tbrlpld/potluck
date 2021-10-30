@@ -10,16 +10,21 @@ from potluck.teams.tests.factories import TeamFactory
 @pytest.mark.django_db
 class TestGame:
     def test_set_winning_team_saves_to_db(self):
+        team_1 = TeamFactory.create()
+        team_2 = TeamFactory.create()
         game = GameFactory.create()
-        winning_team = game.teams.first()
+        game.teams.set((team_1, team_2))
 
-        game.set_winning_team(winning_team)
+        game.set_winning_team(team_1)
 
-        assert Game.objects.get(pk=game.id).winning_team == winning_team
+        assert Game.objects.get(pk=game.id).winning_team == team_1
 
     def test_set_winning_team_raises_validation_error_if_team_not_in_game(self):
-        game = GameFactory.create()
+        team_1 = TeamFactory.create()
+        team_2 = TeamFactory.create()
         team_not_in_game = TeamFactory.create()
+        game = GameFactory.create()
+        game.teams.set((team_1, team_2))
         assert team_not_in_game not in game.teams.all()
 
         with pytest.raises(exceptions.ValidationError):
