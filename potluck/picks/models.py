@@ -18,23 +18,13 @@ class PickSheetQueryset(models.QuerySet):
         return annotated_pick_sheets
 
 
-class PickSheetManager(models.Manager):
-    def get_queryset(self):
-        queryset = PickSheetQueryset(self.model, using=self._db)
-        queryset = queryset.annotate_correct_count()
-        return queryset
-
-
-PickSheetMangerFromQueryset = PickSheetManager.from_queryset(PickSheetQueryset)
-
-
 class PickSheet(models.Model):
     picker = models.CharField(
         max_length=100, help_text="Who is submitting this pick sheet?"
     )
     pot = models.ForeignKey(Pot, on_delete=models.CASCADE, related_name="pick_sheets")
 
-    objects = PickSheetMangerFromQueryset()
+    objects = PickSheetQueryset.as_manager()
 
     def __str__(self):
         return f"PickSheet {self.id}: {self.picker} ({self.pot})"
