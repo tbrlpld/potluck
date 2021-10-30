@@ -150,7 +150,9 @@ class TestPickSheet:
         place_game_1_wrong_pick,
         place_game_2_wrong_pick,
     ):
-        pick_sheet = PickSheet.objects.annotate_correct_count().get(pk=self.pick_sheet.id)
+        pick_sheet = PickSheet.objects.annotate_correct_count().get(
+            pk=self.pick_sheet.id
+        )
 
         result = pick_sheet.correct_count
 
@@ -162,7 +164,9 @@ class TestPickSheet:
         place_game_1_correct_pick,
         place_game_2_wrong_pick,
     ):
-        pick_sheet = PickSheet.objects.annotate_correct_count().get(pk=self.pick_sheet.id)
+        pick_sheet = PickSheet.objects.annotate_correct_count().get(
+            pk=self.pick_sheet.id
+        )
 
         result = pick_sheet.correct_count
 
@@ -174,7 +178,9 @@ class TestPickSheet:
         place_game_1_wrong_pick,
         place_game_2_correct_pick,
     ):
-        pick_sheet = PickSheet.objects.annotate_correct_count().get(pk=self.pick_sheet.id)
+        pick_sheet = PickSheet.objects.annotate_correct_count().get(
+            pk=self.pick_sheet.id
+        )
 
         assert self.pick_sheet.count_correct() == 1
         result = pick_sheet.correct_count
@@ -187,7 +193,9 @@ class TestPickSheet:
         place_game_1_correct_pick,
         place_game_2_correct_pick,
     ):
-        pick_sheet = PickSheet.objects.annotate_correct_count().get(pk=self.pick_sheet.id)
+        pick_sheet = PickSheet.objects.annotate_correct_count().get(
+            pk=self.pick_sheet.id
+        )
 
         result = pick_sheet.correct_count
 
@@ -216,7 +224,9 @@ class TestPickSheet:
         )
         assert Pick.objects.count() == 4
         # Get the original pick, the one that is being tested
-        pick_sheet = PickSheet.objects.annotate_correct_count().get(pk=self.pick_sheet.id)
+        pick_sheet = PickSheet.objects.annotate_correct_count().get(
+            pk=self.pick_sheet.id
+        )
 
         result = pick_sheet.correct_count
 

@@ -1,8 +1,6 @@
 import factory
 
-from potluck.games.tests.factories import GameFactory
 from potluck.picks.models import Pick, PickSheet
-from potluck.pots.tests.factories import PotFactory
 
 
 class PickSheetFactory(factory.django.DjangoModelFactory):
