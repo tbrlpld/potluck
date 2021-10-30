@@ -5,7 +5,7 @@ from django import test, urls
 import pytest
 
 from potluck.games.tests.factories import GameFactory
-from potluck.picks.models import Pick, PickSheet
+from potluck.picks.models import PickSheet
 from potluck.pots.tests.factories import PotFactory
 from potluck.teams.tests.factories import TeamFactory
 

@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('teams', '0001_add_team_model'),
+        ("teams", "0001_add_team_model"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='team',
-            options={'ordering': ['name']},
+            name="team",
+            options={"ordering": ["name"]},
         ),
     ]
