@@ -11,7 +11,7 @@ from potluck.teams.tests.factories import TeamFactory
 
 
 @pytest.mark.django_db
-class TestPick:
+class TestPickSheet:
     @pytest.fixture
     def setup(self):
         team_1 = TeamFactory.create()
@@ -228,7 +228,7 @@ class TestPick:
 
 
 @pytest.mark.django_db
-class TestGamePick:
+class TestPick:
     @pytest.fixture
     def setup_game_with_two_teams(self):
         self.team_1 = TeamFactory.create()
@@ -245,7 +245,7 @@ class TestGamePick:
         self.game.save()  # Game needs to be able to check equality in the DB
         pick = PickFactory(game=self.game, picked_team=winning_team)
         # To get the annotation, you need to retrieve the object from the manager
-        pick = Pick.objects.get(pk=pick.id)
+        pick = Pick.objects.annotate_is_correct().get(pk=pick.id)
 
         result = pick.is_correct
 
@@ -261,7 +261,7 @@ class TestGamePick:
         self.game.save()  # Game needs to be able to check equality in the DB
         pick = PickFactory(game=self.game, picked_team=loosing_team)
         # To get the annotation, you need to retrieve the object from the manager
-        pick = Pick.objects.get(pk=pick.id)
+        pick = Pick.objects.annotate_is_correct().get(pk=pick.id)
 
         result = pick.is_correct
 

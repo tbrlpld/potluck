@@ -16,6 +16,3 @@ class PickSheetFactory(factory.django.DjangoModelFactory):
 class PickFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Pick
-
-    pick_sheet = factory.SubFactory(PickSheetFactory)
-    game = factory.SubFactory(GameFactory)
