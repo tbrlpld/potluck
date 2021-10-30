@@ -150,8 +150,7 @@ class TestPickSheet:
         place_game_1_wrong_pick,
         place_game_2_wrong_pick,
     ):
-        # To get the annotation, you need to retrieve the object from the manager
-        pick_sheet = PickSheet.objects.get(pk=self.pick_sheet.id)
+        pick_sheet = PickSheet.objects.annotate_correct_count().get(pk=self.pick_sheet.id)
 
         result = pick_sheet.correct_count
 
@@ -163,8 +162,7 @@ class TestPickSheet:
         place_game_1_correct_pick,
         place_game_2_wrong_pick,
     ):
-        # To get the annotation, you need to retrieve the object from the manager
-        pick_sheet = PickSheet.objects.get(pk=self.pick_sheet.id)
+        pick_sheet = PickSheet.objects.annotate_correct_count().get(pk=self.pick_sheet.id)
 
         result = pick_sheet.correct_count
 
@@ -176,8 +174,7 @@ class TestPickSheet:
         place_game_1_wrong_pick,
         place_game_2_correct_pick,
     ):
-        # To get the annotation, you need to retrieve the object from the manager
-        pick_sheet = PickSheet.objects.get(pk=self.pick_sheet.id)
+        pick_sheet = PickSheet.objects.annotate_correct_count().get(pk=self.pick_sheet.id)
 
         assert self.pick_sheet.count_correct() == 1
         result = pick_sheet.correct_count
@@ -190,8 +187,7 @@ class TestPickSheet:
         place_game_1_correct_pick,
         place_game_2_correct_pick,
     ):
-        # To get the annotation, you need to retrieve the object from the manager
-        pick_sheet = PickSheet.objects.get(pk=self.pick_sheet.id)
+        pick_sheet = PickSheet.objects.annotate_correct_count().get(pk=self.pick_sheet.id)
 
         result = pick_sheet.correct_count
 
@@ -203,7 +199,7 @@ class TestPickSheet:
         place_game_1_wrong_pick,
         place_game_2_correct_pick,
     ):
-        # Create another pick with 2 correct picks. It's existence can not incluence the
+        # Create another pick with 2 correct picks. It's existence can not influence the
         # fact that the pick under test only has one correct pick!
         other_pick_sheet = PickSheetFactory.create(
             pot=self.pot, picker="The Other Picker"
@@ -220,7 +216,7 @@ class TestPickSheet:
         )
         assert Pick.objects.count() == 4
         # Get the original pick, the one that is being tested
-        pick_sheet = PickSheet.objects.get(pk=self.pick_sheet.id)
+        pick_sheet = PickSheet.objects.annotate_correct_count().get(pk=self.pick_sheet.id)
 
         result = pick_sheet.correct_count
 
