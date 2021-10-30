@@ -1,38 +1,48 @@
 import pytest
 
+from potluck.games.tests.factories import GameFactory
 from potluck.picks.tests.factories import PickFactory, PickSheetFactory
 from potluck.pots.models import Pot
 from potluck.pots.tests.factories import PotFactory
+from potluck.teams.tests.factories import TeamFactory
 
 
 @pytest.mark.django_db
 class TestPot:
     def test_tally_lists_picks_by_decending_number_of_correct_picks(self):
+        team_1 = TeamFactory.create()
+        team_2 = TeamFactory.create()
+        team_3 = TeamFactory.create()
+        team_4 = TeamFactory.create()
+
         pot = PotFactory.create()
-        #
-        game_1 = pot.games.first()
-        game_1_winning_team = game_1.teams.first()
-        game_1_loosing_team = game_1.teams.last()  # noqa: F841
+
+        game_1 = GameFactory.create(pot=pot)
+        game_1.teams.set((team_1, team_2))
+        game_1_winning_team = team_1
         game_1.set_winning_team(game_1_winning_team)
-        #
-        game_2 = pot.games.first()
-        game_2_winning_team = game_2.teams.first()
-        game_2_loosing_team = game_2.teams.last()
+
+        game_2 = GameFactory.create(pot=pot)
+        game_2.teams.set((team_3, team_4))
+        game_2_winning_team = team_3
+        game_2_loosing_team = team_4
         game_2.set_winning_team(game_2_winning_team)
+
         # Pick 1 with 1 correct game pick
-        pick_sheet_1 = PickSheetFactory(pot=pot)
-        PickFactory(
+        pick_sheet_1 = PickSheetFactory.create(pot=pot)
+        PickFactory.create(
             pick_sheet=pick_sheet_1, game=game_1, picked_team=game_1_winning_team
         )
-        PickFactory(
+        PickFactory.create(
             pick_sheet=pick_sheet_1, game=game_2, picked_team=game_2_loosing_team
         )
+
         # Pick 2 with 2 correct game picks
-        pick_sheet_2 = PickSheetFactory(pot=pot)
-        PickFactory(
+        pick_sheet_2 = PickSheetFactory.create(pot=pot)
+        PickFactory.create(
             pick_sheet=pick_sheet_2, game=game_1, picked_team=game_1_winning_team
         )
-        PickFactory(
+        PickFactory.create(
             pick_sheet=pick_sheet_2, game=game_2, picked_team=game_2_winning_team
         )
 
