@@ -12,6 +12,11 @@ from potluck.teams.tests.factories import TeamFactory
 
 @pytest.mark.django_db
 class TestPickSheet:
+    def test_factory(self):
+        pot = PotFactory.create()
+        PickSheetFactory.create(pot=pot)
+        assert True
+
     @pytest.fixture
     def setup_picksheet(self):
         team_1 = TeamFactory.create()
