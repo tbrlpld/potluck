@@ -22,9 +22,16 @@ class TestPickSheet:
     def test_basic_fields(self):
         pot = PotFactory.create()
 
-        picksheet = PickSheetFactory.create(pot=pot, picker="Tester")
+        picksheet = PickSheetFactory.create(
+            pot=pot,
+            picker="Tester",
+            tiebreaker_guess=13,
+        )
 
+        assert isinstance(picksheet.picker, str)
         assert picksheet.picker == "Tester"
+        assert isinstance(picksheet.tiebreaker_guess, int)
+        assert picksheet.tiebreaker_guess == 13
 
     @pytest.fixture
     def setup_picksheet(self):
