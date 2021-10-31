@@ -23,6 +23,7 @@ class PickSheet(models.Model):
         max_length=100, help_text="Who is submitting this pick sheet?"
     )
     pot = models.ForeignKey(Pot, on_delete=models.CASCADE, related_name="pick_sheets")
+    tiebreaker_guess = models.PositiveSmallIntegerField(null=True, blank=False)
 
     objects = PickSheetQueryset.as_manager()
 
