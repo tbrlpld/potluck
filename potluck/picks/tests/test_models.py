@@ -13,7 +13,7 @@ from potluck.teams.tests.factories import TeamFactory
 @pytest.mark.django_db
 class TestPickSheet:
     @pytest.fixture
-    def setup(self):
+    def setup_picksheet(self):
         team_1 = TeamFactory.create()
         team_2 = TeamFactory.create()
         team_3 = TeamFactory.create()
@@ -105,7 +105,7 @@ class TestPickSheet:
 
     def test_count_correct_method_returns_0_for_both_wrong(
         self,
-        setup,
+        setup_picksheet,
         place_game_1_wrong_pick,
         place_game_2_wrong_pick,
     ):
@@ -115,7 +115,7 @@ class TestPickSheet:
 
     def test_count_correct_method_returns_1_for_game_1_correct(
         self,
-        setup,
+        setup_picksheet,
         place_game_1_correct_pick,
         place_game_2_wrong_pick,
     ):
@@ -125,7 +125,7 @@ class TestPickSheet:
 
     def test_count_correct_method_returns_1_for_game_2_correct(
         self,
-        setup,
+        setup_picksheet,
         place_game_1_wrong_pick,
         place_game_2_correct_pick,
     ):
@@ -135,7 +135,7 @@ class TestPickSheet:
 
     def test_count_correct_method_returns_2_for_both_correct(
         self,
-        setup,
+        setup_picksheet,
         place_game_1_correct_pick,
         place_game_2_correct_pick,
     ):
@@ -146,7 +146,7 @@ class TestPickSheet:
 
     def test_correct_count_annotation_returns_0_for_both_wrong(
         self,
-        setup,
+        setup_picksheet,
         place_game_1_wrong_pick,
         place_game_2_wrong_pick,
     ):
@@ -160,7 +160,7 @@ class TestPickSheet:
 
     def test_correct_count_annotation_returns_1_for_game_1_correct(
         self,
-        setup,
+        setup_picksheet,
         place_game_1_correct_pick,
         place_game_2_wrong_pick,
     ):
@@ -174,7 +174,7 @@ class TestPickSheet:
 
     def test_correct_count_annotation_returns_1_for_game_2_correct(
         self,
-        setup,
+        setup_picksheet,
         place_game_1_wrong_pick,
         place_game_2_correct_pick,
     ):
@@ -189,7 +189,7 @@ class TestPickSheet:
 
     def test_correct_count_annotation_returns_2_for_both_correct(
         self,
-        setup,
+        setup_picksheet,
         place_game_1_correct_pick,
         place_game_2_correct_pick,
     ):
@@ -203,7 +203,7 @@ class TestPickSheet:
 
     def test_correct_count_annotation_still_works_when_other_pick_in_db(
         self,
-        setup,
+        setup_picksheet,
         place_game_1_wrong_pick,
         place_game_2_correct_pick,
     ):
