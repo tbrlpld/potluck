@@ -14,8 +14,17 @@ from potluck.teams.tests.factories import TeamFactory
 class TestPickSheet:
     def test_factory(self):
         pot = PotFactory.create()
-        PickSheetFactory.create(pot=pot)
-        assert True
+
+        picksheet = PickSheetFactory.create(pot=pot)
+
+        assert picksheet.pot == pot
+
+    def test_basic_fields(self):
+        pot = PotFactory.create()
+
+        picksheet = PickSheetFactory.create(pot=pot, picker="Tester")
+
+        assert picksheet.picker == "Tester"
 
     @pytest.fixture
     def setup_picksheet(self):
