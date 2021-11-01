@@ -97,6 +97,8 @@ class TestPot:
         setup_pot_with_two_games,
     ):
         tiebreaker_score = 50
+        self.pot.tiebreaker_score = tiebreaker_score
+        self.pot.save()
 
         # Pick with 2 correct game picks, 20 off tiebreaker
         pick_sheet_2_20 = PickSheetFactory.create(
