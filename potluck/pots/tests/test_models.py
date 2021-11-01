@@ -9,44 +9,58 @@ from potluck.teams.tests.factories import TeamFactory
 
 @pytest.mark.django_db
 class TestPot:
-    def test_tally_lists_picks_by_decending_number_of_correct_picks(self):
-        team_1 = TeamFactory.create()
-        team_2 = TeamFactory.create()
-        team_3 = TeamFactory.create()
-        team_4 = TeamFactory.create()
+    @pytest.fixture
+    def setup_pot_with_two_games(self):
+        self.team_1 = TeamFactory.create()
+        self.team_2 = TeamFactory.create()
+        self.team_3 = TeamFactory.create()
+        self.team_4 = TeamFactory.create()
 
-        pot = PotFactory.create()
+        self.pot = PotFactory.create()
 
-        game_1 = GameFactory.create(pot=pot)
-        game_1.teams.set((team_1, team_2))
-        game_1_winning_team = team_1
-        game_1.set_winning_team(game_1_winning_team)
+        self.game_1 = GameFactory.create(pot=self.pot)
+        self.game_1.teams.set((self.team_1, self.team_2))
+        self.game_1_winning_team = self.team_1
+        self.game_1_loosing_team = self.team_2
+        self.game_1.set_winning_team(self.game_1_winning_team)
 
-        game_2 = GameFactory.create(pot=pot)
-        game_2.teams.set((team_3, team_4))
-        game_2_winning_team = team_3
-        game_2_loosing_team = team_4
-        game_2.set_winning_team(game_2_winning_team)
+        self.game_2 = GameFactory.create(pot=self.pot)
+        self.game_2.teams.set((self.team_3, self.team_4))
+        self.game_2_winning_team = self.team_3
+        self.game_2_loosing_team = self.team_4
+        self.game_2.set_winning_team(self.game_2_winning_team)
 
+    def test_tally_lists_picks_by_decending_number_of_correct_picks(
+        self,
+        setup_pot_with_two_games,
+    ):
         # Pick 1 with 1 correct game pick
-        pick_sheet_1 = PickSheetFactory.create(pot=pot)
+        pick_sheet_1 = PickSheetFactory.create(pot=self.pot)
         PickFactory.create(
-            pick_sheet=pick_sheet_1, game=game_1, picked_team=game_1_winning_team
+            pick_sheet=pick_sheet_1,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team
         )
         PickFactory.create(
-            pick_sheet=pick_sheet_1, game=game_2, picked_team=game_2_loosing_team
+            pick_sheet=pick_sheet_1,
+            game=self.game_2,
+            picked_team=self.game_2_loosing_team
         )
 
         # Pick 2 with 2 correct game picks
-        pick_sheet_2 = PickSheetFactory.create(pot=pot)
+        pick_sheet_2 = PickSheetFactory.create(pot=self.pot)
         PickFactory.create(
-            pick_sheet=pick_sheet_2, game=game_1, picked_team=game_1_winning_team
+            pick_sheet=pick_sheet_2,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team
         )
         PickFactory.create(
-            pick_sheet=pick_sheet_2, game=game_2, picked_team=game_2_winning_team
+            pick_sheet=pick_sheet_2,
+            game=self.game_2,
+            picked_team=self.game_2_winning_team
         )
 
-        result = pot.get_tally()
+        result = self.pot.get_tally()
 
         assert result[0] == pick_sheet_2
         assert result[1] == pick_sheet_1
