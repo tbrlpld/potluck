@@ -30,6 +30,19 @@ class TestPot:
         self.game_2_loosing_team = self.team_4
         self.game_2.set_winning_team(self.game_2_winning_team)
 
+    def test_factory(self):
+        PotFactory.create()
+
+        assert True
+
+    def test_pot_fields(self):
+        pot = PotFactory.create(name="Test Pot", tiebreaker_score=13)
+
+        assert isinstance(pot.name, str)
+        assert pot.name == "Test Pot"
+        assert isinstance(pot.tiebreaker_score, int)
+        assert pot.tiebreaker_score == 13
+
     def test_tally_lists_picks_by_decending_number_of_correct_picks(
         self,
         setup_pot_with_two_games,
