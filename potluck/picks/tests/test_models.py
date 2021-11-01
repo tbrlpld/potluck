@@ -12,27 +12,6 @@ from potluck.teams.tests.factories import TeamFactory
 
 @pytest.mark.django_db
 class TestPickSheet:
-    def test_factory(self):
-        pot = PotFactory.create()
-
-        picksheet = PickSheetFactory.create(pot=pot)
-
-        assert picksheet.pot == pot
-
-    def test_basic_fields(self):
-        pot = PotFactory.create()
-
-        picksheet = PickSheetFactory.create(
-            pot=pot,
-            picker="Tester",
-            tiebreaker_guess=13,
-        )
-
-        assert isinstance(picksheet.picker, str)
-        assert picksheet.picker == "Tester"
-        assert isinstance(picksheet.tiebreaker_guess, int)
-        assert picksheet.tiebreaker_guess == 13
-
     @pytest.fixture
     def setup_picksheet(self):
         team_1 = TeamFactory.create()
@@ -123,6 +102,27 @@ class TestPickSheet:
         yield pick
 
         pick.delete()
+
+    def test_factory(self):
+        pot = PotFactory.create()
+
+        picksheet = PickSheetFactory.create(pot=pot)
+
+        assert picksheet.pot == pot
+
+    def test_basic_fields(self):
+        pot = PotFactory.create()
+
+        picksheet = PickSheetFactory.create(
+            pot=pot,
+            picker="Tester",
+            tiebreaker_guess=13,
+        )
+
+        assert isinstance(picksheet.picker, str)
+        assert picksheet.picker == "Tester"
+        assert isinstance(picksheet.tiebreaker_guess, int)
+        assert picksheet.tiebreaker_guess == 13
 
     def test_count_correct_method_returns_0_for_both_wrong(
         self,
