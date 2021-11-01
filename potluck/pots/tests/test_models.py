@@ -34,36 +34,109 @@ class TestPot:
         self,
         setup_pot_with_two_games,
     ):
-        # Pick 1 with 1 correct game pick
+        # Pick with 1 correct game pick
         pick_sheet_1 = PickSheetFactory.create(pot=self.pot)
         PickFactory.create(
             pick_sheet=pick_sheet_1,
             game=self.game_1,
-            picked_team=self.game_1_winning_team
+            picked_team=self.game_1_winning_team,
         )
         PickFactory.create(
             pick_sheet=pick_sheet_1,
             game=self.game_2,
-            picked_team=self.game_2_loosing_team
+            picked_team=self.game_2_loosing_team,
         )
 
-        # Pick 2 with 2 correct game picks
+        # Pick with 0 correct game pick
+        pick_sheet_0 = PickSheetFactory.create(pot=self.pot)
+        PickFactory.create(
+            pick_sheet=pick_sheet_0,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_0,
+            game=self.game_2,
+            picked_team=self.game_2_loosing_team,
+        )
+
+        # Pick with 2 correct game picks
         pick_sheet_2 = PickSheetFactory.create(pot=self.pot)
         PickFactory.create(
             pick_sheet=pick_sheet_2,
             game=self.game_1,
-            picked_team=self.game_1_winning_team
+            picked_team=self.game_1_winning_team,
         )
         PickFactory.create(
             pick_sheet=pick_sheet_2,
             game=self.game_2,
-            picked_team=self.game_2_winning_team
+            picked_team=self.game_2_winning_team,
         )
 
         result = self.pot.get_tally()
 
         assert result[0] == pick_sheet_2
         assert result[1] == pick_sheet_1
+        assert result[2] == pick_sheet_0
+
+    def test_tally_with_tie(
+        self,
+        setup_pot_with_two_games,
+    ):
+        tiebreaker_score = 50
+
+        # Pick with 2 correct game picks, 20 off tiebreaker
+        pick_sheet_2_20 = PickSheetFactory.create(
+            pot=self.pot,
+            tiebreaker_guess=tiebreaker_score - 20,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_20,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_20,
+            game=self.game_2,
+            picked_team=self.game_2_winning_team,
+        )
+
+        # Pick with 1 correct game pick, and exact tiebreaker score.
+        # The tiebreaker score of this pick sheet does not matter because the
+        # correct number of games is not the highest.
+        pick_sheet_1_0 = PickSheetFactory.create(pot=self.pot, tiebreaker_guess=60)
+        PickFactory.create(
+            pick_sheet=pick_sheet_1_0,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_1_0,
+            game=self.game_2,
+            picked_team=self.game_2_loosing_team,
+        )
+
+        # Pick with 2 correct game picks, 10 off tiebreaker
+        pick_sheet_2_10 = PickSheetFactory.create(
+            pot=self.pot,
+            tiebreaker_guess=tiebreaker_score - 10,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_10,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_10,
+            game=self.game_2,
+            picked_team=self.game_2_winning_team,
+        )
+
+        result = self.pot.get_tally()
+
+        assert result[0] == pick_sheet_2_10
+        assert result[1] == pick_sheet_2_20
+        assert result[2] == pick_sheet_1_0
 
     @pytest.mark.parametrize(
         "initial_status, expected_next_status",
