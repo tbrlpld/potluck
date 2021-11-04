@@ -17,6 +17,14 @@ class PickSheetQueryset(models.QuerySet):
         )
         return annotated_pick_sheets
 
+    def annotate_tiebreaker_delta(self):
+        annotated_pick_sheets = self.annotate(
+            tiebreaker_delta=(
+                models.F("pot__tiebreaker_score") - models.F("tiebreaker_guess")
+            )
+        )
+        return annotated_pick_sheets
+
 
 class PickSheet(models.Model):
     picker = models.CharField(

@@ -253,6 +253,25 @@ class TestPickSheet:
 
         assert result == 1
 
+    @pytest.mark.parametrize(
+        "score, guess, expected",
+        [
+            (20, 15, 5),
+            (30, 10, 20),
+        ]
+    )
+    def test_tiebreaker_delta(self, score, guess, expected, django_assert_num_queries):
+        pot = PotFactory.create(tiebreaker_score=score)
+        pick_sheet = PickSheetFactory.create(pot=pot, tiebreaker_guess=guess)
+        annotated_pick_sheets = PickSheet.objects.annotate_tiebreaker_delta().filter(
+            pk=pick_sheet.id
+        )
+
+        with django_assert_num_queries(1):
+            result = annotated_pick_sheets[0].tiebreaker_delta
+
+        assert result == expected
+
 
 @pytest.mark.django_db
 class TestPick:
