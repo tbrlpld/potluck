@@ -65,7 +65,7 @@ class TestPot:
         PickFactory.create(
             pick_sheet=pick_sheet_0,
             game=self.game_1,
-            picked_team=self.game_1_winning_team,
+            picked_team=self.game_1_loosing_team,
         )
         PickFactory.create(
             pick_sheet=pick_sheet_0,
