@@ -45,6 +45,7 @@ class TestPickCreateView:
         data = {
             "pot": self.pot.id,
             "picker": picker_name,
+            "tiebreaker_guess": 0,
             "form-INITIAL_FORMS": 2,
             "form-TOTAL_FORMS": 2,
             "form-MAX_NUM_FORMS": 2,

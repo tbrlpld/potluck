@@ -7,8 +7,9 @@
  */
 input[type="text"],
 input[type="email"],
+input[type="number"],
 input[type="password"] {
-    @apply p-1 appearance-none border-2 border-primary-100 rounded
+    @apply p-2 appearance-none border-2 border-primary-100 rounded
 }
 
 .box {

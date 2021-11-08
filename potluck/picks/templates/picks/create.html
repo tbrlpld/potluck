@@ -11,21 +11,18 @@
 
     <form action="" method="post">
         {% csrf_token %}
-
-        <div  class="my-4 p-4 box">
+        <div  class="my-4">
             <div>
                 {{ create_pick_sheet_form.non_field_errors }}
-                {% for field in create_pick_sheet_form %}
-                    {% if not field.is_hidden %}
-                        <div>
-                            <div class="font-semibold">{{ field.label }}</div>
-                            <div class="text-sm text-gray-500">{{ field.help_text }}</div>
-                            {{ field|add_class:"my-1 w-full" }}
-                        </div>
-                    {% else %}
-                        {{ field }}
-                    {% endif %}
+                {% for hidden in create_pick_sheet_form.hidden_fields %}
+                    {{ hidden }}
                 {% endfor %}
+            </div>
+
+            <div>
+                <div class="font-semibold">{{ create_pick_sheet_form.picker.field.label }}</div>
+                <div class="text-sm text-gray-500">{{ create_pick_sheet_form.picker.field.help_text }}</div>
+                {{ create_pick_sheet_form.picker|add_class:"my-1 w-full" }}
             </div>
 
             <div class="mt-6">
@@ -45,6 +42,12 @@
                         {% endif %}
                     {% endfor %}
                 {% endfor %}
+            </div>
+
+            <div class="mt-6">
+                <div class="font-semibold">{{ create_pick_sheet_form.tiebreaker_guess.field.label }}</div>
+                <div class="text-sm text-gray-500">{{ create_pick_sheet_form.tiebreaker_guess.field.help_text }}</div>
+                {{ create_pick_sheet_form.tiebreaker_guess|add_class:"my-1 w-full" }}
             </div>
         </div>
 

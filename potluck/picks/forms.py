@@ -6,7 +6,7 @@ from potluck.picks.models import Pick, PickSheet
 class CreatePickSheetForm(forms.ModelForm):
     class Meta:
         model = PickSheet
-        fields = ("picker", "pot")
+        fields = ("picker", "pot", "tiebreaker_guess")
         widgets = {
             "pot": forms.HiddenInput(),
         }
