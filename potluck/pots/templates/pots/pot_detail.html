@@ -22,7 +22,7 @@
 
     {% if pot.games.exists %}
         <ul class="my-4">
-            {% for game in pot.games.all  %}
+            {% for game in pot.games.all|dictsort:"id"  %}
                 <li class="p-3 flex flex-row justify-between items-center bg-primary-50 odd:bg-primary-100 first:rounded-t-lg last:rounded-b-lg">
                     <div class="w-full flex flex-col xs:flex-row justify-between items-center">
                         {% for team in game.teams.all %}
