@@ -20,8 +20,9 @@
             </div>
 
             <div>
-                <div class="font-semibold">{{ create_pick_sheet_form.picker.field.label }}</div>
-                <div class="text-sm text-gray-500">{{ create_pick_sheet_form.picker.field.help_text }}</div>
+                <div class="font-semibold">{{ create_pick_sheet_form.picker.label }}</div>
+                <div class="text-sm text-gray-500">{{ create_pick_sheet_form.picker.help_text }}</div>
+                {{ create_pick_sheet_form.picker.errors }}
                 {{ create_pick_sheet_form.picker|add_class:"my-1 w-full" }}
             </div>
 
@@ -32,21 +33,22 @@
                 <div class="text-sm text-gray-500">For each game, pick the team you think is most likely to win.</div>
                 {% for game_form in create_pick_formset %}
                     {% for field in game_form %}
-                        {{ field.errors }}
-                        {% if field.name == "picked_team" %}
-                            <div class="mt-4">
-                                {% include "components/team-radio-select.html" with field=field %}
-                            </div>
-                        {% else %}
-                            {{ field }}
-                        {% endif %}
+                        <div class="mt-4">
+                            {{ field.errors }}
+                            {% if field.name == "picked_team" %}
+                                    {% include "components/team-radio-select.html" with field=field %}
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                        </div>
                     {% endfor %}
                 {% endfor %}
             </div>
 
             <div class="mt-6">
                 <div class="font-semibold">Tiebreaker</div>
-                <div class="mb-2 text-sm text-gray-500">{{ create_pick_sheet_form.tiebreaker_guess.field.help_text }}</div>
+                <div class="text-sm text-gray-500">{{ create_pick_sheet_form.tiebreaker_guess.help_text }}</div>
+                {{ create_pick_sheet_form.tiebreaker_guess.errors }}
                 {{ create_pick_sheet_form.tiebreaker_guess|add_class:"w-full" }}
             </div>
         </div>
