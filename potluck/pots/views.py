@@ -2,8 +2,9 @@ from django import forms, shortcuts, urls
 from django.views import generic
 
 from potluck.games.models import Game
+from potluck.games.forms import SetWinningTeamForm
 from potluck.picks.models import PickSheet
-from potluck.pots.forms import GameAddForm, SetWinningTeamForm
+from potluck.pots.forms import GameAddForm
 from potluck.pots.models import Pot
 
 
