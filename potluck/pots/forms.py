@@ -1,7 +1,14 @@
 from django import forms
 from django.core import validators
 
+from potluck.pots.models import Pot
 from potluck.games.models import Game, Team
+
+
+class SetTiebreakerScoreForm(forms.ModelForm):
+    class Meta:
+        model = Pot
+        fields = ("tiebreaker_score",)
 
 
 class GameAddForm(forms.ModelForm):

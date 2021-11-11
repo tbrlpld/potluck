@@ -1,7 +1,26 @@
 import pytest
 
-from potluck.pots.forms import GameAddForm
+from potluck.pots.forms import GameAddForm, SetTiebreakerScoreForm
+from potluck.pots.tests.factories import PotFactory
 from potluck.teams.tests.factories import TeamFactory
+
+
+class TestSetTiebreakerScoreForm:
+    def test_is_valid(self):
+        form = SetTiebreakerScoreForm({"tiebreaker_score": 1})
+
+        result = form.is_valid()
+
+        assert result is True
+
+    def test_set_value_on_instance(self):
+        pot = PotFactory.build()
+        form = SetTiebreakerScoreForm({"tiebreaker_score": 1}, instance=pot)
+        form.is_valid()
+
+        result = pot.tiebreaker_score
+
+        assert result == 1
 
 
 @pytest.mark.django_db
@@ -14,7 +33,7 @@ class TestGameAddForm:
         assert validation_passed is False
 
     def test_is_valid_raises_error_with_one_team(self):
-        team_1 = TeamFactory.create()
+        team_1 = TeamFactory()
         form = GameAddForm({"teams": [team_1]})
 
         validation_passed = form.is_valid()
