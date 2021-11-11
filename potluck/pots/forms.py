@@ -11,7 +11,7 @@ class SetTiebreakerScoreForm(forms.ModelForm):
         fields = ("tiebreaker_score",)
 
 
-class GameAddForm(forms.ModelForm):
+class CreateGameInPotForm(forms.ModelForm):
     teams = forms.ModelMultipleChoiceField(
         queryset=Team.objects.all(),
         widget=forms.CheckboxSelectMultiple,

@@ -1,6 +1,6 @@
 import pytest
 
-from potluck.pots.forms import GameAddForm, SetTiebreakerScoreForm
+from potluck.pots.forms import CreateGameInPotForm, SetTiebreakerScoreForm
 from potluck.pots.tests.factories import PotFactory
 from potluck.teams.tests.factories import TeamFactory
 
@@ -24,9 +24,9 @@ class TestSetTiebreakerScoreForm:
 
 
 @pytest.mark.django_db
-class TestGameAddForm:
+class TestCreateGameInPotForm:
     def test_is_valid_raises_error_with_no_team(self):
-        form = GameAddForm({"teams": []})
+        form = CreateGameInPotForm({"teams": []})
 
         validation_passed = form.is_valid()
 
@@ -34,7 +34,7 @@ class TestGameAddForm:
 
     def test_is_valid_raises_error_with_one_team(self):
         team_1 = TeamFactory()
-        form = GameAddForm({"teams": [team_1]})
+        form = CreateGameInPotForm({"teams": [team_1]})
 
         validation_passed = form.is_valid()
 
@@ -44,7 +44,7 @@ class TestGameAddForm:
         team_1 = TeamFactory()
         team_2 = TeamFactory()
         team_3 = TeamFactory()
-        form = GameAddForm({"teams": [team_1, team_2, team_3]})
+        form = CreateGameInPotForm({"teams": [team_1, team_2, team_3]})
 
         validation_passed = form.is_valid()
 
@@ -53,7 +53,7 @@ class TestGameAddForm:
     def test_is_valid_success_with_two_team(self):
         team_1 = TeamFactory()
         team_2 = TeamFactory()
-        form = GameAddForm({"teams": [team_1, team_2]})
+        form = CreateGameInPotForm({"teams": [team_1, team_2]})
 
         validation_passed = form.is_valid()
 
