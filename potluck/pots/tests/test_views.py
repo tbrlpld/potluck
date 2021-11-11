@@ -99,7 +99,7 @@ class TestGameAddView:
 
 
 @pytest.mark.django_db
-class TestSetWinningTeamsView:
+class TestSetResultsView:
     @pytest.fixture
     def setup(self):
         self.team_1 = TeamFactory.create()

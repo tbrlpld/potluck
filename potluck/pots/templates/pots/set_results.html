@@ -3,18 +3,16 @@
 
 {% block content %}
     {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Set winning teams" %}
-    {# <h1>{{ pot.name }}: Set winning team for each game</h1> #}
     <p class="my-4 text-gray-500 text-sm">
         For each game, pick the team that actually won.
     </p>
     <form action="" method="POST">
         {% csrf_token %}
+        {{ form.management_form }}
 
         <p>
             {{ form.non_field_errors }}
         </p>
-
-        {{ form.management_form }}
 
         {% for game_form in form %}
                 {% for field in game_form %}
