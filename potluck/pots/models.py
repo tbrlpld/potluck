@@ -5,7 +5,11 @@ class Pot(models.Model):
     name = models.CharField(
         max_length=250, null=False, blank=False, help_text="What shall we call the pot?"
     )
-    tiebreaker_score = models.PositiveSmallIntegerField(null=True, blank=False)
+    tiebreaker_score = models.PositiveSmallIntegerField(
+        null=True,
+        blank=False,
+        help_text="Enter the tiebreaker score."
+    )
 
     class Status(models.TextChoices):
         DRAFT = "DR", "Draft"

@@ -20,7 +20,7 @@
             </div>
 
             <div>
-                <div class="font-semibold">{{ create_pick_sheet_form.picker.label }}</div>
+                <label class="font-semibold">{{ create_pick_sheet_form.picker.label }}</label>
                 <div class="text-sm text-gray-500">{{ create_pick_sheet_form.picker.help_text }}</div>
                 {{ create_pick_sheet_form.picker.errors }}
                 {{ create_pick_sheet_form.picker|add_class:"my-1 w-full" }}
@@ -46,7 +46,7 @@
             </div>
 
             <div class="mt-6">
-                <div class="font-semibold">Tiebreaker</div>
+                <label id={{ create_pick_sheet_form.tiebreaker_guess.id_for_label }} class="font-semibold">Tiebreaker</label>
                 <div class="text-sm text-gray-500">{{ create_pick_sheet_form.tiebreaker_guess.help_text }}</div>
                 {{ create_pick_sheet_form.tiebreaker_guess.errors }}
                 {{ create_pick_sheet_form.tiebreaker_guess|add_class:"w-full" }}

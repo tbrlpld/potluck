@@ -4,7 +4,7 @@ from django.views import generic
 from potluck.games.models import Game
 from potluck.games.forms import SetWinningTeamForm
 from potluck.picks.models import PickSheet
-from potluck.pots.forms import CreateGameInPotForm
+from potluck.pots.forms import CreateGameInPotForm, SetTiebreakerScoreForm
 from potluck.pots.models import Pot
 
 
@@ -94,6 +94,7 @@ class TallyView(generic.ListView):
 def set_results(request, pot_id):
     pot = shortcuts.get_object_or_404(Pot, pk=pot_id)
     games_queryset = pot.games.all().order_by("id")
+    winning_teams_prefix = "winning-teams"
     SetWinningTeamsFormset = forms.modelformset_factory(
         Game,
         form=SetWinningTeamForm,
@@ -104,19 +105,30 @@ def set_results(request, pot_id):
         extra=0,
     )
     if request.method == "POST":
-        set_winning_teams_formset = SetWinningTeamsFormset(data=request.POST, queryset=games_queryset)
-        if set_winning_teams_formset.is_valid():
+        set_winning_teams_formset = SetWinningTeamsFormset(
+            data=request.POST,
+            queryset=games_queryset,
+            prefix=winning_teams_prefix,
+        )
+        set_tiebreaker_score_form = SetTiebreakerScoreForm(data=request.POST, instance=pot)
+        if all((set_winning_teams_formset.is_valid(), set_tiebreaker_score_form.is_valid())):
             set_winning_teams_formset.save()
+            set_tiebreaker_score_form.save()
             return shortcuts.redirect(
                 urls.reverse_lazy("pot_detail", kwargs={"pk": pot_id})
             )
     else:
-        set_winning_teams_formset = SetWinningTeamsFormset(queryset=games_queryset)
+        set_winning_teams_formset = SetWinningTeamsFormset(
+            queryset=games_queryset,
+            prefix=winning_teams_prefix,
+        )
+        set_tiebreaker_score_form = SetTiebreakerScoreForm(instance=pot)
     return shortcuts.render(
         request,
         template_name="pots/set_results.html",
         context = {
             "pot": pot,
-            "form": set_winning_teams_formset,
+            "set_winning_teams_formset": set_winning_teams_formset,
+            "set_tiebreaker_score_form": set_tiebreaker_score_form,
         }
     )
