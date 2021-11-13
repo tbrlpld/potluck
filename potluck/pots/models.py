@@ -62,7 +62,8 @@ class Pot(models.Model):
         return (
             self.pick_sheets.annotate_correct_count()
             .annotate_tiebreaker_delta()
-            .order_by("-correct_count", "tiebreaker_delta")
+            .annotate_tiebreaker_delta_abs()
+            .order_by("-correct_count", "tiebreaker_delta_abs")
         )
 
     @property
