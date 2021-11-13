@@ -75,7 +75,7 @@ class AddGameView(generic.CreateView):
 class TallyView(generic.ListView):
     template_name = "pots/tally.html"
     model = PickSheet
-    context_object_name = "picks"
+    context_object_name = "pick_sheets"
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
