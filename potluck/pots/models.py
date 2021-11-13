@@ -7,13 +7,14 @@ class Pot(models.Model):
     )
     tiebreaker_description = models.CharField(
         max_length=500,
-        null=True,
+        null=False,
         blank=False,
         help_text=(
             "Describe the tiebreaker score you want to use for the pot. "
             'For example: "Total score of the Monday night game". '
             "In case of a tie, the submission with the closest guess to the score wins."
         ),
+        default="Total score of the Monday night game",
     )
     tiebreaker_score = models.PositiveSmallIntegerField(
         null=True, blank=True, help_text="Enter the score for the tiebreaker."
