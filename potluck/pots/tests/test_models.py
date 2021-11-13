@@ -153,6 +153,92 @@ class TestPot:
         assert result[1] == pick_sheet_2_20
         assert result[2] == pick_sheet_1_0
 
+    def test_tally_with_tiebreaker_guess_larger_than_score_winning(
+        self,
+        setup_pot_with_two_games,
+    ):
+        tiebreaker_score = 50
+        self.pot.tiebreaker_score = tiebreaker_score
+        self.pot.save()
+
+        pick_sheet_2_minus_10 = PickSheetFactory.create(
+            pot=self.pot,
+            tiebreaker_guess=tiebreaker_score - 10,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_minus_10,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_minus_10,
+            game=self.game_2,
+            picked_team=self.game_2_winning_team,
+        )
+
+        pick_sheet_2_plus_5 = PickSheetFactory.create(
+            pot=self.pot,
+            tiebreaker_guess=tiebreaker_score + 5,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_plus_5,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_plus_5,
+            game=self.game_2,
+            picked_team=self.game_2_winning_team,
+        )
+
+        result = self.pot.get_tally()
+
+        assert result[0] == pick_sheet_2_plus_5
+        assert result[1] == pick_sheet_2_minus_10
+
+    def test_tally_with_tiebreaker_guess_larger_than_score_losing(
+        self,
+        setup_pot_with_two_games,
+    ):
+        tiebreaker_score = 50
+        self.pot.tiebreaker_score = tiebreaker_score
+        self.pot.save()
+
+        pick_sheet_2_plus_10 = PickSheetFactory.create(
+            pot=self.pot,
+            tiebreaker_guess=tiebreaker_score + 10,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_plus_10,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_plus_10,
+            game=self.game_2,
+            picked_team=self.game_2_winning_team,
+        )
+
+        pick_sheet_2_minus_5 = PickSheetFactory.create(
+            pot=self.pot,
+            tiebreaker_guess=tiebreaker_score - 5,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_minus_5,
+            game=self.game_1,
+            picked_team=self.game_1_winning_team,
+        )
+        PickFactory.create(
+            pick_sheet=pick_sheet_2_minus_5,
+            game=self.game_2,
+            picked_team=self.game_2_winning_team,
+        )
+
+        result = self.pot.get_tally()
+
+        assert result[0] == pick_sheet_2_minus_5
+        assert result[1] == pick_sheet_2_plus_10
+
     @pytest.mark.parametrize(
         "initial_status, expected_next_status",
         [
