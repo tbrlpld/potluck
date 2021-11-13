@@ -45,7 +45,7 @@ class PickSheet(models.Model):
     tiebreaker_guess = models.PositiveSmallIntegerField(
         null=True,
         blank=False,
-        help_text="Enter your guess for the tiebreaker score.",
+        help_text="Enter your guess for the tiebreaker.",
     )
 
     objects = PickSheetQueryset.as_manager()

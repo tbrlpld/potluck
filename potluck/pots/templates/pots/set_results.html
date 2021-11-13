@@ -25,8 +25,12 @@
 
         <div class="my-6">
             <label id={{ set_tiebreaker_score_form.tiebreaker_score.id_for_label }} class="font-semibold">Tiebreaker</label>
-            <div class="text-sm text-gray-500">{{ set_tiebreaker_score_form.tiebreaker_score.help_text }}</div>
+            <p class="text-sm text-gray-500">
+                {{ set_tiebreaker_score_form.tiebreaker_score.help_text }}
+                {{ pot.tiebreaker_description }}{% if pot.tiebreaker_description|last != "." %}.{% endif %}
+            </p>
             {{ set_tiebreaker_score_form.tiebreaker_score.errors }}
+            <div class="h-2"></div>
             {{ set_tiebreaker_score_form.tiebreaker_score|add_class:"w-full" }}
         </div>
 

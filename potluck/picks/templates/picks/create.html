@@ -47,8 +47,12 @@
 
             <div class="mt-6">
                 <label id={{ create_pick_sheet_form.tiebreaker_guess.id_for_label }} class="font-semibold">Tiebreaker</label>
-                <div class="text-sm text-gray-500">{{ create_pick_sheet_form.tiebreaker_guess.help_text }}</div>
+                <p class="text-sm text-gray-500">
+                    {{ create_pick_sheet_form.tiebreaker_guess.help_text }}
+                    {{ pot.tiebreaker_description }}{% if pot.tiebreaker_description|last != "." %}.{% endif %}
+                </p>
                 {{ create_pick_sheet_form.tiebreaker_guess.errors }}
+                <div class="h-2"></div>
                 {{ create_pick_sheet_form.tiebreaker_guess|add_class:"w-full" }}
             </div>
         </div>

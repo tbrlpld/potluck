@@ -31,7 +31,7 @@ class PotCreateView(generic.CreateView):
     model = Pot
     template_name = "pots/pot_create.html"
     success_url = urls.reverse_lazy("pots_list")
-    fields = ("name",)
+    fields = ("name", "tiebreaker_description")
 
 
 class PotDeleteView(generic.DeleteView):

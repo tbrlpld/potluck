@@ -15,7 +15,7 @@ class Pot(models.Model):
         ),
     )
     tiebreaker_score = models.PositiveSmallIntegerField(
-        null=True, blank=True, help_text="Enter the tiebreaker score."
+        null=True, blank=True, help_text="Enter the score for the tiebreaker."
     )
 
     class Status(models.TextChoices):
