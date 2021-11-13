@@ -17,5 +17,5 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: Build Docker stack
         run: docker compose build
-      - name: Start Docker stack
-        run: docker compose up
+      - name: Get Docker info
+        run: docker info
