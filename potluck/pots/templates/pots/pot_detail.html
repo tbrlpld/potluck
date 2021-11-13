@@ -54,10 +54,12 @@
             {% endfor %}
         </ul>
 
-        <div>
-            <div class="font-semibold">Tiebreaker</div>
-            <div class="text-4xl font-semibold">{{ pot.tiebreaker_score }}</div>
-        </div>
+        {% if pot.tiebreaker_score %}
+            <div>
+                <div class="font-semibold">Tiebreaker</div>
+                <div class="text-4xl font-semibold">{{ pot.tiebreaker_score }}</div>
+            </div>
+        {% endif %}
 
         {% if pot.status == pot.Status.DRAFT %}
             <a href="{% url 'add_game' pot.pk %}" class="block my-4 p-4 btn text-center ">Add game</a>

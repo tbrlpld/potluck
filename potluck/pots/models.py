@@ -6,9 +6,7 @@ class Pot(models.Model):
         max_length=250, null=False, blank=False, help_text="What shall we call the pot?"
     )
     tiebreaker_score = models.PositiveSmallIntegerField(
-        null=True,
-        blank=False,
-        help_text="Enter the tiebreaker score."
+        null=True, blank=True, help_text="Enter the tiebreaker score."
     )
 
     class Status(models.TextChoices):
@@ -62,8 +60,7 @@ class Pot(models.Model):
 
     def get_tally(self):
         return (
-            self.pick_sheets
-            .annotate_correct_count()
+            self.pick_sheets.annotate_correct_count()
             .annotate_tiebreaker_delta()
             .order_by("-correct_count", "tiebreaker_delta")
         )
