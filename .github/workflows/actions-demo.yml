@@ -15,11 +15,3 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
-      - name: Get Docker info
-        run: docker info
-      - name: List docker directory
-        run: ls /var/lib/docker
-      - name: Build Docker stack
-        run: docker compose build
-      - name: List docker directory (after build)
-        run: ls /var/lib/docker
