@@ -7,19 +7,8 @@
 
         {{ form.non_field_errors }}
 
-        <div>
-            <label class="block font-semibold text-primary-900" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
-            <p class="text-sm text-gray-500">
-                {{ form.name.help_text }}
-            </p>
-            {% if form.name.errors %}
-                <p>
-                    {{ form.name.errors }}
-                </p>
-            {% endif %}
-            <div class="h-1"></div>
-            {{ form.name|add_error_class:"bg-red-100"|add_class:"p-1 w-full" }}
-        </div>
+        {% include "components/form-field.html" with field=form.name %}
+
         <div class="mt-4 flex items-baseline justify-between">
             <button class="px-2 py-1 btn" type="submit">Create</button>
             <a class="link" href="{% url 'pots_list' %}">Cancel</a>
