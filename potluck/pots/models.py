@@ -10,8 +10,9 @@ class Pot(models.Model):
         null=True,
         blank=False,
         help_text=(
-            "Describe the type of tiebreaker you want to use for the pot. "
-            'For example: "Total score of the Monday night game"'
+            "Describe the tiebreaker score you want to use for the pot. "
+            'For example: "Total score of the Monday night game". '
+            "In case of a tie, the submission with the closest guess to the score wins."
         ),
     )
     tiebreaker_score = models.PositiveSmallIntegerField(
