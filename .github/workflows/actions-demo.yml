@@ -24,8 +24,14 @@ jobs:
       - name: List docker images (after build)
         run: docker images
       - name: Save Docker image
-        run: docker save potluck_web -o ${{ github.workspace }}
+        run: docker save -o ${{ github.workspace }}/potluck_web.tar potluck_web
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+      - name: Upload Docker image to artifact storage
+        uses: actions/upload-artifact@v2
+        with:
+          name: docker-image
+          path: ${{ github.workspace }}/potluck_web.tar potluck_web
+
 
