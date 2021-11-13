@@ -48,8 +48,10 @@ urlpatterns = [
     ),
     path("pots/<int:pot_id>/add-game/", AddGameView.as_view(), name="add_game"),
     path(
-        #"pots/<int:pot_id>/set-results/", SetResultsView.as_view(), name="set_results"
-        "pots/<int:pot_id>/set-results/", set_results, name="set_results"
+        # "pots/<int:pot_id>/set-results/", SetResultsView.as_view(), name="set_results"
+        "pots/<int:pot_id>/set-results/",
+        set_results,
+        name="set_results",
     ),
     path(
         "pots/<int:pot_id>/place-pick/",

@@ -110,8 +110,12 @@ def set_results(request, pot_id):
             queryset=games_queryset,
             prefix=winning_teams_prefix,
         )
-        set_tiebreaker_score_form = SetTiebreakerScoreForm(data=request.POST, instance=pot)
-        if all((set_winning_teams_formset.is_valid(), set_tiebreaker_score_form.is_valid())):
+        set_tiebreaker_score_form = SetTiebreakerScoreForm(
+            data=request.POST, instance=pot
+        )
+        if all(
+            (set_winning_teams_formset.is_valid(), set_tiebreaker_score_form.is_valid())
+        ):
             set_winning_teams_formset.save()
             set_tiebreaker_score_form.save()
             return shortcuts.redirect(
@@ -126,9 +130,9 @@ def set_results(request, pot_id):
     return shortcuts.render(
         request,
         template_name="pots/set_results.html",
-        context = {
+        context={
             "pot": pot,
             "set_winning_teams_formset": set_winning_teams_formset,
             "set_tiebreaker_score_form": set_tiebreaker_score_form,
-        }
+        },
     )

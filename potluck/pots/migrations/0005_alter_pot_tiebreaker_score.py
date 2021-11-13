@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pots', '0004_pot_tiebreaker_score'),
+        ("pots", "0004_pot_tiebreaker_score"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='pot',
-            name='tiebreaker_score',
-            field=models.PositiveSmallIntegerField(help_text='Enter the tiebreaker score.', null=True),
+            model_name="pot",
+            name="tiebreaker_score",
+            field=models.PositiveSmallIntegerField(
+                help_text="Enter the tiebreaker score.", null=True
+            ),
         ),
     ]

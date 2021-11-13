@@ -258,7 +258,7 @@ class TestPickSheet:
         [
             (20, 15, 5),
             (30, 10, 20),
-        ]
+        ],
     )
     def test_tiebreaker_delta(self, score, guess, expected, django_assert_num_queries):
         pot = PotFactory.create(tiebreaker_score=score)
