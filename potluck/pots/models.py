@@ -5,6 +5,15 @@ class Pot(models.Model):
     name = models.CharField(
         max_length=250, null=False, blank=False, help_text="What shall we call the pot?"
     )
+    tiebreaker_description = models.CharField(
+        max_length=500,
+        null=True,
+        blank=False,
+        help_text=(
+            "Describe the type of tiebreaker you want to use for the pot. "
+            'For example: "Total score of the Monday night game"'
+        ),
+    )
     tiebreaker_score = models.PositiveSmallIntegerField(
         null=True, blank=True, help_text="Enter the tiebreaker score."
     )
