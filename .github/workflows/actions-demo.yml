@@ -15,4 +15,7 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
-
+      - name: Build Docker stack
+        run: docker compose build
+      - name: Start Docker stack
+        run: docker compose up
