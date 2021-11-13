@@ -5,6 +5,18 @@ class Pot(models.Model):
     name = models.CharField(
         max_length=250, null=False, blank=False, help_text="What shall we call the pot?"
     )
+    tiebreaker_description = models.CharField(
+        max_length=500,
+        null=True,
+        blank=False,
+        help_text=(
+            "Describe the type of tiebreaker you want to use for the pot. "
+            'For example: "Total score of the Monday night game"'
+        ),
+    )
+    tiebreaker_score = models.PositiveSmallIntegerField(
+        null=True, blank=True, help_text="Enter the score for the tiebreaker."
+    )
 
     class Status(models.TextChoices):
         DRAFT = "DR", "Draft"
@@ -56,7 +68,12 @@ class Pot(models.Model):
         return self.name
 
     def get_tally(self):
-        return self.pick_sheets.annotate_correct_count().order_by("-correct_count")
+        return (
+            self.pick_sheets.annotate_correct_count()
+            .annotate_tiebreaker_delta()
+            .annotate_tiebreaker_delta_abs()
+            .order_by("-correct_count", "tiebreaker_delta_abs")
+        )
 
     @property
     def next_status(self):

@@ -22,7 +22,7 @@
 
     {% if pot.games.exists %}
         <ul class="my-4">
-            {% for game in pot.games.all  %}
+            {% for game in pot.games.all|dictsort:"id"  %}
                 <li class="p-3 flex flex-row justify-between items-center bg-primary-50 odd:bg-primary-100 first:rounded-t-lg last:rounded-b-lg">
                     <div class="w-full flex flex-col xs:flex-row justify-between items-center">
                         {% for team in game.teams.all %}
@@ -54,6 +54,13 @@
             {% endfor %}
         </ul>
 
+        {% if pot.tiebreaker_score %}
+            <div>
+                <div class="font-semibold">Tiebreaker</div>
+                <div class="text-4xl font-semibold">{{ pot.tiebreaker_score }}</div>
+            </div>
+        {% endif %}
+
         {% if pot.status == pot.Status.DRAFT %}
             <a href="{% url 'add_game' pot.pk %}" class="block my-4 p-4 btn text-center ">Add game</a>
         {% elif pot.status == pot.Status.OPEN %}
@@ -71,7 +78,7 @@
             </div>
         {% elif pot.status == pot.Status.CLOSED %}
             <div class="my-4">
-                <a href="{% url 'set_winners' pot.pk %}" class="block p-4 btn">Set winning teams</a>
+                <a href="{% url 'set_results' pot.pk %}" class="block p-4 btn">Set results</a>
             </div>
         {% elif pot.status == pot.Status.TALLY %}
             <div>

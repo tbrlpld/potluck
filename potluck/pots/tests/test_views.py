@@ -69,7 +69,10 @@ class TestPotCreateView:
     def test_post_creates_pot(self):
         url = reverse("pot_create")
         client = Client()
-        data = {"name": "Test Pot"}
+        data = {
+            "name": "Test Pot",
+            "tiebreaker_description": "Tiebreker description"
+        }
 
         response = client.post(url, data=data, follow=True)
 
@@ -99,7 +102,7 @@ class TestGameAddView:
 
 
 @pytest.mark.django_db
-class TestSetWinningTeamsView:
+class TestSetResultsView:
     @pytest.fixture
     def setup(self):
         self.team_1 = TeamFactory.create()

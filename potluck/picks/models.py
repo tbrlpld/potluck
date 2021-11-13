@@ -17,12 +17,36 @@ class PickSheetQueryset(models.QuerySet):
         )
         return annotated_pick_sheets
 
+    def annotate_tiebreaker_delta(self):
+        annotated_pick_sheets = self.annotate(
+            tiebreaker_delta=(
+                models.F("pot__tiebreaker_score") - models.F("tiebreaker_guess")
+            )
+        )
+        return annotated_pick_sheets
+
+    def annotate_tiebreaker_delta_abs(self):
+        annotated_pick_sheets = self.annotate(
+            tiebreaker_delta_abs=(
+                models.functions.Abs(
+                    models.F("pot__tiebreaker_score") - models.F("tiebreaker_guess")
+                )
+            )
+        )
+        return annotated_pick_sheets
+
 
 class PickSheet(models.Model):
     picker = models.CharField(
-        max_length=100, help_text="Who is submitting this pick sheet?"
+        max_length=100,
+        help_text="Enter the name of the person submitting this pick sheet.",
     )
     pot = models.ForeignKey(Pot, on_delete=models.CASCADE, related_name="pick_sheets")
+    tiebreaker_guess = models.PositiveSmallIntegerField(
+        null=True,
+        blank=False,
+        help_text="Enter your guess for the tiebreaker.",
+    )
 
     objects = PickSheetQueryset.as_manager()
 

@@ -3,18 +3,23 @@
 {% block content %}
     {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Tally" %}
 
-    {% if picks %}
-        {% regroup picks by correct_count as pick_groups_by_correct_count %}
+    {% if pick_sheets %}
+        {% regroup pick_sheets by correct_count as pick_sheets_groups_by_correct_count %}
         <ul class="my-4">
-            {% for group in pick_groups_by_correct_count %}
+            {% for group in pick_sheets_groups_by_correct_count %}
                 <li class="p-4">
                     <h2 class="flex flex-row items-start">
                         <div class="mr-2 text-4xl font-semibold">{{ group.grouper }}</div>
                         <div class="pt-1 text-sm leading-none">Correct picks</div>
                     </h2>
-                    <ul>
-                        {% for pick in group.list %}
-                            <li class="font-semibold">{{ pick.picker }}</li>
+                    <ul class="mt-2">
+                        {% for pick_sheet in group.list %}
+                            <li class="mb-2">
+                                <div class="font-semibold">{{ pick_sheet.picker }}</div>
+                                {% if group.list|length > 1 %}
+                                <div class="text-xs text-gray-500">Tiebreaker {{ pick_sheet.tiebreaker_guess }}/{{ pot.tiebreaker_score }} ({{ pick_sheet.tiebreaker_delta }})</div>
+                                {% endif %}
+                            </li>
                         {% endfor %}
                     </ul>
                 </li>

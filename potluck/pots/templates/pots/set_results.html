@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+    {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Set results" %}
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <p class="my-4 text-gray-500 text-sm">
+            For each game, pick the team that actually won.
+        </p>
+        {{ set_winning_teams_formset.management_form }}
+        {{ set_winning_teams_formset.non_field_errors }}
+        {% for game_form in set_winning_teams_formset %}
+            {% for field in game_form %}
+                {% if field.name == "winning_team" %}
+                    <div class="my-4 p-3 box">
+                        {% include "components/team-radio-select.html" with field=field %}
+                    </div>
+                {% else %}
+                    {{ field }}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+
+        <div class="my-6">
+            <label id={{ set_tiebreaker_score_form.tiebreaker_score.id_for_label }} class="font-semibold">Tiebreaker</label>
+            <p class="text-sm text-gray-500">
+                {{ set_tiebreaker_score_form.tiebreaker_score.help_text }}
+                {{ pot.tiebreaker_description }}{% if pot.tiebreaker_description|last != "." %}.{% endif %}
+            </p>
+            {{ set_tiebreaker_score_form.tiebreaker_score.errors }}
+            <div class="h-2"></div>
+            {{ set_tiebreaker_score_form.tiebreaker_score|add_class:"w-full" }}
+        </div>
+
+        <div class="flex justify-between items-baseline">
+            <button type="submit" class="px-4 py-3 btn">
+                Set results
+            </button>
+            <a href="{% url 'pot_detail' pot.id %}" class="link">Cancel</a>
+        </div>
+    </form>
+
+{% endblock content %}
