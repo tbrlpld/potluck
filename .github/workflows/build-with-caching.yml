@@ -68,7 +68,7 @@ jobs:
             ${{ runner.os }}-buildx-
 
       - name: Start docker stack
-        run: docker-compose up
+        run: docker-compose up --no-build -d
 
       - name: Stop docker stack
         run: docker-compose stop
