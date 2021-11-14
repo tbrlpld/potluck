@@ -32,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: docker-image
-          path: ${{ github.workspace }}/potluck_web.tar potluck_web
+          path: ${{ github.workspace }}/potluck_web.tar
 
   load-docker-image:
     runs-on: ubuntu-latest
