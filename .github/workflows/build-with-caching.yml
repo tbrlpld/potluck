@@ -35,7 +35,7 @@ jobs:
           context: .
           push: false
           tags: tbrlpld/potluck:latest
-          cahe-from: type=local,src=/tmp/.buildx-cache
+          cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
         # This ugly bit is necessary if you don't want your cache to grow forever
