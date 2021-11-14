@@ -46,7 +46,7 @@ jobs:
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cachec
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
   use-docker:
     runs-on: ubuntu-latest
