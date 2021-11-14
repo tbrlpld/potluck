@@ -71,6 +71,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
+      # And make it available for the builds
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          load: true
+          tags: potluck_web:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+
       - name: List images
         run: docker images
 
