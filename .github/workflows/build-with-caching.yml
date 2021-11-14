@@ -38,6 +38,7 @@ jobs:
           tags: potluck_web:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
+          outputs: type=docker,dest=/tmp/myimage.tar
 
       - name: List images
         run: docker images
@@ -52,6 +53,12 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: myimage
+          path: /tmp/myimage.tar
+
   use-docker:
     runs-on: ubuntu-latest
     needs: docker
@@ -63,31 +70,42 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Use cache
-        uses: actions/cache@v2
+      - name: Download artifact
+        uses: actions/download-artifact@v2
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+          name: myimage
+          path: /tmp
 
-      # And make it available for the builds
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          load: true
-          tags: potluck_web:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
+      - name: Load image
+        run: |
+          docker load --input /tmp/myimage.tar
+          docker image ls -a
 
-      - name: List cache directory
-        run: ls /tmp/.buildx-cache
+      # - name: Use cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-buildx-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-buildx-
 
-      - name: List images
-        run: docker images
+      # # And make it available for the builds
+      # - name: Build and push
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: .
+      #     load: true
+      #     tags: potluck_web:latest
+      #     cache-from: type=local,src=/tmp/.buildx-cache
 
-      - name: Start docker stack
-        run: docker-compose up --no-build -d
+      # - name: List cache directory
+      #   run: ls /tmp/.buildx-cache
 
-      - name: Stop docker stack
-        run: docker-compose stop
+      # - name: List images
+      #   run: docker images
+
+      # - name: Start docker stack
+      #   run: docker-compose up --no-build -d
+
+      # - name: Stop docker stack
+      #   run: docker-compose stop
