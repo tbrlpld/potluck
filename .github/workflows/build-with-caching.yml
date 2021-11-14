@@ -63,8 +63,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-${{ github.sha }}
+            ${{ runner.os }}-buildx-
 
       - name: Start docker stack
         run: docker-compose up
