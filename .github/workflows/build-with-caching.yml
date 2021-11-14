@@ -80,6 +80,9 @@ jobs:
           tags: potluck_web:latest
           cache-from: type=local,src=/tmp/.buildx-cache
 
+      - name: List cache directory
+        run: ls /tmp/.buildx-cache
+
       - name: List images
         run: docker images
 
