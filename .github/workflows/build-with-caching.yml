@@ -108,7 +108,7 @@ jobs:
       - name: start docker stack
         run: docker-compose -f docker-compose.ci.yaml up --no-build --detach
 
-      - name: run test
+      - name: run black
         run: |
           docker-compose -f docker-compose.ci.yaml exec -t web black .
 
@@ -141,7 +141,7 @@ jobs:
         run: docker-compose -f docker-compose.ci.yaml up --no-build --detach
 
       - name: run isort
-        run: docker-compose -f docker-compose.ci.yaml exec -t web isort
+        run: docker-compose -f docker-compose.ci.yaml exec -t web isort . --check
 
       - name: stop docker stack
         run: docker-compose -f docker-compose.ci.yaml stop
