@@ -77,7 +77,7 @@ jobs:
         run: docker-compose up --no-build --detach
 
       - name: Run test
-        run: docker-compose exec web pytest
+        run: docker-compose exec -T web pytest
 
       - name: Stop docker stack
         run: docker-compose stop
