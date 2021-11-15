@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
             model_name="pot",
             name="tiebreaker_description",
             field=models.CharField(
-                help_text='Describe the type of tiebreaker you want to use for the pot. For example: "Total score of the Monday night game"',
+                help_text='Describe the type of tiebreaker you want to use for the pot. For example: "Total score of the Monday night game"',  # noqa: E501
                 max_length=500,
                 null=True,
             ),
