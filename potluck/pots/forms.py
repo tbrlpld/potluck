@@ -1,8 +1,8 @@
 from django import forms
 from django.core import validators
 
-from potluck.pots.models import Pot
 from potluck.games.models import Game, Team
+from potluck.pots.models import Pot
 
 
 class SetTiebreakerScoreForm(forms.ModelForm):

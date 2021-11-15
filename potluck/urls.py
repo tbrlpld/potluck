@@ -27,9 +27,9 @@ from potluck.pots.views import (
     PotDeleteView,
     PotDetailView,
     PotListView,
-    set_results,
     TallyView,
     UpdatePotStatusView,
+    set_results,
 )
 
 urlpatterns = [
