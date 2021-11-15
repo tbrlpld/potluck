@@ -179,6 +179,7 @@ jobs:
 
   clean-up:
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs: [test, black, isort, flake8]
     steps:
       - name: Delete artifacts
