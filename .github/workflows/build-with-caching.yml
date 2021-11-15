@@ -78,7 +78,6 @@ jobs:
 
       - name: Run test
         run: |
-          export WEB_VOLUME="/tmp/override-volume-def-in-compose-file"
           docker-compose exec -T web python ./manage.py collectstatic --noinput
           docker-compose exec -T web pytest
 

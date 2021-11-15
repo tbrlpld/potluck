@@ -4,7 +4,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - "${WEB_VOLUME}"
+      - .:/app
     environment:
       DATABASE_URL: postgres://potluck:potluck@db:5432/potluck # pragma: allowlist secret
       SECRET_KEY: thisisnotasecrectkey
