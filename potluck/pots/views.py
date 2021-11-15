@@ -1,8 +1,8 @@
 from django import forms, shortcuts, urls
 from django.views import generic
 
-from potluck.games.models import Game
 from potluck.games.forms import SetWinningTeamForm
+from potluck.games.models import Game
 from potluck.picks.models import PickSheet
 from potluck.pots.forms import CreateGameInPotForm, SetTiebreakerScoreForm
 from potluck.pots.models import Pot

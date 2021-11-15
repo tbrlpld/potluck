@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name="tiebreaker_description",
             field=models.CharField(
                 default="Total score of the Monday night game",
-                help_text='Describe the tiebreaker score you want to use for the pot. For example: "Total score of the Monday night game". In case of a tie, the submission with the closest guess to the score wins.',
+                help_text='Describe the tiebreaker score you want to use for the pot. For example: "Total score of the Monday night game". In case of a tie, the submission with the closest guess to the score wins.',  # noqa: E501
                 max_length=500,
             ),
         ),
