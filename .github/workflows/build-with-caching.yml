@@ -110,7 +110,7 @@ jobs:
 
       - name: run black
         run: |
-          docker-compose -f docker-compose.ci.yaml exec -t web black .
+          docker-compose -f docker-compose.ci.yaml exec -T web black .
 
       - name: stop docker stack
         run: docker-compose -f docker-compose.ci.yaml stop
@@ -141,7 +141,7 @@ jobs:
         run: docker-compose -f docker-compose.ci.yaml up --no-build --detach
 
       - name: run isort
-        run: docker-compose -f docker-compose.ci.yaml exec -t web isort . --check
+        run: docker-compose -f docker-compose.ci.yaml exec -T web isort . --check
 
       - name: stop docker stack
         run: docker-compose -f docker-compose.ci.yaml stop
@@ -172,7 +172,7 @@ jobs:
         run: docker-compose -f docker-compose.ci.yaml up --no-build --detach
 
       - name: run flake8
-        run: docker-compose -f docker-compose.ci.yaml exec -t web flake8
+        run: docker-compose -f docker-compose.ci.yaml exec -T web flake8
 
       - name: stop docker stack
         run: docker-compose -f docker-compose.ci.yaml stop
