@@ -110,7 +110,7 @@ jobs:
 
       - name: run black
         run: |
-          docker-compose -f docker-compose.ci.yaml exec -T web black .
+          docker-compose -f docker-compose.ci.yaml exec -T web black . --check
 
       - name: stop docker stack
         run: docker-compose -f docker-compose.ci.yaml stop
