@@ -10,6 +10,17 @@ The `Dockerfile` is meant for development as well as production deployment.
 
 The development specific configuration is done via environment variables that are defined in the `docker-compose.yml`.
 
+The `docker-compose.yml` is also used in GitHub actions CI pipeline.
+In the pipeline we don't want to override the app in the container with the local version, but we do want that in local development.
+To activate the code override in the container, you want to mount the local directory to the `/app` directory in the container.
+This can be done by settng the environment variable `WEB_VOLUME=".:/app`.
+That environment variable can also be set in the `.env` file.
+You can get a properly configured `.env` file by copying the `.env.example`.
+
+```console
+cp .env.example .env
+```
+
 To start local development, you need to build the required images.
 
 ```console
