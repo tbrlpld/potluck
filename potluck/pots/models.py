@@ -6,7 +6,8 @@ class Pot(models.Model):
         max_length=250, null=False, blank=False, help_text="What shall we call the pot?"
     )
     tiebreaker_description = models.CharField(
-        max_length=500,       null=False,
+        max_length=500,
+        null=False,
         blank=False,
         help_text=(
             "Describe the tiebreaker score you want to use for the pot. "
