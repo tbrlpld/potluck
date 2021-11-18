@@ -4,7 +4,7 @@ from potluck.picks import forms
 from potluck.pots.tests import factories as pot_factories
 
 
-class TestCreateGamePick:
+class TestCreatePickSheet:
     def test_create_empty(self):
         with pytest.raises(TypeError):
             forms.CreatePickSheet()

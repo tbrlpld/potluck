@@ -3,14 +3,19 @@ from django import forms
 from potluck.picks.models import Pick, PickSheet
 
 
-class CreatePickSheetForm(forms.ModelForm):
+class CreatePickSheet(forms.ModelForm):
     class Meta:
         model = PickSheet
-        fields = ("picker", "pot", "tiebreaker_guess")
-        widgets = {
-            "pot": forms.HiddenInput(),
-        }
+        fields = ("picker", "tiebreaker_guess")
         labels = {"picker": "Your name"}
+
+    def __init__(self, *args, pot, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.pot = pot
+
+    def save(self, *args, **kwargs):
+        self.instance.pot = self.pot
+        return super().save(*args, **kwargs)
 
 
 class CreatePickForm(forms.ModelForm):
