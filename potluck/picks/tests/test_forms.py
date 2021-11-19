@@ -28,3 +28,10 @@ class TestCreatePickSheet:
         assert form.is_valid() is True
         pick_sheet = form.save(commit=False)
         assert pick_sheet.pot == pot
+
+
+class TestCreatePick:
+    def test_create_empty(self):
+        with pytest.raises(ValueError):
+            form = forms.CreatePick()
+
