@@ -7,7 +7,7 @@ from potluck.picks.models import Pot
 def pick_create_view(request, pot_id):
     pot = shortcuts.get_object_or_404(Pot, pk=pot_id)
     CreatePickFormset = forms.formset_factory(
-        picks_forms.CreatePickForm,
+        picks_forms.CreatePick,
         min_num=pot.games.count(),
         max_num=pot.games.count(),
         validate_min=True,

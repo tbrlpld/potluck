@@ -18,7 +18,7 @@ class CreatePickSheet(forms.ModelForm):
         return super().save(*args, **kwargs)
 
 
-class CreatePickForm(forms.ModelForm):
+class CreatePick(forms.ModelForm):
     class Meta:
         model = Pick
         fields = ("game", "picked_team")
