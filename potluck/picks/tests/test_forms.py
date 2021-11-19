@@ -1,7 +1,9 @@
 import pytest
 
 from potluck.picks import forms
-from potluck.pots.tests import factories as pot_factories
+from potluck.games.tests import factories as games_factories
+from potluck.pots.tests import factories as pots_factories
+from potluck.teams.tests import factories as teams_factories
 
 
 class TestCreatePickSheet:
@@ -10,13 +12,13 @@ class TestCreatePickSheet:
             forms.CreatePickSheet()
 
     def test_create_without_data(self):
-        pot = pot_factories.PotFactory.build()
+        pot = pots_factories.PotFactory.build()
         form = forms.CreatePickSheet(pot=pot)
 
         assert form.is_valid() is False
 
     def test_create_valid_form(self):
-        pot = pot_factories.PotFactory.build()
+        pot = pots_factories.PotFactory.build()
         form = forms.CreatePickSheet(
             data={
                 "picker": "Joe Shmoe",
@@ -30,8 +32,18 @@ class TestCreatePickSheet:
         assert pick_sheet.pot == pot
 
 
+@pytest.mark.django_db
 class TestCreatePick:
     def test_create_empty(self):
         with pytest.raises(ValueError):
             form = forms.CreatePick()
 
+    def test_with_initial(self):
+        team_1 = teams_factories.TeamFactory.create()
+        team_2 = teams_factories.TeamFactory.create()
+        game = games_factories.GameFactory.create()
+        game.teams.set((team_1, team_2))
+
+        form = forms.CreatePick(initial={"game": game})
+
+        assert form.is_valid() is False
