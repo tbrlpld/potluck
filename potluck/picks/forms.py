@@ -35,4 +35,13 @@ class CreatePick(forms.ModelForm):
         self.instance.game = self.game
         return super().save(*args, **kwargs)
 
-# GamePickFormset = forms.formset_factory(CreateGamePickForm, extra=0)
+
+class BaseCreatePickFormset(forms.BaseFormSet):
+    def __init__(self, *args, games, **kwargs):
+        self.games = games
+        super().__init__(*args, **kwargs)
+
+    def get_form_kwargs(self, index):
+        kwargs = super().get_form_kwargs(index)
+        kwargs["game"] = self.games[index]
+        return kwargs
