@@ -8,13 +8,13 @@ from potluck.pots import forms as pots_forms
 from potluck.pots import models as pots_models
 
 
-class PotListView(generic.ListView):
+class PotList(generic.ListView):
     model = pots_models.Pot
     context_object_name = "pots"
     ordering = "-id"
 
 
-class PotDetailView(generic.DetailView):
+class PotDetail(generic.DetailView):
     model = pots_models.Pot
     context_object_name = "pot"
 
@@ -27,20 +27,20 @@ class PotDetailView(generic.DetailView):
         return context
 
 
-class PotCreateView(generic.CreateView):
+class PotCreate(generic.CreateView):
     model = pots_models.Pot
     template_name = "pots/pot_create.html"
     success_url = urls.reverse_lazy("pots_list")
     fields = ("name", "tiebreaker_description")
 
 
-class PotDeleteView(generic.DeleteView):
+class PotDelete(generic.DeleteView):
     model = pots_models.Pot
     template_name = "pots/pot_delete.html"
     success_url = urls.reverse_lazy("pots_list")
 
 
-class UpdatePotStatusView(generic.UpdateView):
+class UpdatePotStatus(generic.UpdateView):
     model = pots_models.Pot
     fields = ("status",)
     http_method_names = ["post"]
@@ -49,7 +49,7 @@ class UpdatePotStatusView(generic.UpdateView):
         return urls.reverse_lazy("pot_detail", kwargs={"pk": self.kwargs["pk"]})
 
 
-class TallyView(generic.ListView):
+class Tally(generic.ListView):
     template_name = "pots/tally.html"
     model = picks_models.PickSheet
     context_object_name = "pick_sheets"
