@@ -14,16 +14,16 @@ class Game(models.Model):
         Team,
         on_delete=models.CASCADE,
         related_name="+",
-        blank=True,
         null=True,
+        blank=True,
     )
 
     pot = models.ForeignKey(
         Pot,
         on_delete=models.CASCADE,
         related_name="games",
-        blank=True,
         null=True,
+        blank=False,
     )
 
     def get_team_names(self):
