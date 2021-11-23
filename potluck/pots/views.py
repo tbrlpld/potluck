@@ -1,10 +1,11 @@
 from django import forms, shortcuts, urls
 from django.views import generic
 
+from potluck.games import forms as games_forms
 from potluck.games.forms import SetWinningTeamForm
 from potluck.games.models import Game
 from potluck.picks.models import PickSheet
-from potluck.pots.forms import CreateGameInPotForm, SetTiebreakerScoreForm
+from potluck.pots.forms import SetTiebreakerScoreForm
 from potluck.pots.models import Pot
 
 
@@ -51,7 +52,7 @@ class UpdatePotStatusView(generic.UpdateView):
 
 class AddGameView(generic.CreateView):
     model = Game
-    form_class = CreateGameInPotForm
+    form_class = games_forms.CreateGameInPotForm
     template_name = "pots/add_game.html"
 
     def setup(self, request, *args, **kwargs):

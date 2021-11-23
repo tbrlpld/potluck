@@ -1,7 +1,7 @@
 import pytest
 
-from potluck.picks import forms
 from potluck.games.tests import factories as games_factories
+from potluck.picks import forms
 from potluck.pots.tests import factories as pots_factories
 from potluck.teams.tests import factories as teams_factories
 
@@ -34,7 +34,6 @@ class TestCreatePickSheet:
 
 @pytest.mark.django_db
 class TestCreatePick:
-
     @pytest.fixture
     def setup(self):
         self.team_1 = teams_factories.TeamFactory.create()
@@ -44,7 +43,7 @@ class TestCreatePick:
 
     def test_empty(self):
         with pytest.raises(TypeError):
-            form = forms.CreatePick()
+            forms.CreatePick()
 
     def test_with_game(self, setup):
         form = forms.CreatePick(game=self.game)
@@ -52,10 +51,7 @@ class TestCreatePick:
         assert form.is_valid() is False
 
     def test_with_data(self, setup):
-        form = forms.CreatePick(
-            data={"picked_team": self.team_1},
-            game=self.game
-        )
+        form = forms.CreatePick(data={"picked_team": self.team_1}, game=self.game)
 
         assert form.is_valid() is True
         pick = form.save()
