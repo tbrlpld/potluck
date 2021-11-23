@@ -25,77 +25,70 @@ class TestSetTiebreakerScoreForm:
 
 @pytest.mark.django_db
 class TestCreateGame:
+    def test_no_pot(self):
+        with pytest.raises(TypeError):
+            form = CreateGameInPotForm()
+
     def test_empty_form(self):
-        form = CreateGameInPotForm()
+        pot = pots_factories.PotFactory()
+        form = CreateGameInPotForm(pot=pot)
 
         result = form.is_valid()
 
         assert result is False
+        assert form.pot == pot
 
     def test_with_empty_data(self):
-        form = CreateGameInPotForm({})
-
-        result = form.is_valid()
-
-        assert result is False
-        assert "teams" in form.errors
-        assert "pot" in form.errors
-
-    def test_with_pot(self):
         pot = pots_factories.PotFactory()
-        form = CreateGameInPotForm({"pot": pot})
+        form = CreateGameInPotForm(data={}, pot=pot)
 
         result = form.is_valid()
 
         assert result is False
         assert "teams" in form.errors
-        assert "pot" not in form.errors
 
     def test_with_empty_teams(self):
         pot = pots_factories.PotFactory()
-        form = CreateGameInPotForm({"teams": [], "pot": pot})
+        form = CreateGameInPotForm({"teams": []}, pot=pot)
 
         result = form.is_valid()
 
         assert result is False
         assert "teams" in form.errors
-        assert "pot" not in form.errors
 
     def test_with_one_team(self):
         pot = pots_factories.PotFactory()
         team_1 = teams_factories.TeamFactory()
-        form = CreateGameInPotForm({"teams": [team_1], "pot": pot})
+        form = CreateGameInPotForm(data={"teams": [team_1]}, pot=pot)
 
         result = form.is_valid()
 
         assert result is False
         assert "teams" in form.errors
-        assert "pot" not in form.errors
 
     def test_with_three_teams(self):
         pot = pots_factories.PotFactory()
         team_1 = teams_factories.TeamFactory()
         team_2 = teams_factories.TeamFactory()
         team_3 = teams_factories.TeamFactory()
-        form = CreateGameInPotForm({
-            "teams": [team_1, team_2, team_3],
-            "pot": pot,
-        })
+        form = CreateGameInPotForm(
+            data={"teams": [team_1, team_2, team_3]},
+            pot=pot,
+        )
 
         result = form.is_valid()
 
         assert result is False
         assert "teams" in form.errors
-        assert "pot" not in form.errors
 
     def test_with_two_teams(self):
         pot = pots_factories.PotFactory()
         team_1 = teams_factories.TeamFactory()
         team_2 = teams_factories.TeamFactory()
-        form = CreateGameInPotForm({
-            "teams": [team_1, team_2],
-            "pot": pot,
-        })
+        form = CreateGameInPotForm(
+            data={"teams": [team_1, team_2]},
+            pot=pot,
+        )
 
         result = form.is_valid()
 
