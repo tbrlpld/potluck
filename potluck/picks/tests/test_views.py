@@ -11,7 +11,7 @@ from potluck.teams.tests.factories import TeamFactory
 
 
 @pytest.mark.django_db
-class TestPickCreateView:
+class TestSubmitPickSheet:
     @pytest.fixture
     def setup_pot_with_two_games(self):
         self.team_1 = TeamFactory.create()
