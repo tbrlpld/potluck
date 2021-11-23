@@ -63,10 +63,10 @@ class AddGameView(generic.CreateView):
         context["pot"] = self.pot
         return context
 
-    def get_initial(self):
-        initial = super().get_initial()
-        initial["pot"] = self.kwargs["pot_id"]
-        return initial
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["pot"] = self.pot
+        return kwargs
 
     def get_success_url(self):
         return urls.reverse_lazy("pot_detail", kwargs={"pk": self.pot.id})
