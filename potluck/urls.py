@@ -19,10 +19,9 @@ from django.urls import include, path
 
 import debug_toolbar
 
-from potluck.games.views import GameDeleteView
+from potluck.games.views import AddGameView, GameDeleteView
 from potluck.picks.views import pick_create_view
 from potluck.pots.views import (
-    AddGameView,
     PotCreateView,
     PotDeleteView,
     PotDetailView,
