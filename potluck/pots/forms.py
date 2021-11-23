@@ -23,5 +23,12 @@ class CreateGameInPotForm(forms.ModelForm):
 
     class Meta:
         model = Game
-        fields = ("teams", "pot")
-        widgets = {"pot": forms.HiddenInput()}
+        fields = ("teams",)
+
+    def __init__(self, *args, pot, **kwargs):
+        self.pot = pot
+        super().__init__(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        self.instance.pot = self.pot
+        return super().save(*args, **kwargs)
