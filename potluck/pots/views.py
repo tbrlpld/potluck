@@ -87,7 +87,7 @@ def set_results(request, pot_id):
             queryset=games_queryset,
             prefix=winning_teams_prefix,
         )
-        set_tiebreaker_score_form = pots_forms.SetTiebreakerScoreForm(
+        set_tiebreaker_score_form = pots_forms.SetTiebreakerScore(
             data=request.POST, instance=pot
         )
         if all(
@@ -103,7 +103,7 @@ def set_results(request, pot_id):
             queryset=games_queryset,
             prefix=winning_teams_prefix,
         )
-        set_tiebreaker_score_form = pots_forms.SetTiebreakerScoreForm(instance=pot)
+        set_tiebreaker_score_form = pots_forms.SetTiebreakerScore(instance=pot)
     return shortcuts.render(
         request,
         template_name="pots/set_results.html",
