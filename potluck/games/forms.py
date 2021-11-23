@@ -5,7 +5,7 @@ from potluck.games import models as games_models
 from potluck.teams import models as teams_models
 
 
-class CreateGameInPotForm(forms.ModelForm):
+class CreateGame(forms.ModelForm):
     teams = forms.ModelMultipleChoiceField(
         queryset=teams_models.Team.objects.all(),
         widget=forms.CheckboxSelectMultiple,
