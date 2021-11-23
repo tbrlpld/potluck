@@ -1,7 +1,7 @@
 import pytest
 
 from potluck.games.tests import factories as games_factories
-from potluck.picks import forms
+from potluck.picks import forms as picks_forms
 from potluck.pots.tests import factories as pots_factories
 from potluck.teams.tests import factories as teams_factories
 
@@ -9,17 +9,17 @@ from potluck.teams.tests import factories as teams_factories
 class TestCreatePickSheet:
     def test_create_empty(self):
         with pytest.raises(TypeError):
-            forms.CreatePickSheet()
+            picks_forms.CreatePickSheet()
 
     def test_create_without_data(self):
         pot = pots_factories.PotFactory.build()
-        form = forms.CreatePickSheet(pot=pot)
+        form = picks_forms.CreatePickSheet(pot=pot)
 
         assert form.is_valid() is False
 
     def test_create_valid_form(self):
         pot = pots_factories.PotFactory.build()
-        form = forms.CreatePickSheet(
+        form = picks_forms.CreatePickSheet(
             data={
                 "picker": "Joe Shmoe",
                 "tiebreaker_guess": 10,
@@ -43,15 +43,15 @@ class TestCreatePick:
 
     def test_empty(self):
         with pytest.raises(TypeError):
-            forms.CreatePick()
+            picks_forms.CreatePick()
 
     def test_with_game(self, setup):
-        form = forms.CreatePick(game=self.game)
+        form = picks_forms.CreatePick(game=self.game)
 
         assert form.is_valid() is False
 
     def test_with_data(self, setup):
-        form = forms.CreatePick(data={"picked_team": self.team_1}, game=self.game)
+        form = picks_forms.CreatePick(data={"picked_team": self.team_1}, game=self.game)
 
         assert form.is_valid() is True
         pick = form.save()
@@ -60,7 +60,7 @@ class TestCreatePick:
 
     def test_with_team_not_from_game(self, setup):
         team_3 = teams_factories.TeamFactory.create()
-        form = forms.CreatePick(
+        form = picks_forms.CreatePick(
             data={"picked_team": team_3},
             game=self.game,
         )

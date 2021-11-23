@@ -1,13 +1,14 @@
 from django import shortcuts, urls
 from django.views import generic
 
-from potluck.games import forms, models
+from potluck.games import forms as games_forms
+from potluck.games import models as games_models
 from potluck.pots import models as pots_models
 
 
 class CreateGame(generic.CreateView):
-    model = models.Game
-    form_class = forms.CreateGameInPotForm
+    model = games_models.Game
+    form_class = games_forms.CreateGameInPotForm
     template_name = "pots/add_game.html"
 
     def setup(self, request, *args, **kwargs):
@@ -31,12 +32,12 @@ class CreateGame(generic.CreateView):
 
 
 class DeleteGame(generic.DeleteView):
-    model = models.Game
+    model = games_models.Game
     context_object_name = "game"
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.game = shortcuts.get_object_or_404(models.Game, pk=self.kwargs["pk"])
+        self.game = shortcuts.get_object_or_404(games_models.Game, pk=self.kwargs["pk"])
         self.pot = self.game.pot
 
     def get_success_url(self):

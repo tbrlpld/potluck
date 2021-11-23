@@ -20,48 +20,41 @@ from django.urls import include, path
 import debug_toolbar
 
 from potluck.games import views as games_views
-from potluck.picks.views import pick_create_view
-from potluck.pots.views import (
-    PotCreateView,
-    PotDeleteView,
-    PotDetailView,
-    PotListView,
-    TallyView,
-    UpdatePotStatusView,
-    set_results,
-)
+from potluck.picks import views as picks_views
+from potluck.pots import views as pots_views
+
 
 urlpatterns = [
     path("djng/", admin.site.urls),
     # path("accounts/", include("django.contrib.auth.urls")),
     # path("", include("potluck.home.urls", name§space="home")),
     #
-    path("", PotListView.as_view(), name="pots_list"),
-    path("pots/create/", PotCreateView.as_view(), name="pot_create"),
-    path("pots/<int:pk>/", PotDetailView.as_view(), name="pot_detail"),
-    path("pots/<int:pk>/delete", PotDeleteView.as_view(), name="pot_delete"),
+    path("", pots_views.PotListView.as_view(), name="pots_list"),
+    path("pots/create/", pots_views.PotCreateView.as_view(), name="pot_create"),
+    path("pots/<int:pk>/", pots_views.PotDetailView.as_view(), name="pot_detail"),
+    path("pots/<int:pk>/delete", pots_views.PotDeleteView.as_view(), name="pot_delete"),
     path(
         "pots/<int:pk>/update-status/",
-        UpdatePotStatusView.as_view(),
+        pots_views.UpdatePotStatusView.as_view(),
         name="pot_update_status",
     ),
     path(
         "pots/<int:pot_id>/add-game/", games_views.CreateGame.as_view(), name="add_game"
     ),
     path(
-        # "pots/<int:pot_id>/set-results/", SetResultsView.as_view(), name="set_results"
+        # "pots/<int:pot_id>/set-results/", pots_views.SetResultsView.as_view(), name="set_results"
         "pots/<int:pot_id>/set-results/",
-        set_results,
+        pots_views.set_results,
         name="set_results",
     ),
     path(
         "pots/<int:pot_id>/place-pick/",
-        pick_create_view,
+        picks_views.pick_create_view,
         name="pick_create",
     ),
     path(
         "pots/<int:pot_id>/tally/",
-        TallyView.as_view(),
+        pots_views.TallyView.as_view(),
         name="show_tally",
     ),
     #

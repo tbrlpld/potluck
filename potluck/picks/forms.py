@@ -1,11 +1,11 @@
 from django import forms
 
-from potluck.picks.models import Pick, PickSheet
+from potluck.picks import models as picks_models
 
 
 class CreatePickSheet(forms.ModelForm):
     class Meta:
-        model = PickSheet
+        model = picks_models.PickSheet
         fields = ("picker", "tiebreaker_guess")
         labels = {"picker": "Your name"}
 
@@ -20,7 +20,7 @@ class CreatePickSheet(forms.ModelForm):
 
 class CreatePick(forms.ModelForm):
     class Meta:
-        model = Pick
+        model = picks_models.Pick
         fields = ("picked_team",)
         widgets = {
             "picked_team": forms.RadioSelect,

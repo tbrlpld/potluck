@@ -1,17 +1,17 @@
 from django.core import exceptions
 from django.db import models
 
-from potluck.pots.models import Pot
-from potluck.teams.models import Team
+from potluck.pots import models as pots_models
+from potluck.teams import models as teams_models
 
 
 class Game(models.Model):
     teams = models.ManyToManyField(
-        Team,
+        teams_models.Team,
         related_name="+",
     )
     winning_team = models.ForeignKey(
-        Team,
+        teams_models.Team,
         on_delete=models.CASCADE,
         related_name="+",
         null=True,
@@ -19,7 +19,7 @@ class Game(models.Model):
     )
 
     pot = models.ForeignKey(
-        Pot,
+        pots_models.Pot,
         on_delete=models.CASCADE,
         related_name="games",
         null=True,

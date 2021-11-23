@@ -1,13 +1,13 @@
 from django import forms
 from django.core import validators
 
-from potluck.games.models import Game
-from potluck.teams.models import Team
+from potluck.games import models as games_models
+from potluck.teams import models as teams_models
 
 
 class CreateGameInPotForm(forms.ModelForm):
     teams = forms.ModelMultipleChoiceField(
-        queryset=Team.objects.all(),
+        queryset=teams_models.Team.objects.all(),
         widget=forms.CheckboxSelectMultiple,
         validators=[
             validators.MinLengthValidator(2),
@@ -16,7 +16,7 @@ class CreateGameInPotForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Game
+        model = games_models.Game
         fields = ("teams",)
 
     def __init__(self, *args, pot, **kwargs):
@@ -30,7 +30,7 @@ class CreateGameInPotForm(forms.ModelForm):
 
 class SetWinningTeamForm(forms.ModelForm):
     class Meta:
-        model = Game
+        model = games_models.Game
         fields = ("winning_team",)
         widgets = {"winning_team": forms.RadioSelect}
 

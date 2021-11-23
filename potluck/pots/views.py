@@ -1,21 +1,21 @@
 from django import forms, shortcuts, urls
 from django.views import generic
 
-from potluck.games.forms import SetWinningTeamForm
-from potluck.games.models import Game
-from potluck.picks.models import PickSheet
-from potluck.pots.forms import SetTiebreakerScoreForm
-from potluck.pots.models import Pot
+from potluck.games import forms as games_forms
+from potluck.games import models as games_models
+from potluck.picks import models as picks_models
+from potluck.pots import forms as pots_forms
+from potluck.pots import models as pots_models
 
 
 class PotListView(generic.ListView):
-    model = Pot
+    model = pots_models.Pot
     context_object_name = "pots"
     ordering = "-id"
 
 
 class PotDetailView(generic.DetailView):
-    model = Pot
+    model = pots_models.Pot
     context_object_name = "pot"
 
     def get_context_data(self, **kwargs):
@@ -28,20 +28,20 @@ class PotDetailView(generic.DetailView):
 
 
 class PotCreateView(generic.CreateView):
-    model = Pot
+    model = pots_models.Pot
     template_name = "pots/pot_create.html"
     success_url = urls.reverse_lazy("pots_list")
     fields = ("name", "tiebreaker_description")
 
 
 class PotDeleteView(generic.DeleteView):
-    model = Pot
+    model = pots_models.Pot
     template_name = "pots/pot_delete.html"
     success_url = urls.reverse_lazy("pots_list")
 
 
 class UpdatePotStatusView(generic.UpdateView):
-    model = Pot
+    model = pots_models.Pot
     fields = ("status",)
     http_method_names = ["post"]
 
@@ -51,13 +51,13 @@ class UpdatePotStatusView(generic.UpdateView):
 
 class TallyView(generic.ListView):
     template_name = "pots/tally.html"
-    model = PickSheet
+    model = picks_models.PickSheet
     context_object_name = "pick_sheets"
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.pot_id = kwargs.get("pot_id")
-        self.pot = shortcuts.get_object_or_404(Pot, pk=self.pot_id)
+        self.pot = shortcuts.get_object_or_404(pots_models.Pot, pk=self.pot_id)
 
     def get_queryset(self):
         return self.pot.get_tally()
@@ -69,12 +69,12 @@ class TallyView(generic.ListView):
 
 
 def set_results(request, pot_id):
-    pot = shortcuts.get_object_or_404(Pot, pk=pot_id)
+    pot = shortcuts.get_object_or_404(pots_models.Pot, pk=pot_id)
     games_queryset = pot.games.all().order_by("id")
     winning_teams_prefix = "winning-teams"
     SetWinningTeamsFormset = forms.modelformset_factory(
-        Game,
-        form=SetWinningTeamForm,
+        games_models.Game,
+        form=games_forms.SetWinningTeamForm,
         max_num=pot.games.count(),
         min_num=pot.games.count(),
         validate_max=True,
@@ -87,7 +87,7 @@ def set_results(request, pot_id):
             queryset=games_queryset,
             prefix=winning_teams_prefix,
         )
-        set_tiebreaker_score_form = SetTiebreakerScoreForm(
+        set_tiebreaker_score_form = pots_forms.SetTiebreakerScoreForm(
             data=request.POST, instance=pot
         )
         if all(
@@ -103,7 +103,7 @@ def set_results(request, pot_id):
             queryset=games_queryset,
             prefix=winning_teams_prefix,
         )
-        set_tiebreaker_score_form = SetTiebreakerScoreForm(instance=pot)
+        set_tiebreaker_score_form = pots_forms.SetTiebreakerScoreForm(instance=pot)
     return shortcuts.render(
         request,
         template_name="pots/set_results.html",
