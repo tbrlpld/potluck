@@ -26,7 +26,7 @@ class TestPickCreateView:
 
     def test_get_success(self, setup_pot_with_two_games):
         self.team_5 = TeamFactory.create()
-        url = urls.reverse("pick_create", kwargs={"pot_id": self.pot.id})
+        url = urls.reverse("submit_pick_sheet", kwargs={"pot_id": self.pot.id})
         client = test.Client()
 
         response = client.get(url)
@@ -55,7 +55,7 @@ class TestPickCreateView:
             "form-1-game": self.game_2.id,
             "form-1-picked_team": picked_team_2.id,
         }
-        url = urls.reverse("pick_create", kwargs={"pot_id": self.pot.id})
+        url = urls.reverse("submit_pick_sheet", kwargs={"pot_id": self.pot.id})
         client = test.Client()
 
         response = client.post(url, data=data, follow=True)

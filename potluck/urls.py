@@ -48,9 +48,9 @@ urlpatterns = [
         name="set_results",
     ),
     path(
-        "pots/<int:pot_id>/place-pick/",
-        picks_views.pick_create_view,
-        name="pick_create",
+        "pots/<int:pot_id>/submit-pick-sheet/",
+        picks_views.submit_pick_sheet,
+        name="submit_pick_sheet",
     ),
     path(
         "pots/<int:pot_id>/tally/",

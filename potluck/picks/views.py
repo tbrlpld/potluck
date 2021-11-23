@@ -4,7 +4,7 @@ from potluck.picks import forms as picks_forms
 from potluck.pots import models as pots_models
 
 
-def pick_create_view(request, pot_id):
+def submit_pick_sheet(request, pot_id):
     pot = shortcuts.get_object_or_404(pots_models.Pot, pk=pot_id)
     CreatePickFormset = forms.formset_factory(
         picks_forms.CreatePick,
