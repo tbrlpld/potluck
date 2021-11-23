@@ -1,8 +1,8 @@
 import pytest
 
 from potluck.pots.forms import CreateGameInPotForm, SetTiebreakerScoreForm
-from potluck.pots.tests.factories import PotFactory
-from potluck.teams.tests.factories import TeamFactory
+from potluck.pots.tests import factories as pots_factories
+from potluck.teams.tests import factories as teams_factories
 
 
 class TestSetTiebreakerScoreForm:
@@ -14,7 +14,7 @@ class TestSetTiebreakerScoreForm:
         assert result is True
 
     def test_set_value_on_instance(self):
-        pot = PotFactory.build()
+        pot = pots_factories.PotFactory.build()
         form = SetTiebreakerScoreForm({"tiebreaker_score": 1}, instance=pot)
         form.is_valid()
 
@@ -24,37 +24,83 @@ class TestSetTiebreakerScoreForm:
 
 
 @pytest.mark.django_db
-class TestCreateGameInPotForm:
-    def test_is_valid_raises_error_with_no_team(self):
-        form = CreateGameInPotForm({"teams": []})
+class TestCreateGame:
+    def test_empty_form(self):
+        form = CreateGameInPotForm()
 
-        validation_passed = form.is_valid()
+        result = form.is_valid()
 
-        assert validation_passed is False
+        assert result is False
 
-    def test_is_valid_raises_error_with_one_team(self):
-        team_1 = TeamFactory()
-        form = CreateGameInPotForm({"teams": [team_1]})
+    def test_with_empty_data(self):
+        form = CreateGameInPotForm({})
 
-        validation_passed = form.is_valid()
+        result = form.is_valid()
 
-        assert validation_passed is False
+        assert result is False
+        assert "teams" in form.errors
+        assert "pot" in form.errors
 
-    def test_is_valid_raises_error_with_three_team(self):
-        team_1 = TeamFactory()
-        team_2 = TeamFactory()
-        team_3 = TeamFactory()
-        form = CreateGameInPotForm({"teams": [team_1, team_2, team_3]})
+    def test_with_pot(self):
+        pot = pots_factories.PotFactory()
+        form = CreateGameInPotForm({"pot": pot})
 
-        validation_passed = form.is_valid()
+        result = form.is_valid()
 
-        assert validation_passed is False
+        assert result is False
+        assert "teams" in form.errors
+        assert "pot" not in form.errors
 
-    def test_is_valid_success_with_two_team(self):
-        team_1 = TeamFactory()
-        team_2 = TeamFactory()
-        form = CreateGameInPotForm({"teams": [team_1, team_2]})
+    def test_with_empty_teams(self):
+        pot = pots_factories.PotFactory()
+        form = CreateGameInPotForm({"teams": [], "pot": pot})
 
-        validation_passed = form.is_valid()
+        result = form.is_valid()
 
-        assert validation_passed is True
+        assert result is False
+        assert "teams" in form.errors
+        assert "pot" not in form.errors
+
+    def test_with_one_team(self):
+        pot = pots_factories.PotFactory()
+        team_1 = teams_factories.TeamFactory()
+        form = CreateGameInPotForm({"teams": [team_1], "pot": pot})
+
+        result = form.is_valid()
+
+        assert result is False
+        assert "teams" in form.errors
+        assert "pot" not in form.errors
+
+    def test_with_three_teams(self):
+        pot = pots_factories.PotFactory()
+        team_1 = teams_factories.TeamFactory()
+        team_2 = teams_factories.TeamFactory()
+        team_3 = teams_factories.TeamFactory()
+        form = CreateGameInPotForm({
+            "teams": [team_1, team_2, team_3],
+            "pot": pot,
+        })
+
+        result = form.is_valid()
+
+        assert result is False
+        assert "teams" in form.errors
+        assert "pot" not in form.errors
+
+    def test_with_two_teams(self):
+        pot = pots_factories.PotFactory()
+        team_1 = teams_factories.TeamFactory()
+        team_2 = teams_factories.TeamFactory()
+        form = CreateGameInPotForm({
+            "teams": [team_1, team_2],
+            "pot": pot,
+        })
+
+        result = form.is_valid()
+
+        assert result is True
+        assert "teams" not in form.errors
+        assert "pot" not in form.errors
+        game = form.save()
+        assert game.pot == pot
