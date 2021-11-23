@@ -11,7 +11,7 @@ from potluck.pots.tests.factories import PotFactory
 
 
 @pytest.mark.django_db
-class TestGameDeleteView:
+class TestDeleteGame:
     def test_post_deletes_game(self):
         pot = PotFactory.create()
         game = GameFactory.create(pot=pot)

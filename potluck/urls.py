@@ -19,7 +19,7 @@ from django.urls import include, path
 
 import debug_toolbar
 
-from potluck.games.views import AddGameView, GameDeleteView
+from potluck.games import views as games_views
 from potluck.picks.views import pick_create_view
 from potluck.pots.views import (
     PotCreateView,
@@ -45,7 +45,9 @@ urlpatterns = [
         UpdatePotStatusView.as_view(),
         name="pot_update_status",
     ),
-    path("pots/<int:pot_id>/add-game/", AddGameView.as_view(), name="add_game"),
+    path(
+        "pots/<int:pot_id>/add-game/", games_views.CreateGame.as_view(), name="add_game"
+    ),
     path(
         # "pots/<int:pot_id>/set-results/", SetResultsView.as_view(), name="set_results"
         "pots/<int:pot_id>/set-results/",
@@ -65,7 +67,7 @@ urlpatterns = [
     #
     path(
         "games/<int:pk>/delete/",
-        GameDeleteView.as_view(),
+        games_views.DeleteGame.as_view(),
         name="game_delete",
     ),
 ]

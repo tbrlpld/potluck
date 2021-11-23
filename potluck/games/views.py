@@ -5,7 +5,7 @@ from potluck.games import forms, models
 from potluck.pots import models as pots_models
 
 
-class AddGameView(generic.CreateView):
+class CreateGame(generic.CreateView):
     model = models.Game
     form_class = forms.CreateGameInPotForm
     template_name = "pots/add_game.html"
@@ -30,7 +30,7 @@ class AddGameView(generic.CreateView):
         return urls.reverse_lazy("pot_detail", kwargs={"pk": self.pot.id})
 
 
-class GameDeleteView(generic.DeleteView):
+class DeleteGame(generic.DeleteView):
     model = models.Game
     context_object_name = "game"
 
