@@ -1,7 +1,28 @@
 from django import forms, shortcuts
+from django.views import generic
 
 from potluck.picks import forms as picks_forms
+from potluck.picks import models as picks_models
 from potluck.pots import models as pots_models
+
+
+class Tally(generic.ListView):
+    template_name = "pots/tally.html"
+    model = picks_models.PickSheet
+    context_object_name = "pick_sheets"
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.pot_id = kwargs.get("pot_id")
+        self.pot = shortcuts.get_object_or_404(pots_models.Pot, pk=self.pot_id)
+
+    def get_queryset(self):
+        return self.pot.get_tally()
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context["pot"] = self.pot
+        return context
 
 
 def submit_pick_sheet(request, pot_id):

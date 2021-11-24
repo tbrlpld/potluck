@@ -53,7 +53,7 @@ urlpatterns = [
     ),
     path(
         "pots/<int:pot_id>/tally/",
-        pots_views.Tally.as_view(),
+        picks_views.Tally.as_view(),
         name="show_tally",
     ),
     #
