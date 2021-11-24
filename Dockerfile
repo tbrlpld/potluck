@@ -19,7 +19,7 @@ ENV POETRY_HOME=/home/potluck/poetry
 ENV PATH=${POETRY_HOME}/bin:$PATH \
     # Ensure dependencies are available globally (without having to mess with the poetry's venvs)
     POETRY_VIRTUALENVS_CREATE=false \
-    DJANGO_SETTINGS_MODULE=potluck.settings.base
+    DJANGO_SETTINGS_MODULE=potluck.settings
 RUN env
 
 # Install poetry
@@ -37,7 +37,7 @@ COPY --chown=potluck:potluck . .
 
 COPY --chown=potluck:potluck --from=frontend ./potluck/static/comp ./potluck/static/comp
 
-RUN ./manage.py collectstatic --noinput
+RUN SECRET_KEY=none ./manage.py collectstatic --noinput --clear
 
 EXPOSE 8000
 CMD gunicorn --bind 0.0.0.0:$PORT potluck.wsgi:application
