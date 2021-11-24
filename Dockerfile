@@ -37,7 +37,7 @@ COPY --chown=potluck:potluck . .
 
 COPY --chown=potluck:potluck --from=frontend ./potluck/static/comp ./potluck/static/comp
 
-RUN ./manage.py collectstatic --noinput
+RUN SECRET_KEY=none ./manage.py collectstatic --noinput --clear
 
 EXPOSE 8000
 CMD gunicorn --bind 0.0.0.0:$PORT potluck.wsgi:application
