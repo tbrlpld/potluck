@@ -19,7 +19,7 @@ ENV POETRY_HOME=/home/potluck/poetry
 ENV PATH=${POETRY_HOME}/bin:$PATH \
     # Ensure dependencies are available globally (without having to mess with the poetry's venvs)
     POETRY_VIRTUALENVS_CREATE=false \
-    DJANGO_SETTINGS_MODULE=potluck.settings.base
+    DJANGO_SETTINGS_MODULE=potluck.settings
 RUN env
 
 # Install poetry
