@@ -42,7 +42,7 @@ urlpatterns = [
     ),
     path(
         "pots/<int:pot_id>/set-results/",
-        pots_views.set_results,
+        games_views.set_results,
         name="set_results",
     ),
     path(
