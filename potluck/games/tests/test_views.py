@@ -1,4 +1,4 @@
-from http import HTTPStatus
+import http
 
 from django import test, urls
 
@@ -19,7 +19,7 @@ class TestCreateGame:
 
         response = client.get(url)
 
-        assert response.status_code == HTTPStatus.OK
+        assert response.status_code == http.HTTPStatus.OK
 
 
 @pytest.mark.django_db
@@ -33,7 +33,7 @@ class TestDeleteGame:
 
         response = client.post(url, data={}, follow=True)
 
-        assert response.status_code == HTTPStatus.OK
+        assert response.status_code == http.HTTPStatus.OK
         assert game not in games_models.Game.objects.all()
 
 
@@ -57,12 +57,12 @@ class TestSetResults:
     def test_get_success(self, setup):
         response = self.client.get(self.url)
 
-        assert response.status_code == HTTPStatus.OK
+        assert response.status_code == http.HTTPStatus.OK
 
     def test_get_team_names(self, setup):
         response = self.client.get(self.url)
 
-        assert response.status_code == HTTPStatus.OK
+        assert response.status_code == http.HTTPStatus.OK
         assert self.team_1.name in str(response.content)
         assert self.team_2.name in str(response.content)
         assert self.team_3.name in str(response.content)
