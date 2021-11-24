@@ -83,7 +83,7 @@ def set_results(request, pot_id):
         set_tiebreaker_score_form = pots_forms.SetTiebreakerScore(instance=pot)
     return shortcuts.render(
         request,
-        template_name="pots/set_results.html",
+        template_name="games/set_results.html",
         context={
             "pot": pot,
             "set_winning_teams_formset": set_winning_teams_formset,
