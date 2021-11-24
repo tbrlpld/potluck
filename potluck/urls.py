@@ -23,7 +23,6 @@ from potluck.games import views as games_views
 from potluck.picks import views as picks_views
 from potluck.pots import views as pots_views
 
-
 urlpatterns = [
     path("dj-admin/", admin.site.urls),
     # path("accounts/", include("django.contrib.auth.urls")),

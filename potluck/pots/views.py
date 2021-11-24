@@ -21,8 +21,7 @@ class PotDetail(generic.DetailView):
         context = super().get_context_data()
 
         picks_url = urls.reverse_lazy(
-            "submit_pick_sheet",
-            kwargs={"pot_id": self.object.id}
+            "submit_pick_sheet", kwargs={"pot_id": self.object.id}
         )
         context["picks_url"] = self.request.build_absolute_uri(picks_url)
 
