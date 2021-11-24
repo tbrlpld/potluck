@@ -7,7 +7,7 @@ from potluck.pots import models as pots_models
 
 
 class Tally(generic.ListView):
-    template_name = "pots/tally.html"
+    template_name = "picks/tally.html"
     model = picks_models.PickSheet
     context_object_name = "pick_sheets"
 
