@@ -98,21 +98,17 @@ class TestPotDelete:
 
 
 @pytest.mark.django_db
-class TestGameAddView:
-    def test_get_success(self):
-        pot = PotFactory.create()
-        url = reverse("add_game", kwargs={"pot_id": pot.id})
+class TestUpdatePotStatus:
+    def test_post(self):
+        pot = PotFactory()
+        url = reverse("pot_update_status", kwargs={"pk": pot.id})
         client = Client()
+        assert pot.status == Pot.Status.DRAFT
 
-        response = client.get(url)
+        response = client.post(
+            url,
+            data={"status": Pot.Status.OPEN},
+            follow=True,
+        )
 
         assert response.status_code == http.HTTPStatus.OK
-
-    def test_pot_in_context(self):
-        pot = PotFactory.create()
-        url = reverse("add_game", kwargs={"pot_id": pot.id})
-        client = Client()
-
-        response = client.get(url)
-
-        assert pot == response.context["pot"]

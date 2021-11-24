@@ -15,7 +15,7 @@ class TestCreateGame:
     def test_get(self):
         pot = pots_factories.PotFactory.create()
         url = urls.reverse("add_game", kwargs={"pot_id": pot.id})
-        client = test.Client(url)
+        client = test.Client()
 
         response = client.get(url)
 
