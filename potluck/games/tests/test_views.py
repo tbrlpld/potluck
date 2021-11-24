@@ -11,6 +11,18 @@ from potluck.teams.tests import factories as teams_factories
 
 
 @pytest.mark.django_db
+class TestCreateGame:
+    def test_get(self):
+        pot = pots_factories.PotFactory.create()
+        url = urls.reverse("add_game", kwargs={"pot_id": pot.id})
+        client = test.Client(url)
+
+        response = client.get(url)
+
+        assert response.status_code == HTTPStatus.OK
+
+
+@pytest.mark.django_db
 class TestDeleteGame:
     def test_post_deletes_game(self):
         pot = pots_factories.PotFactory.create()
