@@ -1,36 +1,47 @@
 from django import forms
 
-from potluck.picks.models import Pick, PickSheet
+from potluck.picks import models as picks_models
 
 
-class CreatePickSheetForm(forms.ModelForm):
+class CreatePickSheet(forms.ModelForm):
     class Meta:
-        model = PickSheet
-        fields = ("picker", "pot", "tiebreaker_guess")
-        widgets = {
-            "pot": forms.HiddenInput(),
-        }
+        model = picks_models.PickSheet
+        fields = ("picker", "tiebreaker_guess")
         labels = {"picker": "Your name"}
 
+    def __init__(self, *args, pot, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.pot = pot
 
-class CreatePickForm(forms.ModelForm):
+    def save(self, *args, **kwargs):
+        self.instance.pot = self.pot
+        return super().save(*args, **kwargs)
+
+
+class CreatePick(forms.ModelForm):
     class Meta:
-        model = Pick
-        fields = ("game", "picked_team")
+        model = picks_models.Pick
+        fields = ("picked_team",)
         widgets = {
-            "game": forms.HiddenInput(),
             "picked_team": forms.RadioSelect,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, game, **kwargs):
         super().__init__(*args, **kwargs)
-        self.game = self.initial.get("game")
-        if self.game is None:
-            raise ValueError(
-                "{0} needs receive a game as initial data.".format(self.__class__)
-            )
+        self.game = game
         self.fields["picked_team"].queryset = self.game.teams
-        self.fields["picked_team"].label = str(self.game)
+
+    def save(self, *args, **kwargs):
+        self.instance.game = self.game
+        return super().save(*args, **kwargs)
 
 
-# GamePickFormset = forms.formset_factory(CreateGamePickForm, extra=0)
+class BaseCreatePickFormset(forms.BaseFormSet):
+    def __init__(self, *args, games, **kwargs):
+        self.games = games
+        super().__init__(*args, **kwargs)
+
+    def get_form_kwargs(self, index):
+        kwargs = super().get_form_kwargs(index)
+        kwargs["game"] = self.games[index]
+        return kwargs

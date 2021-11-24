@@ -19,54 +19,46 @@ from django.urls import include, path
 
 import debug_toolbar
 
-from potluck.games.views import GameDeleteView
-from potluck.picks.views import pick_create_view
-from potluck.pots.views import (
-    AddGameView,
-    PotCreateView,
-    PotDeleteView,
-    PotDetailView,
-    PotListView,
-    TallyView,
-    UpdatePotStatusView,
-    set_results,
-)
+from potluck.games import views as games_views
+from potluck.picks import views as picks_views
+from potluck.pots import views as pots_views
 
 urlpatterns = [
-    path("djng/", admin.site.urls),
+    path("dj-admin/", admin.site.urls),
     # path("accounts/", include("django.contrib.auth.urls")),
-    # path("", include("potluck.home.urls", name§space="home")),
+    # path("", include("potluck.home.urls", namespace="home")),
     #
-    path("", PotListView.as_view(), name="pots_list"),
-    path("pots/create/", PotCreateView.as_view(), name="pot_create"),
-    path("pots/<int:pk>/", PotDetailView.as_view(), name="pot_detail"),
-    path("pots/<int:pk>/delete", PotDeleteView.as_view(), name="pot_delete"),
+    path("", pots_views.PotList.as_view(), name="pots_list"),
+    path("pots/create/", pots_views.PotCreate.as_view(), name="pot_create"),
+    path("pots/<int:pk>/", pots_views.PotDetail.as_view(), name="pot_detail"),
+    path("pots/<int:pk>/delete", pots_views.PotDelete.as_view(), name="pot_delete"),
     path(
         "pots/<int:pk>/update-status/",
-        UpdatePotStatusView.as_view(),
+        pots_views.UpdatePotStatus.as_view(),
         name="pot_update_status",
     ),
-    path("pots/<int:pot_id>/add-game/", AddGameView.as_view(), name="add_game"),
     path(
-        # "pots/<int:pot_id>/set-results/", SetResultsView.as_view(), name="set_results"
+        "pots/<int:pot_id>/add-game/", games_views.CreateGame.as_view(), name="add_game"
+    ),
+    path(
         "pots/<int:pot_id>/set-results/",
-        set_results,
+        games_views.set_results,
         name="set_results",
     ),
     path(
-        "pots/<int:pot_id>/place-pick/",
-        pick_create_view,
-        name="pick_create",
+        "pots/<int:pot_id>/submit-pick-sheet/",
+        picks_views.submit_pick_sheet,
+        name="submit_pick_sheet",
     ),
     path(
         "pots/<int:pot_id>/tally/",
-        TallyView.as_view(),
+        picks_views.Tally.as_view(),
         name="show_tally",
     ),
     #
     path(
         "games/<int:pk>/delete/",
-        GameDeleteView.as_view(),
+        games_views.DeleteGame.as_view(),
         name="game_delete",
     ),
 ]
