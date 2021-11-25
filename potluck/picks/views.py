@@ -62,7 +62,7 @@ def submit_pick_sheet(request, pot_id):
 
     return shortcuts.render(
         request,
-        template_name="picks/create.html",
+        template_name="picks/submit-pick-sheet.html",
         context={
             "pot": pot,
             "create_pick_sheet_form": create_pick_sheet_form,
