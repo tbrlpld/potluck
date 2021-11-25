@@ -287,8 +287,7 @@ class TestPick:
         setup_game_with_two_teams,
     ):
         winning_team = self.game.teams.first()
-        self.game.winning_team = winning_team
-        self.game.save()  # Game needs to be able to check equality in the DB
+        self.game.set_winning_team(winning_team)
         pick = PickFactory(game=self.game, picked_team=winning_team)
         # To get the annotation, you need to retrieve the object from the manager
         pick = Pick.objects.annotate_is_correct().get(pk=pick.id)
@@ -303,8 +302,7 @@ class TestPick:
     ):
         winning_team = self.game.teams.first()
         loosing_team = self.game.teams.last()
-        self.game.winning_team = winning_team
-        self.game.save()  # Game needs to be able to check equality in the DB
+        self.game.set_winning_team(winning_team)
         pick = PickFactory(game=self.game, picked_team=loosing_team)
         # To get the annotation, you need to retrieve the object from the manager
         pick = Pick.objects.annotate_is_correct().get(pk=pick.id)
