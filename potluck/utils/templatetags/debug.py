@@ -3,6 +3,6 @@ from django import template
 register = template.Library()
 
 
-@register.filter
-def debug_breakpoint(value):
+@register.simple_tag(takes_context=True)
+def debug_breakpoint(context):
     breakpoint()
