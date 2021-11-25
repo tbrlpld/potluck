@@ -19,7 +19,7 @@ class TestGame:
 
         assert Game.objects.get(pk=game.id).winning_team == team_1
 
-    def test_set_winning_team_raises_validation_error_if_team_not_in_game(self):
+    def test_set_winning_team_with_team_not_in_game(self):
         team_1 = TeamFactory.create()
         team_2 = TeamFactory.create()
         team_not_in_game = TeamFactory.create()
