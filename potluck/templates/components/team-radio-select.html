@@ -2,12 +2,11 @@
 
 <div class="flex flex-row justify-between items-center">
     {% for radio in field %}
-        <div class="flex-1 flex justify-center">
-            {{ radio.tag|insert:'-1, class="hidden"'|safe }}
-            <label for="{{ radio.id_for_label }}" class="block flex-initial p-2 box hover:bg-primary-100 font-bold text-center checked-input-label">
-                {{ radio.choice_label }}
-            </label>
-        </div>
+        <label for="{{ radio.id_for_label }}" class="flex-1 flex justify-center font-semibold">
+            {{ radio.tag }}
+            <span class="inline-block w-5"></span>
+            {{ radio.choice_label }}
+        </label>
         {% if forloop.counter0 == 0 %}
             <div class="flex-initial mx-2">
                 vs
