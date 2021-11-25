@@ -11,7 +11,7 @@
 
     <form action="" method="post">
         {% csrf_token %}
-        <div class="my-4">
+        <div class="my-8">
             <div>
                 {{ create_pick_sheet_form.non_field_errors }}
                 {% for hidden in create_pick_sheet_form.hidden_fields %}
@@ -26,14 +26,14 @@
                 {{ create_pick_sheet_form.picker|add_class:"my-1 w-full" }}
             </div>
 
-            <div class="mt-6">
+            <div class="my-8">
                 {{ create_pick_formset.management_form }}
                 {{ create_pick_formset.non_field_errors }}
                 <h2 class="font-semibold">Picks</h2>
                 <div class="text-sm text-gray-500">For each game, pick the team you think is most likely to win.</div>
                 {% for game_form in create_pick_formset %}
                     {% for field in game_form %}
-                        <div class="mt-4">
+                        <div class="my-8">
                             {{ field.errors }}
                             {% if field.name == "picked_team" %}
                                     {% include "components/team-radio-select.html" with field=field %}
@@ -45,7 +45,7 @@
                 {% endfor %}
             </div>
 
-            <div class="mt-6">
+            <div class="my-8">
                 <label id={{ create_pick_sheet_form.tiebreaker_guess.id_for_label }} class="font-semibold">Tiebreaker</label>
                 <p class="text-sm text-gray-500">
                     {{ create_pick_sheet_form.tiebreaker_guess.help_text }}
