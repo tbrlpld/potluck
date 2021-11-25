@@ -11,7 +11,7 @@
 
     <form action="" method="post">
         {% csrf_token %}
-        <div  class="my-4">
+        <div class="my-4">
             <div>
                 {{ create_pick_sheet_form.non_field_errors }}
                 {% for hidden in create_pick_sheet_form.hidden_fields %}
