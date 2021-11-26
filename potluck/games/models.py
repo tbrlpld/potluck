@@ -17,6 +17,10 @@ class Game(models.Model):
         null=True,
         blank=True,
     )
+    is_tie = models.BooleanField(
+        null=True,
+        blank=True,
+    )
 
     pot = models.ForeignKey(
         pots_models.Pot,
