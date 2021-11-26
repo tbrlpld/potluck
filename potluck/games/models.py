@@ -39,9 +39,10 @@ class Game(models.Model):
         return " vs ".join(team_names)
 
     def set_winning_team(self, team):
-        if team not in self.teams.all():
-            raise exceptions.ValidationError("Team has to paricipate in game to win!")
         self.winning_team = team
+        if self.is_tie is not False:
+            self.is_tie = False
+        self.clean()
         self.save()
 
     def clean(self):
