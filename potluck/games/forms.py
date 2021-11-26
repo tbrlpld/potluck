@@ -28,13 +28,13 @@ class CreateGame(forms.ModelForm):
         return super().save(*args, **kwargs)
 
 
-class SetWinningTeamForm(forms.ModelForm):
+class SetGameResult(forms.ModelForm):
     class Meta:
         model = games_models.Game
         fields = ("winning_team",)
         widgets = {"winning_team": forms.RadioSelect}
 
-    def __init__(self, *args, initial=None, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["winning_team"].queryset = self.instance.teams
         self.fields["winning_team"].empty_label = None
