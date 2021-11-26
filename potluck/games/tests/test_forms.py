@@ -96,3 +96,16 @@ class TestSetGameResult:
         form.is_valid()
 
         assert form.instance.winning_team == team
+
+    def test_set_winning_team_not_in_game(self):
+        game = games_factories.GameFactory()
+        team = teams_factories.TeamFactory()
+        form = games_forms.SetGameResult(
+            instance=game,
+            data={"winning_team": team},
+        )
+
+        result = form.is_valid()
+
+        assert result is False
+        assert "winning_team" in form.errors
