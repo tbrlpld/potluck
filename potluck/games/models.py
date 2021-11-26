@@ -43,3 +43,11 @@ class Game(models.Model):
             raise exceptions.ValidationError("Team has to paricipate in game to win!")
         self.winning_team = team
         self.save()
+
+    def clean(self):
+        if self.winning_team and self.is_tie:
+            raise exceptions.ValidationError(
+                "Winning team and tie are mutually exclusive. Set only either one."
+            )
+        if self.winning_team and self.winning_team not in self.teams.all():
+            raise exceptions.ValidationError("Team has to paricipate in game to win!")
