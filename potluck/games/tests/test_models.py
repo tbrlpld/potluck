@@ -18,8 +18,13 @@ class TestGame:
         self.game = games_factories.GameFactory(pot=pot)
         self.game.teams.set((self.team_1, self.team_2))
 
-    def test_set_winning_team_saves_to_db(self, setup):
+    def test_set_winning_team(self, setup):
         self.game.set_winning_team(self.team_1)
+
+        assert self.game.winning_team == self.team_1
+
+    def test_set_and_save_winning_team(self, setup):
+        self.game.set_and_save_winning_team(self.team_1)
 
         assert (
             games_models.Game.objects.get(pk=self.game.id).winning_team == self.team_1

@@ -22,13 +22,13 @@ class TestPot:
         self.game_1.teams.set((self.team_1, self.team_2))
         self.game_1_winning_team = self.team_1
         self.game_1_loosing_team = self.team_2
-        self.game_1.set_winning_team(self.game_1_winning_team)
+        self.game_1.set_and_save_winning_team(self.game_1_winning_team)
 
         self.game_2 = GameFactory.create(pot=self.pot)
         self.game_2.teams.set((self.team_3, self.team_4))
         self.game_2_winning_team = self.team_3
         self.game_2_loosing_team = self.team_4
-        self.game_2.set_winning_team(self.game_2_winning_team)
+        self.game_2.set_and_save_winning_team(self.game_2_winning_team)
 
     def test_factory(self):
         PotFactory.create()
