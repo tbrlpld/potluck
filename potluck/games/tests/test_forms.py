@@ -84,6 +84,18 @@ class TestCreateGame:
 
 @pytest.mark.django_db
 class TestSetGameResult:
+    def test_empty(self):
+        game = games_factories.GameFactory()
+        team = teams_factories.TeamFactory()
+        game.teams.set((team,))
+        form = games_forms.SetGameResult(
+            instance=game,
+        )
+
+        result = form.is_valid()
+
+        assert result is False
+
     def test_set_winning_team(self):
         game = games_factories.GameFactory()
         team = teams_factories.TeamFactory()
