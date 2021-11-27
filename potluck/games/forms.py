@@ -29,6 +29,17 @@ class CreateGame(forms.ModelForm):
 
 
 class SetGameResult(forms.Form):
+    """
+    Form to set the result of a game.
+
+    This is implemented with a custom form instead of a ModelForm to allow for using
+    the same choice field to select between the teams of the game or a tie.
+
+    On the model, the tie is set as a separate field but it makes more sense on the
+    form to have that as a single radio select.
+
+    """
+
     winning_team = forms.ChoiceField(
         widget=forms.RadioSelect,
     )
