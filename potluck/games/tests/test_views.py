@@ -50,16 +50,11 @@ class TestSetResults:
         self.game1.teams.set((self.team_1, self.team_2))
         self.game2 = games_factories.GameFactory.create(pot=self.pot)
         self.game2.teams.set((self.team_3, self.team_4))
-        self.url = urls.reverse("add_game", kwargs={"pot_id": self.pot.id})
+        self.url = urls.reverse("set_results", kwargs={"pot_id": self.pot.id})
         self.client = test.Client()
         assert self.pot.games.count() == 2
 
     def test_get_success(self, setup):
-        response = self.client.get(self.url)
-
-        assert response.status_code == http.HTTPStatus.OK
-
-    def test_get_team_names(self, setup):
         response = self.client.get(self.url)
 
         assert response.status_code == http.HTTPStatus.OK
