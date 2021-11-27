@@ -70,9 +70,8 @@ class SetGameResult(forms.Form):
         winning_team_field_name = self["winning_team"].html_name
         if data and winning_team_field_name in data:
             team_id = int(data[winning_team_field_name])
-            # TODO: Don't set the model fields directly.
             if team_id == self.TIE_VALUE:
-                self.game.is_tie = True
+                self.game.set_tie()
             else:
                 self.game.set_winning_team(teams_models.Team.objects.get(pk=team_id))
 
