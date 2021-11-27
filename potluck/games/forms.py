@@ -1,3 +1,5 @@
+from typing import Any, Optional
+
 from django import forms
 from django.core import validators
 
@@ -44,7 +46,13 @@ class SetGameResult(forms.Form):
         widget=forms.RadioSelect,
     )
 
-    def __init__(self, *, data=None, game, **kwargs):
+    def __init__(
+        self,
+        *,
+        data: Optional[dict]=None,
+        game: games_models.Game,
+        **kwargs: dict[str, Any],
+    ) -> None:
         self.game = game
 
         initial = kwargs.get("initial", {})
@@ -63,14 +71,14 @@ class SetGameResult(forms.Form):
         )
 
     @staticmethod
-    def get_choices(*, game):
+    def get_choices(*, game: games_models.Game) -> list[tuple[int, str]]:
         choices = [
             (team.id, team.name)
             for team in game.teams.all()
         ]
         return choices
 
-    def save(self):
+    def save(self) -> games_models.Game:
         self.game.save()
         return self.game
 
