@@ -136,6 +136,12 @@ class TestSetGameResult:
     def test_tie_label(self):
         assert games_forms.SetGameResult.TIE_LABEL == "Tie"
 
+    def test_tie_choice(self):
+        assert games_forms.SetGameResult.TIE_CHOICE == (
+            games_forms.SetGameResult.TIE_VALUE,
+            games_forms.SetGameResult.TIE_LABEL
+        )
+
     def test_game_is_tie(self, setup):
         self.game.set_tie()
         assert self.game.is_tie is True
