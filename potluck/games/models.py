@@ -42,17 +42,16 @@ class Game(models.Model):
         self.winning_team = team
         if self.is_tie is not False:
             self.is_tie = False
-        self.clean()
 
     def set_and_save_winning_team(self, team):
         self.set_winning_team(team)
+        self.clean()
         self.save()
 
     def set_tie(self) -> None:
         if self.winning_team is not None:
             self.winning_team = None
         self.is_tie = True
-        self.clean()
 
     def clean(self):
         if self.winning_team and self.is_tie:
