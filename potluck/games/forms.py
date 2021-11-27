@@ -49,7 +49,7 @@ class SetGameResult(forms.Form):
     def __init__(
         self,
         *,
-        data: Optional[dict]=None,
+        data: Optional[dict] = None,
         game: games_models.Game,
         **kwargs: dict[str, Any],
     ) -> None:
@@ -66,16 +66,11 @@ class SetGameResult(forms.Form):
             team_id = int(data[winning_team_field_name])
             self.game.winning_team = teams_models.Team.objects.get(pk=team_id)
 
-        self.fields["winning_team"].choices = self.get_choices(
-            game=self.game
-        )
+        self.fields["winning_team"].choices = self.get_choices(game=self.game)
 
     @staticmethod
     def get_choices(*, game: games_models.Game) -> list[tuple[int, str]]:
-        choices = [
-            (team.id, team.name)
-            for team in game.teams.all()
-        ]
+        choices = [(team.id, team.name) for team in game.teams.all()]
         return choices
 
     def save(self) -> games_models.Game:
