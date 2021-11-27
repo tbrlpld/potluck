@@ -42,6 +42,8 @@ class SetGameResult(forms.Form):
 
     """
 
+    TIE_VALUE = -1
+
     winning_team = forms.ChoiceField(
         widget=forms.RadioSelect,
     )
