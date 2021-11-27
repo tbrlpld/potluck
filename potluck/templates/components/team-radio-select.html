@@ -1,16 +1,10 @@
-{% load utils %}
-
-<div class="flex flex-row justify-between items-center">
-    {% for radio in field %}
-        <label for="{{ radio.id_for_label }}" class="flex-1 flex justify-center font-semibold">
-            {{ radio.tag }}
-            <span class="inline-block w-5"></span>
-            {{ radio.choice_label }}
-        </label>
-        {% if forloop.counter0 == 0 %}
-            <div class="flex-initial mx-2">
-                vs
-            </div>
-        {% endif %}
-    {% endfor %}
+<div class="flex flex-col xs:flex-row justify-between items-center">
+    {% include "components/team-radio-option.html" with radio=field.0 %}
+    <div class="flex-initial m-2">
+        vs
+    </div>
+    {% include "components/team-radio-option.html" with radio=field.1 %}
+</div>
+<div class="mt-8">
+    {% include "components/team-radio-option.html" with radio=field.2 small=True %}
 </div>
