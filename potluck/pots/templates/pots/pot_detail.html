@@ -36,7 +36,11 @@
                             </div>
                             {% if not forloop.last %}
                                 <div class="flex-initial mx-2">
-                                    vs
+                                    {% if not game.is_tie %}
+                                        vs
+                                    {% else %}
+                                        🥴 tied
+                                    {% endif %}
                                 </div>
                             {% endif %}
                         {% endfor %}
