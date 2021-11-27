@@ -142,7 +142,19 @@ class TestSetGameResult:
         assert result is True
         assert form.game.is_tie is True
 
-    # TODO: Form unsets tie on game if winning team is set
+    def test_setting_team_unsets_tie(self, setup):
+        self.game.set_tie()
+        assert self.game.is_tie is True
+
+        form = games_forms.SetGameResult(
+            data={"winning_team": self.team_1.id},
+            game=self.game,
+        )
+
+        assert self.game.is_tie is not True
+        assert self.game.is_tie is False
+        assert self.game.winning_team == self.team_1
+
     # TODO: From unsets winning team on game if tie is set
 
     def test_tie_value(self):
