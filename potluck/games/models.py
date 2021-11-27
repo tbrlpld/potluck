@@ -45,6 +45,13 @@ class Game(models.Model):
         self.clean()
         self.save()
 
+    def set_tie(self) -> None:
+        if self.winning_team is not None:
+            self.winning_team = None
+        self.is_tie = True
+        self.clean()
+        self.save()
+
     def clean(self):
         if self.winning_team and self.is_tie:
             raise exceptions.ValidationError(

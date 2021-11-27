@@ -32,6 +32,14 @@ class TestGame:
         with pytest.raises(exceptions.ValidationError):
             self.game.set_winning_team(team_not_in_game)
 
+    def test_set_winning_team_on_tie(self, setup):
+        self.game.set_tie()
+        assert self.game.is_tie is True
+
+        self.game.set_winning_team(self.team_1)
+
+        assert self.game.is_tie is False
+
     def test_is_tie(self):
         game = games_factories.GameFactory(is_tie=True)
 
@@ -44,11 +52,19 @@ class TestGame:
         with pytest.raises(exceptions.ValidationError):
             self.game.clean()
 
-    def test_set_winning_team_on_tie(self, setup):
-        game = games_factories.GameFactory(is_tie=True)
-        game.teams.set((self.team_1, self.team_2))
-        assert game.is_tie is True
+    def test_set_tie(self, setup):
+        assert self.game.is_tie is not True
 
-        game.set_winning_team(self.team_1)
+        self.game.set_tie()
 
-        assert game.is_tie is False
+        assert self.game.is_tie is True
+
+    def test_set_tie_on_winning_team(self, setup):
+        self.game.set_winning_team(self.team_1)
+        assert self.game.winning_team == self.team_1
+        assert self.game.is_tie is False
+
+        self.game.set_tie()
+
+        assert self.game.is_tie is True
+        assert self.game.winning_team == None
