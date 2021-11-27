@@ -84,40 +84,43 @@ class TestCreateGame:
 
 @pytest.mark.django_db
 class TestSetGameResult:
-    def test_empty(self):
-        game = games_factories.GameFactory()
-        team = teams_factories.TeamFactory()
-        game.teams.set((team,))
+    @pytest.fixture
+    def setup(self):
+        self.game = games_factories.GameFactory()
+        self.team_1 = teams_factories.TeamFactory()
+        self.team_2 = teams_factories.TeamFactory()
+        self.game.teams.set((self.team_1, self.team_2))
+
+    def test_no_data(self, setup):
         form = games_forms.SetGameResult(
-            instance=game,
+            instance=self.game,
         )
 
         result = form.is_valid()
 
         assert result is False
 
-    def test_set_winning_team(self):
-        game = games_factories.GameFactory()
-        team = teams_factories.TeamFactory()
-        game.teams.set((team,))
+    def test_winning_team(self, setup):
         form = games_forms.SetGameResult(
-            instance=game,
-            data={"winning_team": team},
+            instance=self.game,
+            data={"winning_team": self.team_1.id},
         )
 
         form.is_valid()
 
-        assert form.instance.winning_team == team
+        assert form.game.winning_team == self.team_1
 
-    def test_set_winning_team_not_in_game(self):
-        game = games_factories.GameFactory()
-        team = teams_factories.TeamFactory()
+    def test_winning_team_not_in_game(self, setup):
+        team_not_in_game = teams_factories.TeamFactory()
         form = games_forms.SetGameResult(
-            instance=game,
-            data={"winning_team": team},
+            instance=self.game,
+            data={"winning_team": team_not_in_game.id},
         )
 
         result = form.is_valid()
 
         assert result is False
         assert "winning_team" in form.errors
+
+    # TODO: Game with winning team -> Form has winning team
+    # TODO: Game with tie -> Form has tie
