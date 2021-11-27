@@ -28,8 +28,6 @@ class CreateGame(forms.ModelForm):
         return super().save(*args, **kwargs)
 
 
-
-
 class SetGameResult(forms.Form):
     winning_team = forms.ChoiceField(
         widget=forms.RadioSelect,
@@ -59,3 +57,14 @@ class SetGameResult(forms.Form):
             for team in game.teams.all()
         ]
         return choices
+
+
+class BaseSetGameResultFormSet(forms.BaseFormSet):
+    def __init__(self, *args, games, **kwargs):
+        self.games = games
+        super().__init__(*args, **kwargs)
+
+    def get_form_kwargs(self, index):
+        kwargs = super().get_form_kwargs(index)
+        kwargs["instance"] = self.games[index]
+        return kwargs
