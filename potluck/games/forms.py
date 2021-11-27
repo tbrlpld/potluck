@@ -44,22 +44,22 @@ class SetGameResult(forms.Form):
         widget=forms.RadioSelect,
     )
 
-    def __init__(self, *, data=None, instance, **kwargs):
-        self.instance = instance
+    def __init__(self, *, data=None, game, **kwargs):
+        self.game = game
 
         initial = kwargs.get("initial", {})
-        if self.instance.winning_team:
-            initial["winning_team"] = self.instance.winning_team.id
+        if self.game.winning_team:
+            initial["winning_team"] = self.game.winning_team.id
 
         super().__init__(data, initial=initial, **kwargs)
 
         winning_team_field_name = self["winning_team"].html_name
         if data and winning_team_field_name in data:
             team_id = int(data[winning_team_field_name])
-            self.instance.winning_team = teams_models.Team.objects.get(pk=team_id)
+            self.game.winning_team = teams_models.Team.objects.get(pk=team_id)
 
         self.fields["winning_team"].choices = self.get_choices(
-            game=self.instance
+            game=self.game
         )
 
     @staticmethod
@@ -71,8 +71,8 @@ class SetGameResult(forms.Form):
         return choices
 
     def save(self):
-        self.instance.save()
-        return self.instance
+        self.game.save()
+        return self.game
 
 
 class BaseSetGameResultFormSet(forms.BaseFormSet):
@@ -82,5 +82,5 @@ class BaseSetGameResultFormSet(forms.BaseFormSet):
 
     def get_form_kwargs(self, index):
         kwargs = super().get_form_kwargs(index)
-        kwargs["instance"] = self.games[index]
+        kwargs["game"] = self.games[index]
         return kwargs
