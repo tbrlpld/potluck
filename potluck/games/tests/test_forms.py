@@ -149,3 +149,11 @@ class TestSetGameResult:
 
         assert form.initial["winning_team"] == form.TIE_VALUE
 
+    def test_winning_team_choices(self, setup):
+        form = games_forms.SetGameResult(game=self.game)
+
+        choices = form.fields["winning_team"].choices
+
+        assert (self.team_1.id, self.team_1.name) in choices
+        assert (self.team_2.id, self.team_2.name) in choices
+        assert form.TIE_CHOICE in choices
