@@ -100,6 +100,14 @@ class TestSetGameResult:
 
         assert result is False
 
+    def test_game_with_winning_team(self, setup):
+        self.game.set_winning_team(self.team_1)
+        form = games_forms.SetGameResult(
+            instance=self.game,
+        )
+
+        assert form.initial["winning_team"] == self.team_1.id
+
     def test_winning_team(self, setup):
         form = games_forms.SetGameResult(
             instance=self.game,
@@ -108,7 +116,7 @@ class TestSetGameResult:
 
         form.is_valid()
 
-        assert form.game.winning_team == self.team_1
+        assert form.instance.winning_team == self.team_1
 
     def test_winning_team_not_in_game(self, setup):
         team_not_in_game = teams_factories.TeamFactory()
@@ -122,5 +130,4 @@ class TestSetGameResult:
         assert result is False
         assert "winning_team" in form.errors
 
-    # TODO: Game with winning team -> Form has winning team
     # TODO: Game with tie -> Form has tie
