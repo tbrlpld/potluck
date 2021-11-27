@@ -28,13 +28,34 @@ class CreateGame(forms.ModelForm):
         return super().save(*args, **kwargs)
 
 
-class SetGameResult(forms.ModelForm):
-    class Meta:
-        model = games_models.Game
-        fields = ("winning_team",)
-        widgets = {"winning_team": forms.RadioSelect}
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["winning_team"].queryset = self.instance.teams
-        self.fields["winning_team"].empty_label = None
+
+class SetGameResult(forms.Form):
+    winning_team = forms.ChoiceField(
+        widget=forms.RadioSelect,
+    )
+
+    def __init__(self, *, data=None, instance, **kwargs):
+        self.instance = instance
+
+        initial = kwargs.get("initial", {})
+        if self.instance.winning_team:
+            initial["winning_team"] = self.instance.winning_team.id
+
+        if data and "winning_team" in data:
+            team_id = int(data["winning_team"])
+            self.instance.winning_team = teams_models.Team.objects.get(pk=team_id)
+
+        super().__init__(data, initial=initial, **kwargs)
+
+        self.fields["winning_team"].choices = self.get_choices(
+            game=self.instance
+        )
+
+    @staticmethod
+    def get_choices(*, game):
+        choices = [
+            (team.id, team.name)
+            for team in game.teams.all()
+        ]
+        return choices
