@@ -60,6 +60,8 @@ class SetGameResult(forms.Form):
         initial = kwargs.get("initial", {})
         if self.game.winning_team:
             initial["winning_team"] = self.game.winning_team.id
+        elif self.game.is_tie:
+            initial["winning_team"] = self.TIE_VALUE
 
         super().__init__(data, initial=initial, **kwargs)
 
