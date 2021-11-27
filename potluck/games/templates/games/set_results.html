@@ -9,9 +9,9 @@
         <p class="my-4 text-gray-500 text-sm">
             For each game, pick the team that actually won.
         </p>
-        {{ set_winning_teams_formset.management_form }}
-        {{ set_winning_teams_formset.non_field_errors }}
-        {% for game_form in set_winning_teams_formset %}
+        {{ set_game_result_formset.management_form }}
+        {{ set_game_result_formset.non_field_errors }}
+        {% for game_form in set_game_result_formset %}
             {% for field in game_form %}
                 {% if field.name == "winning_team" %}
                     <div class="my-4 p-3 box">

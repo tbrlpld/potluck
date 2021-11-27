@@ -40,11 +40,12 @@ class SetGameResult(forms.Form):
         if self.instance.winning_team:
             initial["winning_team"] = self.instance.winning_team.id
 
-        if data and "winning_team" in data:
-            team_id = int(data["winning_team"])
-            self.instance.winning_team = teams_models.Team.objects.get(pk=team_id)
-
         super().__init__(data, initial=initial, **kwargs)
+
+        winning_team_field_name = self["winning_team"].html_name
+        if data and winning_team_field_name in data:
+            team_id = int(data[winning_team_field_name])
+            self.instance.winning_team = teams_models.Team.objects.get(pk=team_id)
 
         self.fields["winning_team"].choices = self.get_choices(
             game=self.instance
@@ -57,6 +58,10 @@ class SetGameResult(forms.Form):
             for team in game.teams.all()
         ]
         return choices
+
+    def save(self):
+        self.instance.save()
+        return self.instance
 
 
 class BaseSetGameResultFormSet(forms.BaseFormSet):

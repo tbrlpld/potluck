@@ -58,35 +58,38 @@ def set_results(request, pot_id):
         validate_min=True,
         extra=0,
     )
+
     if request.method == "POST":
-        set_winning_teams_formset = SetGameResultFormset(
+        set_game_result_formset = SetGameResultFormset(
             data=request.POST,
-            queryset=games_queryset,
+            games=games_queryset,
             prefix=winning_teams_prefix,
         )
         set_tiebreaker_score_form = pots_forms.SetTiebreakerScore(
             data=request.POST, instance=pot
         )
         if all(
-            (set_winning_teams_formset.is_valid(), set_tiebreaker_score_form.is_valid())
+            (set_game_result_formset.is_valid(), set_tiebreaker_score_form.is_valid())
         ):
-            set_winning_teams_formset.save()
+            for set_game_result_form in set_game_result_formset:
+                set_game_result_form.save()
             set_tiebreaker_score_form.save()
             return shortcuts.redirect(
                 urls.reverse_lazy("pot_detail", kwargs={"pk": pot_id})
             )
     else:
-        set_winning_teams_formset = SetGameResultFormset(
+        set_game_result_formset = SetGameResultFormset(
             games=games_queryset,
             prefix=winning_teams_prefix,
         )
         set_tiebreaker_score_form = pots_forms.SetTiebreakerScore(instance=pot)
+
     return shortcuts.render(
         request,
         template_name="games/set_results.html",
         context={
             "pot": pot,
-            "set_winning_teams_formset": set_winning_teams_formset,
+            "set_game_result_formset": set_game_result_formset,
             "set_tiebreaker_score_form": set_tiebreaker_score_form,
         },
     )
