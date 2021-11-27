@@ -130,4 +130,10 @@ class TestSetGameResult:
         assert result is False
         assert "winning_team" in form.errors
 
-    # TODO: Game with tie -> Form has tie
+    def test_game_is_tie(self, setup):
+        self.game.set_tie()
+        assert self.game.is_tie is True
+        form = games_forms.SetGameResult(game=self.game)
+
+        assert form.initial["winning_team"] == form.TIE_VALUE
+
