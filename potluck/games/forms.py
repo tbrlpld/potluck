@@ -74,7 +74,7 @@ class SetGameResult(forms.Form):
             if team_id == self.TIE_VALUE:
                 self.game.is_tie = True
             else:
-                self.game.winning_team = teams_models.Team.objects.get(pk=team_id)
+                self.game.set_winning_team(teams_models.Team.objects.get(pk=team_id))
 
         self.fields["winning_team"].choices = self.get_choices(game=self.game)
 
