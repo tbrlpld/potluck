@@ -74,9 +74,9 @@ class SetGameResult(forms.Form):
 
         self.fields["winning_team"].choices = self.get_choices(game=self.game)
 
-    @staticmethod
-    def get_choices(*, game: games_models.Game) -> list[tuple[int, str]]:
+    def get_choices(self, *, game: games_models.Game) -> list[tuple[int, str]]:
         choices = [(team.id, team.name) for team in game.teams.all()]
+        choices.append(self.TIE_CHOICE)
         return choices
 
     def save(self) -> games_models.Game:
