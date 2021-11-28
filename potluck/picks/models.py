@@ -62,7 +62,9 @@ class PickQueryset(models.QuerySet):
     def annotate_is_correct(self):
         return self.annotate(
             is_correct=models.Case(
-                models.When(picked_team=models.F("game__winning_team"), then=models.Value(True)),
+                models.When(
+                    picked_team=models.F("game__winning_team"), then=models.Value(True)
+                ),
                 default=models.Value(False),
             )
         )

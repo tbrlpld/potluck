@@ -80,4 +80,4 @@ class TestGame:
         self.game.set_tie()
 
         assert self.game.is_tie is True
-        assert self.game.winning_team == None
+        assert self.game.winning_team is None
