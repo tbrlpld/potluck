@@ -96,12 +96,11 @@ class TestSetGameResult:
             game=self.game,
         )
 
-        result = form.is_valid()
-
-        assert result is False
+        assert form.is_valid() is False
 
     def test_game_with_winning_team(self, setup):
         self.game.set_winning_team(self.team_1)
+
         form = games_forms.SetGameResult(
             game=self.game,
         )
@@ -114,32 +113,28 @@ class TestSetGameResult:
             data={"result": self.team_1.id},
         )
 
-        form.is_valid()
-
         assert form.game.winning_team == self.team_1
 
     def test_winning_team_not_in_game(self, setup):
         team_not_in_game = teams_factories.TeamFactory()
+
         form = games_forms.SetGameResult(
             game=self.game,
             data={"result": team_not_in_game.id},
         )
 
-        result = form.is_valid()
-
-        assert result is False
+        assert form.is_valid() is False
         assert "result" in form.errors
 
     def test_winning_team_is_tie(self, setup):
         assert self.game.is_tie is not True
+
         form = games_forms.SetGameResult(
             data={"result": games_forms.SetGameResult.TIE_VALUE},
             game=self.game,
         )
 
-        result = form.is_valid()
-
-        assert result is True
+        assert form.is_valid() is True
         assert form.game.is_tie is True
 
     def test_setting_team_unsets_tie(self, setup):
@@ -192,7 +187,6 @@ class TestSetGameResult:
         form = games_forms.SetGameResult(game=self.game)
 
         choices = form.fields["result"].choices
-
         assert (self.team_1.id, self.team_1.name) in choices
         assert (self.team_2.id, self.team_2.name) in choices
         assert form.TIE_CHOICE in choices
