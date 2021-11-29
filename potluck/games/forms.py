@@ -46,7 +46,7 @@ class SetGameResult(forms.Form):
     TIE_LABEL = "Tie"
     TIE_CHOICE = (TIE_VALUE, TIE_LABEL)
 
-    winning_team = forms.ChoiceField(
+    result = forms.ChoiceField(
         widget=forms.RadioSelect,
     )
 
@@ -61,23 +61,23 @@ class SetGameResult(forms.Form):
 
         initial = kwargs.get("initial", {})
         if self.game.winning_team:
-            initial["winning_team"] = self.game.winning_team.id
+            initial["result"] = self.game.winning_team.id
         elif self.game.is_tie:
-            initial["winning_team"] = self.TIE_VALUE
+            initial["result"] = self.TIE_VALUE
 
         super().__init__(data, initial=initial, **kwargs)
 
-        winning_team_field_name = self["winning_team"].html_name
-        if data and winning_team_field_name in data:
-            team_id = int(data[winning_team_field_name])
-            if team_id == self.TIE_VALUE:
+        result_field_name = self["result"].html_name
+        if data and result_field_name in data:
+            result = int(data[result_field_name])
+            if result == self.TIE_VALUE:
                 self.game.set_tie()
             else:
-                self.game.set_winning_team(teams_models.Team.objects.get(pk=team_id))
+                self.game.set_winning_team(teams_models.Team.objects.get(pk=result))
 
-        self.fields["winning_team"].choices = self.get_choices(game=self.game)
+        self.fields["result"].choices = self.get_result_choices(game=self.game)
 
-    def get_choices(self, *, game: games_models.Game) -> list[tuple[int, str]]:
+    def get_result_choices(self, *, game: games_models.Game) -> list[tuple[int, str]]:
         choices = [(team.id, team.name) for team in game.teams.all()]
         choices.append(self.TIE_CHOICE)
         return choices

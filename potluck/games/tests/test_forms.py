@@ -106,12 +106,12 @@ class TestSetGameResult:
             game=self.game,
         )
 
-        assert form.initial["winning_team"] == self.team_1.id
+        assert form.initial["result"] == self.team_1.id
 
     def test_winning_team(self, setup):
         form = games_forms.SetGameResult(
             game=self.game,
-            data={"winning_team": self.team_1.id},
+            data={"result": self.team_1.id},
         )
 
         form.is_valid()
@@ -122,18 +122,18 @@ class TestSetGameResult:
         team_not_in_game = teams_factories.TeamFactory()
         form = games_forms.SetGameResult(
             game=self.game,
-            data={"winning_team": team_not_in_game.id},
+            data={"result": team_not_in_game.id},
         )
 
         result = form.is_valid()
 
         assert result is False
-        assert "winning_team" in form.errors
+        assert "result" in form.errors
 
     def test_winning_team_is_tie(self, setup):
         assert self.game.is_tie is not True
         form = games_forms.SetGameResult(
-            data={"winning_team": games_forms.SetGameResult.TIE_VALUE},
+            data={"result": games_forms.SetGameResult.TIE_VALUE},
             game=self.game,
         )
 
@@ -147,7 +147,7 @@ class TestSetGameResult:
         assert self.game.is_tie is True
 
         games_forms.SetGameResult(
-            data={"winning_team": self.team_1.id},
+            data={"result": self.team_1.id},
             game=self.game,
         )
 
@@ -161,7 +161,7 @@ class TestSetGameResult:
         assert self.game.is_tie is False
 
         games_forms.SetGameResult(
-            data={"winning_team": games_forms.SetGameResult.TIE_VALUE},
+            data={"result": games_forms.SetGameResult.TIE_VALUE},
             game=self.game,
         )
 
@@ -186,12 +186,12 @@ class TestSetGameResult:
         assert self.game.is_tie is True
         form = games_forms.SetGameResult(game=self.game)
 
-        assert form.initial["winning_team"] == form.TIE_VALUE
+        assert form.initial["result"] == form.TIE_VALUE
 
     def test_winning_team_choices(self, setup):
         form = games_forms.SetGameResult(game=self.game)
 
-        choices = form.fields["winning_team"].choices
+        choices = form.fields["result"].choices
 
         assert (self.team_1.id, self.team_1.name) in choices
         assert (self.team_2.id, self.team_2.name) in choices
