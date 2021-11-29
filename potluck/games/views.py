@@ -49,44 +49,47 @@ def set_results(request, pot_id):
     pot = shortcuts.get_object_or_404(pots_models.Pot, pk=pot_id)
     games_queryset = pot.games.all().order_by("id")
     winning_teams_prefix = "winning-teams"
-    SetWinningTeamsFormset = forms.modelformset_factory(
-        games_models.Game,
-        form=games_forms.SetWinningTeamForm,
+    SetGameResultFormset = forms.formset_factory(
+        form=games_forms.SetGameResult,
+        formset=games_forms.BaseSetGameResultFormSet,
         max_num=pot.games.count(),
         min_num=pot.games.count(),
         validate_max=True,
         validate_min=True,
         extra=0,
     )
+
     if request.method == "POST":
-        set_winning_teams_formset = SetWinningTeamsFormset(
+        set_game_result_formset = SetGameResultFormset(
             data=request.POST,
-            queryset=games_queryset,
+            games=games_queryset,
             prefix=winning_teams_prefix,
         )
         set_tiebreaker_score_form = pots_forms.SetTiebreakerScore(
             data=request.POST, instance=pot
         )
         if all(
-            (set_winning_teams_formset.is_valid(), set_tiebreaker_score_form.is_valid())
+            (set_game_result_formset.is_valid(), set_tiebreaker_score_form.is_valid())
         ):
-            set_winning_teams_formset.save()
+            for set_game_result_form in set_game_result_formset:
+                set_game_result_form.save()
             set_tiebreaker_score_form.save()
             return shortcuts.redirect(
                 urls.reverse_lazy("pot_detail", kwargs={"pk": pot_id})
             )
     else:
-        set_winning_teams_formset = SetWinningTeamsFormset(
-            queryset=games_queryset,
+        set_game_result_formset = SetGameResultFormset(
+            games=games_queryset,
             prefix=winning_teams_prefix,
         )
         set_tiebreaker_score_form = pots_forms.SetTiebreakerScore(instance=pot)
+
     return shortcuts.render(
         request,
         template_name="games/set_results.html",
         context={
             "pot": pot,
-            "set_winning_teams_formset": set_winning_teams_formset,
+            "set_game_result_formset": set_game_result_formset,
             "set_tiebreaker_score_form": set_tiebreaker_score_form,
         },
     )

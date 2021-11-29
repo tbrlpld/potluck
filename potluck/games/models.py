@@ -17,6 +17,10 @@ class Game(models.Model):
         null=True,
         blank=True,
     )
+    is_tie = models.BooleanField(
+        null=True,
+        blank=True,
+    )
 
     pot = models.ForeignKey(
         pots_models.Pot,
@@ -35,7 +39,24 @@ class Game(models.Model):
         return " vs ".join(team_names)
 
     def set_winning_team(self, team):
-        if team not in self.teams.all():
-            raise exceptions.ValidationError("Team has to paricipate in game to win!")
         self.winning_team = team
+        if self.is_tie is not False:
+            self.is_tie = False
+
+    def set_and_save_winning_team(self, team):
+        self.set_winning_team(team)
+        self.clean()
         self.save()
+
+    def set_tie(self) -> None:
+        if self.winning_team is not None:
+            self.winning_team = None
+        self.is_tie = True
+
+    def clean(self):
+        if self.winning_team and self.is_tie:
+            raise exceptions.ValidationError(
+                "Winning team and tie are mutually exclusive. Set only either one."
+            )
+        if self.winning_team and self.winning_team not in self.teams.all():
+            raise exceptions.ValidationError("Team has to paricipate in game to win!")

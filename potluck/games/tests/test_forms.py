@@ -1,6 +1,7 @@
 import pytest
 
 from potluck.games import forms as games_forms
+from potluck.games.tests import factories as games_factories
 from potluck.pots.tests import factories as pots_factories
 from potluck.teams.tests import factories as teams_factories
 
@@ -79,3 +80,113 @@ class TestCreateGame:
         assert "pot" not in form.errors
         game = form.save()
         assert game.pot == pot
+
+
+@pytest.mark.django_db
+class TestSetGameResult:
+    @pytest.fixture
+    def setup(self):
+        self.game = games_factories.GameFactory()
+        self.team_1 = teams_factories.TeamFactory()
+        self.team_2 = teams_factories.TeamFactory()
+        self.game.teams.set((self.team_1, self.team_2))
+
+    def test_no_data(self, setup):
+        form = games_forms.SetGameResult(
+            game=self.game,
+        )
+
+        assert form.is_valid() is False
+
+    def test_game_with_winning_team(self, setup):
+        self.game.set_winning_team(self.team_1)
+
+        form = games_forms.SetGameResult(
+            game=self.game,
+        )
+
+        assert form.initial["result"] == self.team_1.id
+
+    def test_winning_team(self, setup):
+        form = games_forms.SetGameResult(
+            game=self.game,
+            data={"result": self.team_1.id},
+        )
+
+        assert form.game.winning_team == self.team_1
+
+    def test_winning_team_not_in_game(self, setup):
+        team_not_in_game = teams_factories.TeamFactory()
+
+        form = games_forms.SetGameResult(
+            game=self.game,
+            data={"result": team_not_in_game.id},
+        )
+
+        assert form.is_valid() is False
+        assert "result" in form.errors
+
+    def test_winning_team_is_tie(self, setup):
+        assert self.game.is_tie is not True
+
+        form = games_forms.SetGameResult(
+            data={"result": games_forms.SetGameResult.TIE_VALUE},
+            game=self.game,
+        )
+
+        assert form.is_valid() is True
+        assert form.game.is_tie is True
+
+    def test_setting_team_unsets_tie(self, setup):
+        self.game.set_tie()
+        assert self.game.is_tie is True
+
+        games_forms.SetGameResult(
+            data={"result": self.team_1.id},
+            game=self.game,
+        )
+
+        assert self.game.is_tie is not True
+        assert self.game.is_tie is False
+        assert self.game.winning_team == self.team_1
+
+    def test_setting_tie_unsets_team(self, setup):
+        self.game.set_winning_team(self.team_1)
+        assert self.game.winning_team == self.team_1
+        assert self.game.is_tie is False
+
+        games_forms.SetGameResult(
+            data={"result": games_forms.SetGameResult.TIE_VALUE},
+            game=self.game,
+        )
+
+        assert self.game.winning_team != self.team_1
+        assert self.game.winning_team is None
+        assert self.game.is_tie is True
+
+    def test_tie_value(self):
+        assert games_forms.SetGameResult.TIE_VALUE == -1
+
+    def test_tie_label(self):
+        assert games_forms.SetGameResult.TIE_LABEL == "Tie"
+
+    def test_tie_choice(self):
+        assert games_forms.SetGameResult.TIE_CHOICE == (
+            games_forms.SetGameResult.TIE_VALUE,
+            games_forms.SetGameResult.TIE_LABEL,
+        )
+
+    def test_game_is_tie(self, setup):
+        self.game.set_tie()
+        assert self.game.is_tie is True
+        form = games_forms.SetGameResult(game=self.game)
+
+        assert form.initial["result"] == form.TIE_VALUE
+
+    def test_winning_team_choices(self, setup):
+        form = games_forms.SetGameResult(game=self.game)
+
+        choices = form.fields["result"].choices
+        assert (self.team_1.id, self.team_1.name) in choices
+        assert (self.team_2.id, self.team_2.name) in choices
+        assert form.TIE_CHOICE in choices

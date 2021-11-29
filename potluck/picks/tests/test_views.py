@@ -26,11 +26,11 @@ class TestTally:
         game_2.teams.set((team_3, team_4))
 
         game_1_winning_team = team_1
-        game_1.set_winning_team(game_1_winning_team)
+        game_1.set_and_save_winning_team(game_1_winning_team)
 
         game_2_winning_team = team_3
         game_2_loosing_team = team_4
-        game_2.set_winning_team(game_2_winning_team)
+        game_2.set_and_save_winning_team(game_2_winning_team)
 
         # Pick 1 with 1 correct game pick
         self.pick_sheet_1 = picks_factories.PickSheetFactory(pot=pot)

@@ -287,8 +287,7 @@ class TestPick:
         setup_game_with_two_teams,
     ):
         winning_team = self.game.teams.first()
-        self.game.winning_team = winning_team
-        self.game.save()  # Game needs to be able to check equality in the DB
+        self.game.set_and_save_winning_team(winning_team)
         pick = PickFactory(game=self.game, picked_team=winning_team)
         # To get the annotation, you need to retrieve the object from the manager
         pick = Pick.objects.annotate_is_correct().get(pk=pick.id)
@@ -303,8 +302,7 @@ class TestPick:
     ):
         winning_team = self.game.teams.first()
         loosing_team = self.game.teams.last()
-        self.game.winning_team = winning_team
-        self.game.save()  # Game needs to be able to check equality in the DB
+        self.game.set_and_save_winning_team(winning_team)
         pick = PickFactory(game=self.game, picked_team=loosing_team)
         # To get the annotation, you need to retrieve the object from the manager
         pick = Pick.objects.annotate_is_correct().get(pk=pick.id)
@@ -312,3 +310,19 @@ class TestPick:
         result = pick.is_correct
 
         assert result is False
+
+    def test_is_correct_annotation_with_tied_game(self, setup_game_with_two_teams):
+        self.game.set_tie()
+        self.game.save()
+        assert self.game.winning_team is None
+        assert self.game.is_tie is True
+        pick_team_1 = PickFactory(game=self.game, picked_team=self.team_1)
+        pick_team_2 = PickFactory(game=self.game, picked_team=self.team_2)
+        pick_team_1 = Pick.objects.annotate_is_correct().get(pk=pick_team_1.id)
+        pick_team_2 = Pick.objects.annotate_is_correct().get(pk=pick_team_2.id)
+
+        result_team_1 = pick_team_1.is_correct
+        result_team_2 = pick_team_2.is_correct
+
+        assert result_team_1 is False
+        assert result_team_2 is False
