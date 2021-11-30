@@ -177,10 +177,41 @@ jobs:
       - name: stop docker stack
         run: docker-compose -f docker-compose.ci.yaml stop
 
+  mypy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      # this is the a separate action that sets up buildx runner
+      - name: set up docker buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: potluck-image
+          path: /tmp
+
+      - name: load image
+        run: |
+          docker load --input /tmp/potluck-image.tar
+          docker image ls -a
+
+      - name: start docker stack
+        run: docker-compose -f docker-compose.ci.yaml up --no-build --detach
+
+      - name: run mypy
+        run: docker-compose -f docker-compose.ci.yaml exec -T web mypy
+
+      - name: stop docker stack
+        run: docker-compose -f docker-compose.ci.yaml stop
+
   clean-up:
     runs-on: ubuntu-latest
     if: ${{ always() }}
-    needs: [test, black, isort, flake8]
+    needs: [test, black, isort, flake8, mypy]
     steps:
       - name: Delete artifacts
         uses: geekyeggo/delete-artifact@v1
