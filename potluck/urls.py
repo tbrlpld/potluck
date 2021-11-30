@@ -17,7 +17,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
-import debug_toolbar
+import debug_toolbar  # type: ignore
 
 from potluck.games import views as games_views
 from potluck.picks import views as picks_views
