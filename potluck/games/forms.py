@@ -55,7 +55,7 @@ class SetGameResult(forms.Form):
         *,
         data: Optional[dict] = None,
         game: games_models.Game,
-        **kwargs: dict[str, Any],
+        **kwargs,
     ) -> None:
         self.game = game
 
