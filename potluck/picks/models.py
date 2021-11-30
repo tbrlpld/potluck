@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import functions
 
 from potluck.games.models import Game
 from potluck.pots.models import Pot
@@ -6,7 +7,7 @@ from potluck.teams.models import Team
 
 
 class PickSheetQueryset(models.QuerySet):
-    def annotate_correct_count(self):
+    def annotate_correct_count(self) -> "models.QuerySet[PickSheet]":
         correct_picks = Pick.objects.annotate_is_correct().filter(
             is_correct=True,
         )
@@ -17,7 +18,7 @@ class PickSheetQueryset(models.QuerySet):
         )
         return annotated_pick_sheets
 
-    def annotate_tiebreaker_delta(self):
+    def annotate_tiebreaker_delta(self) -> "models.QuerySet[PickSheet]":
         annotated_pick_sheets = self.annotate(
             tiebreaker_delta=(
                 models.F("pot__tiebreaker_score") - models.F("tiebreaker_guess")
@@ -25,10 +26,10 @@ class PickSheetQueryset(models.QuerySet):
         )
         return annotated_pick_sheets
 
-    def annotate_tiebreaker_delta_abs(self):
+    def annotate_tiebreaker_delta_abs(self) -> "models.QuerySet[PickSheet]":
         annotated_pick_sheets = self.annotate(
             tiebreaker_delta_abs=(
-                models.functions.Abs(
+                functions.Abs(
                     models.F("pot__tiebreaker_score") - models.F("tiebreaker_guess")
                 )
             )
@@ -50,16 +51,16 @@ class PickSheet(models.Model):
 
     objects = PickSheetQueryset.as_manager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"PickSheet {self.id}: {self.picker} ({self.pot})"
 
-    def count_correct(self):
+    def count_correct(self) -> int:
         correct_picks = self.picks.annotate_is_correct().filter(is_correct=True)
         return correct_picks.count()
 
 
 class PickQueryset(models.QuerySet):
-    def annotate_is_correct(self):
+    def annotate_is_correct(self) -> "models.QuerySet[Pick]":
         return self.annotate(
             is_correct=models.Case(
                 models.When(
@@ -93,14 +94,14 @@ class Pick(models.Model):
 
     objects = PickQueryset.as_manager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Pick {self.id}: {self.pick_sheet.picker} ({self.game})"
 
-    def add_pick_sheet(self, pick_sheet):
+    def add_pick_sheet(self, pick_sheet: PickSheet) -> None:
         self.pick_sheet = pick_sheet
         self.full_clean
         self.save()
 
-    def check_if_correct(self):
+    def check_if_correct(self) -> bool:
         """Return true if picked team is game's winning team."""
         return self.picked_team == self.game.winning_team

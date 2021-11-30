@@ -1,4 +1,9 @@
+import typing
+
 from django.db import models
+
+if typing.TYPE_CHECKING:
+    from potluck.picks import models as picks_models
 
 
 class Pot(models.Model):
@@ -66,10 +71,10 @@ class Pot(models.Model):
         ),
     }
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def get_tally(self):
+    def get_tally(self) -> "models.QuerySet[picks_models.PickSheet]":
         return (
             self.pick_sheets.annotate_correct_count()
             .annotate_tiebreaker_delta()
@@ -78,7 +83,7 @@ class Pot(models.Model):
         )
 
     @property
-    def next_status(self):
+    def next_status(self) -> typing.Optional[Status]:
         next_status_index = self.status_order.index(self.status) + 1
         try:
             next_status = self.status_order[next_status_index]
