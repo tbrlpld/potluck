@@ -203,7 +203,7 @@ jobs:
         run: docker-compose -f docker-compose.ci.yaml up --no-build --detach
 
       - name: run mypy
-        run: docker-compose -f docker-compose.ci.yaml exec -T web mypy
+        run: docker-compose -f docker-compose.ci.yaml exec -T web mypy .
 
       - name: stop docker stack
         run: docker-compose -f docker-compose.ci.yaml stop
