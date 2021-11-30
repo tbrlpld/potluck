@@ -204,6 +204,7 @@ jobs:
 
       - name: run mypy
         run: docker-compose -f docker-compose.ci.yaml exec -T web mypy .
+        continue-on-error: true
 
       - name: stop docker stack
         run: docker-compose -f docker-compose.ci.yaml stop
