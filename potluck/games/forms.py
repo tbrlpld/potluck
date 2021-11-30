@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Optional
 
 from django import forms
 from django.core import validators
