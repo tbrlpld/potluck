@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Optional
 
 from django import forms
 from django.core import validators
@@ -55,7 +55,7 @@ class SetGameResult(forms.Form):
         *,
         data: Optional[dict] = None,
         game: games_models.Game,
-        **kwargs: dict[str, Any],
+        **kwargs,
     ) -> None:
         self.game = game
 

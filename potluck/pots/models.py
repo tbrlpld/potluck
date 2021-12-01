@@ -1,4 +1,10 @@
+import typing
+from typing import Optional
+
 from django.db import models
+
+if typing.TYPE_CHECKING:
+    from potluck.picks import models as picks_models
 
 
 class Pot(models.Model):
@@ -48,7 +54,7 @@ class Pot(models.Model):
         Status.OPEN: "Re-open up the pot for pick submissions",
         Status.CLOSED: "Go back to set winning teams in the games",
     }
-    _status_help_text = {
+    _status_help_text: "dict[str, str]" = {
         Status.DRAFT: (
             "While the pot is in draft you can "
             "add and remove games included in the pot. "
@@ -66,10 +72,10 @@ class Pot(models.Model):
         ),
     }
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def get_tally(self):
+    def get_tally(self) -> "picks_models.PickSheetQueryset":
         return (
             self.pick_sheets.annotate_correct_count()
             .annotate_tiebreaker_delta()
@@ -78,8 +84,9 @@ class Pot(models.Model):
         )
 
     @property
-    def next_status(self):
+    def next_status(self) -> Optional["Pot.Status"]:
         next_status_index = self.status_order.index(self.status) + 1
+        next_status: Optional["Pot.Status"]
         try:
             next_status = self.status_order[next_status_index]
         except IndexError:
@@ -87,8 +94,9 @@ class Pot(models.Model):
         return next_status
 
     @property
-    def previous_status(self):
+    def previous_status(self) -> Optional["Pot.Status"]:
         previous_status_index = self.status_order.index(self.status) - 1
+        previous_status: Optional["Pot.Status"]
         if previous_status_index < 0:
             previous_status = None
         else:
@@ -96,17 +104,21 @@ class Pot(models.Model):
         return previous_status
 
     @property
-    def next_status_action_text(self):
+    def next_status_action_text(self) -> Optional[str]:
+        if not self.next_status:
+            return None
         return self._next_status_action_text.get(self.next_status)
 
     @property
-    def previous_status_action_text(self):
+    def previous_status_action_text(self) -> Optional[str]:
+        if not self.previous_status:
+            return None
         return self._previous_status_action_text.get(self.previous_status)
 
     @property
-    def status_help_text(self):
+    def status_help_text(self) -> Optional[str]:
         return self._status_help_text.get(self.status)
 
     @property
-    def pickers_list(self):
-        return self.pick_sheets.all().values_list("picker", flat=True)
+    def pickers_list(self) -> "models.QuerySet[picks_models.PickSheet]":
+        return self.pick_sheets.values_list("picker", flat=True)

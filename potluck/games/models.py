@@ -30,20 +30,20 @@ class Game(models.Model):
         blank=False,
     )
 
-    def get_team_names(self):
+    def get_team_names(self) -> list[str]:
         teams = self.teams.values_list("id", "name")
         return [team[1] for team in teams]
 
-    def __str__(self):
+    def __str__(self) -> str:
         team_names = self.get_team_names()
         return " vs ".join(team_names)
 
-    def set_winning_team(self, team):
+    def set_winning_team(self, team: teams_models.Team) -> None:
         self.winning_team = team
         if self.is_tie is not False:
             self.is_tie = False
 
-    def set_and_save_winning_team(self, team):
+    def set_and_save_winning_team(self, team: teams_models.Team) -> None:
         self.set_winning_team(team)
         self.clean()
         self.save()
@@ -53,7 +53,7 @@ class Game(models.Model):
             self.winning_team = None
         self.is_tie = True
 
-    def clean(self):
+    def clean(self) -> None:
         if self.winning_team and self.is_tie:
             raise exceptions.ValidationError(
                 "Winning team and tie are mutually exclusive. Set only either one."
