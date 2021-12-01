@@ -54,7 +54,7 @@ class Pot(models.Model):
         Status.OPEN: "Re-open up the pot for pick submissions",
         Status.CLOSED: "Go back to set winning teams in the games",
     }
-    _status_help_text: "dict[str, str]"  = {
+    _status_help_text: "dict[str, str]" = {
         Status.DRAFT: (
             "While the pot is in draft you can "
             "add and remove games included in the pot. "
