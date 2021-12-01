@@ -37,6 +37,9 @@ class PickSheetQueryset(models.QuerySet):
         return annotated_pick_sheets
 
 
+PickSheetManager = models.Manager.from_queryset(PickSheetQueryset)
+
+
 class PickSheet(models.Model):
     picker = models.CharField(
         max_length=100,
@@ -49,7 +52,7 @@ class PickSheet(models.Model):
         help_text="Enter your guess for the tiebreaker.",
     )
 
-    objects = PickSheetQueryset.as_manager()
+    objects = PickSheetManager()
 
     def __str__(self) -> str:
         return f"PickSheet {self.id}: {self.picker} ({self.pot})"
@@ -69,6 +72,9 @@ class PickQueryset(models.QuerySet):
                 default=models.Value(False),
             )
         )
+
+
+PickManger = models.Manager.from_queryset(PickQueryset)
 
 
 class Pick(models.Model):
@@ -92,7 +98,7 @@ class Pick(models.Model):
         blank=False,
     )
 
-    objects = PickQueryset.as_manager()
+    objects = PickManger()
 
     def __str__(self) -> str:
         return f"Pick {self.id}: {self.pick_sheet.picker} ({self.game})"
