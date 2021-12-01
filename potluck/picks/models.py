@@ -101,7 +101,7 @@ class Pick(models.Model):
     objects = PickManger()
 
     def __str__(self) -> str:
-        return f"Pick {self.id}: {self.pick_sheet.picker} ({self.game})"
+        return f"Pick { self.id }: { self.picked_team } ({ self.game })"
 
     def add_pick_sheet(self, pick_sheet: PickSheet) -> None:
         self.pick_sheet = pick_sheet
