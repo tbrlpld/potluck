@@ -7,7 +7,7 @@ from potluck.teams.models import Team
 
 
 class PickSheetQueryset(models.QuerySet):
-    def annotate_correct_count(self) -> "models.QuerySet[PickSheet]":
+    def annotate_correct_count(self) -> "PickSheetQueryset":
         correct_picks = Pick.objects.annotate_is_correct().filter(
             is_correct=True,
         )
@@ -18,7 +18,7 @@ class PickSheetQueryset(models.QuerySet):
         )
         return annotated_pick_sheets
 
-    def annotate_tiebreaker_delta(self) -> "models.QuerySet[PickSheet]":
+    def annotate_tiebreaker_delta(self) -> "PickSheetQueryset":
         annotated_pick_sheets = self.annotate(
             tiebreaker_delta=(
                 models.F("pot__tiebreaker_score") - models.F("tiebreaker_guess")
@@ -26,7 +26,7 @@ class PickSheetQueryset(models.QuerySet):
         )
         return annotated_pick_sheets
 
-    def annotate_tiebreaker_delta_abs(self) -> "models.QuerySet[PickSheet]":
+    def annotate_tiebreaker_delta_abs(self) -> "PickSheetQueryset":
         annotated_pick_sheets = self.annotate(
             tiebreaker_delta_abs=(
                 functions.Abs(
@@ -63,7 +63,7 @@ class PickSheet(models.Model):
 
 
 class PickQueryset(models.QuerySet):
-    def annotate_is_correct(self) -> "models.QuerySet[Pick]":
+    def annotate_is_correct(self) -> "PickQueryset":
         return self.annotate(
             is_correct=models.Case(
                 models.When(

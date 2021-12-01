@@ -74,7 +74,7 @@ class Pot(models.Model):
     def __str__(self) -> str:
         return self.name
 
-    def get_tally(self) -> "models.QuerySet[picks_models.PickSheet]":
+    def get_tally(self) -> "picks_models.PickSheetQueryset":
         return (
             self.pick_sheets.annotate_correct_count()
             .annotate_tiebreaker_delta()
