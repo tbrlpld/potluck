@@ -91,14 +91,11 @@ class TestSetGameResult:
         self.team_2 = teams_factories.TeamFactory()
         self.game.teams.set((self.team_1, self.team_2))
 
-    def test_no_data(self, setup):
-        form = games_forms.SetGameResult(
-            game=self.game,
-        )
+    def test_init_with_no_game(self):
+        with pytest.raises(TypeError):
+            games_forms.SetGameResult()
 
-        assert form.is_valid() is False
-
-    def test_game_with_winning_team(self, setup):
+    def test_init_with_game_with_winning_team(self, setup):
         self.game.set_winning_team(self.team_1)
 
         form = games_forms.SetGameResult(
@@ -107,15 +104,41 @@ class TestSetGameResult:
 
         assert form.initial["result"] == self.team_1.id
 
-    def test_winning_team(self, setup):
+    def test_init_with_game_is_tie(self, setup):
+        self.game.set_tie()
+        assert self.game.is_tie is True
+        form = games_forms.SetGameResult(game=self.game)
+
+        assert form.initial["result"] == form.TIE_VALUE
+
+    def test_no_data(self, setup):
+        form = games_forms.SetGameResult(
+            game=self.game,
+        )
+
+        assert form.is_bound is False
+        assert form.is_valid() is False
+
+    def test_data_result_winning_team(self, setup):
         form = games_forms.SetGameResult(
             game=self.game,
             data={"result": self.team_1.id},
         )
+        form.is_valid()
+        form.cleaned_data
+        assert self.game.winning_team != self.team_1
+
+        # TODO: Action that does update the game.
+        #       I think I should do this in the save method.
+        #       The save method should update the game based on the
+        #       `cleaned_data`. `cleaned_data` is populated when `is_valid`
+        #       is called. So that is required. The ModelForm does the updating
+        #       of the instance in a `_post_clean` method but does not save the
+        #       changes. I guess I could follow that.
 
         assert form.game.winning_team == self.team_1
 
-    def test_winning_team_not_in_game(self, setup):
+    def test_data_result_winning_team_not_in_game(self, setup):
         team_not_in_game = teams_factories.TeamFactory()
 
         form = games_forms.SetGameResult(
@@ -176,14 +199,7 @@ class TestSetGameResult:
             games_forms.SetGameResult.TIE_LABEL,
         )
 
-    def test_game_is_tie(self, setup):
-        self.game.set_tie()
-        assert self.game.is_tie is True
-        form = games_forms.SetGameResult(game=self.game)
-
-        assert form.initial["result"] == form.TIE_VALUE
-
-    def test_winning_team_choices(self, setup):
+    def test_result_choices(self, setup):
         form = games_forms.SetGameResult(game=self.game)
 
         choices = form.fields["result"].choices
