@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from django import forms
 from django.core import validators
@@ -74,7 +74,7 @@ class SetGameResult(forms.Form):
         choices.append(self.TIE_CHOICE)
         return choices
 
-    def clean(self) -> None:
+    def clean(self) -> dict[str, Any]:
         cleaned_data = super().clean()
 
         result = cleaned_data.get("result")
@@ -84,6 +84,8 @@ class SetGameResult(forms.Form):
                 self.game.set_tie()
             else:
                 self.game.set_winning_team(self.game.teams.get(pk=result_int))
+
+        return cleaned_data
 
     def save(self) -> games_models.Game:
         self.game.save()
