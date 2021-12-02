@@ -149,16 +149,22 @@ class TestSetGameResult:
         assert valid is False
         assert "result" in form.errors
 
-    def test_winning_team_is_tie(self, setup):
-        assert self.game.is_tie is not True
-
+    def test_data_result_tie(self, setup):
         form = games_forms.SetGameResult(
             data={"result": games_forms.SetGameResult.TIE_VALUE},
             game=self.game,
         )
+        assert self.game.is_tie is not True
 
-        assert form.is_valid() is True
-        assert form.game.is_tie is True
+        valid = form.is_valid()
+
+        assert valid is True
+        assert self.game.is_tie is True
+        assert games_models.Game.objects.get(pk=self.game.id).is_tie != True
+
+        form.save()
+
+        assert games_models.Game.objects.get(pk=self.game.id).is_tie == True
 
     def test_setting_team_unsets_tie(self, setup):
         self.game.set_tie()
