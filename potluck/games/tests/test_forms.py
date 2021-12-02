@@ -124,9 +124,9 @@ class TestSetGameResult:
             game=self.game,
             data={"result": self.team_1.id},
         )
-        form.is_valid()
-        form.cleaned_data
         assert self.game.winning_team != self.team_1
+
+        form.is_valid()
 
         # TODO: Action that does update the game.
         #       I think I should do this in the save method.
@@ -137,6 +137,7 @@ class TestSetGameResult:
         #       changes. I guess I could follow that.
 
         assert form.game.winning_team == self.team_1
+        assert self.game.winning_team == self.team_1
 
     def test_data_result_winning_team_not_in_game(self, setup):
         team_not_in_game = teams_factories.TeamFactory()

@@ -67,20 +67,23 @@ class SetGameResult(forms.Form):
 
         super().__init__(data, initial=initial, **kwargs)
 
-        result_field_name = self["result"].html_name
-        if data and result_field_name in data:
-            result = int(data[result_field_name])
-            if result == self.TIE_VALUE:
-                self.game.set_tie()
-            else:
-                self.game.set_winning_team(teams_models.Team.objects.get(pk=result))
-
         self.fields["result"].choices = self.get_result_choices(game=self.game)
 
     def get_result_choices(self, *, game: games_models.Game) -> list[tuple[int, str]]:
         choices = [(team.id, team.name) for team in game.teams.all()]
         choices.append(self.TIE_CHOICE)
         return choices
+
+    def clean(self) -> None:
+        cleaned_data = super().clean()
+
+        result = cleaned_data.get("result")
+        if result and self.has_changed():
+            result_int = int(result)
+            if result_int == self.TIE_VALUE:
+                self.game.set_tie()
+            else:
+                self.game.set_winning_team(self.game.teams.get(pk=result_int))
 
     def save(self) -> games_models.Game:
         self.game.save()
