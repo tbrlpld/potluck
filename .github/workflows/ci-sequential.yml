@@ -4,7 +4,7 @@ name: ci (sequential)
 on: [push]
 
 jobs:
-  build:
+  build-lint-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -48,8 +48,7 @@ jobs:
         run: docker-compose -f docker-compose.ci.yaml up --no-build --detach
 
       - name: Run black
-        run: |
-          docker-compose -f docker-compose.ci.yaml exec -T web black . --check
+        run: docker-compose -f docker-compose.ci.yaml exec -T web black . --check
 
       - name: Run isort
         run: docker-compose -f docker-compose.ci.yaml exec -T web isort . --check
@@ -57,12 +56,11 @@ jobs:
       - name: Run flake8
         run: docker-compose -f docker-compose.ci.yaml exec -T web flake8
 
-      - name: run mypy
+      - name: Run mypy
         run: docker-compose -f docker-compose.ci.yaml exec -T web mypy .
 
       - name: Run pytest
-        run: |
-          docker-compose -f docker-compose.ci.yaml exec -T web pytest
+        run: docker-compose -f docker-compose.ci.yaml exec -T web pytest
 
-      - name: stop docker stack
+      - name: Stop docker stack
         run: docker-compose -f docker-compose.ci.yaml stop
