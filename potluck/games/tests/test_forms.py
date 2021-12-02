@@ -131,11 +131,15 @@ class TestSetGameResult:
 
         assert valid is True
         assert self.game.winning_team == self.team_1
-        assert games_models.Game.objects.get(pk=self.game.id).winning_team != self.team_1
+        assert (
+            games_models.Game.objects.get(pk=self.game.id).winning_team != self.team_1
+        )
 
         form.save()
 
-        assert games_models.Game.objects.get(pk=self.game.id).winning_team == self.team_1
+        assert (
+            games_models.Game.objects.get(pk=self.game.id).winning_team == self.team_1
+        )
 
     def test_data_result_winning_team_not_in_game(self, setup):
         team_not_in_game = teams_factories.TeamFactory()
@@ -160,11 +164,11 @@ class TestSetGameResult:
 
         assert valid is True
         assert self.game.is_tie is True
-        assert games_models.Game.objects.get(pk=self.game.id).is_tie != True
+        assert games_models.Game.objects.get(pk=self.game.id).is_tie is not True
 
         form.save()
 
-        assert games_models.Game.objects.get(pk=self.game.id).is_tie == True
+        assert games_models.Game.objects.get(pk=self.game.id).is_tie is True
 
     def test_setting_team_unsets_tie(self, setup):
         self.game.set_tie()
