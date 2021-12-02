@@ -1,6 +1,7 @@
 import pytest
 
 from potluck.games import forms as games_forms
+from potluck.games import models as games_models
 from potluck.games.tests import factories as games_factories
 from potluck.pots.tests import factories as pots_factories
 from potluck.teams.tests import factories as teams_factories
@@ -126,28 +127,26 @@ class TestSetGameResult:
         )
         assert self.game.winning_team != self.team_1
 
-        form.is_valid()
+        valid = form.is_valid()
 
-        # TODO: Action that does update the game.
-        #       I think I should do this in the save method.
-        #       The save method should update the game based on the
-        #       `cleaned_data`. `cleaned_data` is populated when `is_valid`
-        #       is called. So that is required. The ModelForm does the updating
-        #       of the instance in a `_post_clean` method but does not save the
-        #       changes. I guess I could follow that.
-
-        assert form.game.winning_team == self.team_1
+        assert valid is True
         assert self.game.winning_team == self.team_1
+        assert games_models.Game.objects.get(pk=self.game.id).winning_team != self.team_1
+
+        form.save()
+
+        assert games_models.Game.objects.get(pk=self.game.id).winning_team == self.team_1
 
     def test_data_result_winning_team_not_in_game(self, setup):
         team_not_in_game = teams_factories.TeamFactory()
-
         form = games_forms.SetGameResult(
             game=self.game,
             data={"result": team_not_in_game.id},
         )
 
-        assert form.is_valid() is False
+        valid = form.is_valid()
+
+        assert valid is False
         assert "result" in form.errors
 
     def test_winning_team_is_tie(self, setup):
