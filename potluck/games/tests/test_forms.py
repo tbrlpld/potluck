@@ -169,13 +169,14 @@ class TestSetGameResult:
     def test_setting_team_unsets_tie(self, setup):
         self.game.set_tie()
         assert self.game.is_tie is True
-
-        games_forms.SetGameResult(
+        form = games_forms.SetGameResult(
             data={"result": self.team_1.id},
             game=self.game,
         )
 
-        assert self.game.is_tie is not True
+        valid = form.is_valid()
+
+        assert valid is True
         assert self.game.is_tie is False
         assert self.game.winning_team == self.team_1
 
@@ -183,13 +184,14 @@ class TestSetGameResult:
         self.game.set_winning_team(self.team_1)
         assert self.game.winning_team == self.team_1
         assert self.game.is_tie is False
-
-        games_forms.SetGameResult(
+        form = games_forms.SetGameResult(
             data={"result": games_forms.SetGameResult.TIE_VALUE},
             game=self.game,
         )
 
-        assert self.game.winning_team != self.team_1
+        valid = form.is_valid()
+
+        assert valid is True
         assert self.game.winning_team is None
         assert self.game.is_tie is True
 
@@ -207,7 +209,6 @@ class TestSetGameResult:
 
     def test_result_choices(self, setup):
         form = games_forms.SetGameResult(game=self.game)
-
         choices = form.fields["result"].choices
         assert (self.team_1.id, self.team_1.name) in choices
         assert (self.team_2.id, self.team_2.name) in choices
