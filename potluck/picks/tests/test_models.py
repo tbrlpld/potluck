@@ -284,12 +284,12 @@ class TestPickSheet:
     def test_tiebreaker_delta_abs(self, score, guess, expected, django_assert_num_queries):
         pot = PotFactory.create(tiebreaker_score=score)
         pick_sheet = PickSheetFactory.create(pot=pot, tiebreaker_guess=guess)
-        annotated_pick_sheets = PickSheet.objects.annotate_tiebreaker_delta().filter(
+        annotated_pick_sheets = PickSheet.objects.annotate_tiebreaker_delta_abs().filter(
             pk=pick_sheet.id
         )
 
         with django_assert_num_queries(1):
-            result = annotated_pick_sheets[0].tiebreaker_delta
+            result = annotated_pick_sheets[0].tiebreaker_delta_abs
 
         assert result == expected
 
