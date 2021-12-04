@@ -6,10 +6,27 @@ from potluck.teams import models as teams_models
 
 
 class Game(models.Model):
+    home_team = models.ForeignKey(
+        teams_models.Team,
+        related_name="+",
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+    )
+    away_team = models.ForeignKey(
+        teams_models.Team,
+        related_name="+",
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+    )
+
+    # Deprecated. Do not use.
     teams = models.ManyToManyField(
         teams_models.Team,
         related_name="+",
     )
+
     winning_team = models.ForeignKey(
         teams_models.Team,
         on_delete=models.CASCADE,
