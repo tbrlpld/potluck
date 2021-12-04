@@ -12,22 +12,23 @@ from potluck.teams.tests import factories as teams_factories
 class TestGame:
     @pytest.fixture
     def setup(self):
-        self.team_1 = teams_factories.TeamFactory()
-        self.team_2 = teams_factories.TeamFactory()
-        self.game = games_factories.Game()
-        self.game.teams.set((self.team_1, self.team_2))
+        self.game = games_factories.Game(with_teams=True)
+        self.home_team = self.game.home_team
+        self.away_team = self.game.away_team
 
-    def test_set_winning_team(self, setup):
-        self.game.set_winning_team(self.team_1)
+    def test_set_winning_team_home(self, setup):
+        self.game.set_winning_team(self.home_team)
 
-        assert self.game.winning_team == self.team_1
+        assert self.game.winning_team == self.home_team
 
-    def test_set_and_save_winning_team(self, setup):
-        self.game.set_and_save_winning_team(self.team_1)
+    def test_set_and_save_winning_team_home(self, setup):
+        self.game.set_and_save_winning_team(self.home_team)
 
         assert (
-            games_models.Game.objects.get(pk=self.game.id).winning_team == self.team_1
+            games_models.Game.objects.get(pk=self.game.id).winning_team == self.home_team
         )
+
+    # TODO: Test set winning team away
 
     def test_set_winning_team_with_team_not_in_game(self, setup):
         team_not_in_game = teams_factories.TeamFactory.create()
@@ -48,7 +49,7 @@ class TestGame:
         self.game.set_tie()
         assert self.game.is_tie is True
 
-        self.game.set_winning_team(self.team_1)
+        self.game.set_winning_team(self.home_team)
 
         assert self.game.is_tie is False
 
@@ -58,7 +59,7 @@ class TestGame:
         assert game.is_tie is True
 
     def test_clean_with_is_tie_and_winning_team(self, setup):
-        self.game.set_winning_team(self.team_1)
+        self.game.set_winning_team(self.home_team)
         self.game.is_tie = True
 
         with pytest.raises(exceptions.ValidationError):
@@ -72,8 +73,8 @@ class TestGame:
         assert self.game.is_tie is True
 
     def test_set_tie_on_winning_team(self, setup):
-        self.game.set_winning_team(self.team_1)
-        assert self.game.winning_team == self.team_1
+        self.game.set_winning_team(self.home_team)
+        assert self.game.winning_team == self.home_team
         assert self.game.is_tie is False
 
         self.game.set_tie()
