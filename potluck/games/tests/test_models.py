@@ -16,6 +16,13 @@ class TestGame:
         self.home_team = self.game.home_team
         self.away_team = self.game.away_team
 
+    def test_get_teams(self, setup, django_assert_num_queries):
+        with django_assert_num_queries(1):
+            teams = self.game.get_teams()
+
+            assert self.home_team in teams
+            assert self.away_team in teams
+
     def test_set_winning_team_home(self, setup):
         self.game.set_winning_team(self.home_team)
 

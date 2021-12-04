@@ -47,13 +47,17 @@ class Game(models.Model):
         blank=False,
     )
 
-    def get_team_names(self) -> list[str]:
-        teams = self.teams.values_list("id", "name")
-        return [team[1] for team in teams]
-
     def __str__(self) -> str:
         team_names = self.get_team_names()
         return " vs ".join(team_names)
+
+    def get_teams(self) -> models.QuerySet[teams_models.Team]:
+        team_ids = [team.id for team in (self.home_team, self.away_team) if team is not None]
+        return teams_models.Team.objects.filter(pk__in=team_ids)
+
+    def get_team_names(self) -> list[str]:
+        teams = self.teams.values_list("id", "name")
+        return [team[1] for team in teams]
 
     def set_winning_team(self, team: teams_models.Team) -> None:
         self.winning_team = team
