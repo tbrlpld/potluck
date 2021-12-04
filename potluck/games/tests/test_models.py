@@ -3,7 +3,7 @@ from django.core import exceptions
 import pytest
 
 from potluck.games import models as games_models
-from potluck.games.tests import factories as games_factories
+from potluck.games import factories as games_factories
 from potluck.pots.tests import factories as pots_factories
 from potluck.teams.tests import factories as teams_factories
 
@@ -12,10 +12,9 @@ from potluck.teams.tests import factories as teams_factories
 class TestGame:
     @pytest.fixture
     def setup(self):
-        pot = pots_factories.PotFactory()
         self.team_1 = teams_factories.TeamFactory()
         self.team_2 = teams_factories.TeamFactory()
-        self.game = games_factories.GameFactory(pot=pot)
+        self.game = games_factories.Game()
         self.game.teams.set((self.team_1, self.team_2))
 
     def test_set_winning_team(self, setup):
@@ -54,7 +53,7 @@ class TestGame:
         assert self.game.is_tie is False
 
     def test_is_tie(self):
-        game = games_factories.GameFactory(is_tie=True)
+        game = games_factories.Game(is_tie=True)
 
         assert game.is_tie is True
 
