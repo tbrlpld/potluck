@@ -281,11 +281,13 @@ class TestPickSheet:
             (30, 40, 10),
         ],
     )
-    def test_tiebreaker_delta_abs(self, score, guess, expected, django_assert_num_queries):
+    def test_tiebreaker_delta_abs(
+        self, score, guess, expected, django_assert_num_queries
+    ):
         pot = PotFactory.create(tiebreaker_score=score)
         pick_sheet = PickSheetFactory.create(pot=pot, tiebreaker_guess=guess)
-        annotated_pick_sheets = PickSheet.objects.annotate_tiebreaker_delta_abs().filter(
-            pk=pick_sheet.id
+        annotated_pick_sheets = (
+            PickSheet.objects.annotate_tiebreaker_delta_abs().filter(pk=pick_sheet.id)
         )
 
         with django_assert_num_queries(1):
