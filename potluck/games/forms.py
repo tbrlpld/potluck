@@ -8,18 +8,9 @@ from potluck.teams import models as teams_models
 
 
 class CreateGame(forms.ModelForm):
-    teams = forms.ModelMultipleChoiceField(
-        queryset=teams_models.Team.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        validators=[
-            validators.MinLengthValidator(2),
-            validators.MaxLengthValidator(2),
-        ],
-    )
-
     class Meta:
         model = games_models.Game
-        fields = ("teams",)
+        fields = ("home_team", "away_team")
 
     def __init__(self, *args, pot, **kwargs):
         self.pot = pot
