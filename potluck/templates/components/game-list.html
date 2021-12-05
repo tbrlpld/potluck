@@ -1,0 +1,40 @@
+<ul>
+    {% for game in games|dictsort:"id"  %}
+        <li class="p-3 flex flex-row justify-between items-center bg-primary-50 odd:bg-primary-100">
+            <div class="w-full flex flex-col xs:flex-row justify-between items-center">
+                    <div class="flex-1 flex justify-center">
+                        <div class="flex-initial text-center font-semibold">
+                            {% if game.away_team == game.winning_team %}
+                                <span class="text-xl">👑</span>
+                            {% endif %}
+                            {{ game.away_team.name }}
+                        </div>
+                    </div>
+                    <div class="flex-initial m-2 text-sm">
+                        {% if not game.is_tie %}
+                            vs
+                        {% else %}
+                            🥴 tied
+                        {% endif %}
+                    </div>
+                    <div class="flex-1 flex justify-center">
+                        <div class="flex-initial text-center font-semibold">
+                            {% if game.home_team == game.winning_team %}
+                                <span class="text-xl">👑</span>
+                            {% endif %}
+                            {{ game.home_team.name }}
+                        </div>
+                    </div>
+            </div>
+            {% if pot.status == pot.Status.DRAFT %}
+                <div class="w-3"></div>
+                <form action="{% url 'game_delete' game.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="px-2 py-0.5 text-sm font-semibold text-white bg-primary-300 hover:bg-primary-400 active:bg-primary-500 rounded">
+                        Delete
+                    </button>
+                </form>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
