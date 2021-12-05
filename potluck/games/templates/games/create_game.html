@@ -15,9 +15,9 @@
             </div>
         {% endif %}
 
-        {% include "components/form-field.html" with field=form.home_team %}
-        <div class="h-5"></div>
         {% include "components/form-field.html" with field=form.away_team %}
+        <div class="h-5"></div>
+        {% include "components/form-field.html" with field=form.home_team %}
 
         <div class="mt-8 flex flex-row justify-between items-baseline">
             <button type="submit"  class="px-4 py-3 btn">Add game</button>
