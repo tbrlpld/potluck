@@ -10,7 +10,7 @@ from potluck.pots import models as pots_models
 class CreateGame(generic.CreateView):
     model = games_models.Game
     form_class = games_forms.CreateGame
-    template_name = "pots/add_game.html"
+    template_name = "games/create_game.html"
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
