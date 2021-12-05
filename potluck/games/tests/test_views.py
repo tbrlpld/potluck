@@ -5,7 +5,7 @@ from django import test, urls
 import pytest
 
 from potluck.games import models as games_models
-from potluck.games.tests import factories as games_factories
+from potluck.games import factories as games_factories
 from potluck.pots.tests import factories as pots_factories
 from potluck.teams.tests import factories as teams_factories
 
@@ -26,7 +26,7 @@ class TestCreateGame:
 class TestDeleteGame:
     def test_post_deletes_game(self):
         pot = pots_factories.PotFactory.create()
-        game = games_factories.GameFactory.create(pot=pot)
+        game = games_factories.Game(pot=pot)
         url = urls.reverse("game_delete", kwargs={"pk": game.id})
         client = test.Client()
         assert game in games_models.Game.objects.all()
@@ -41,15 +41,13 @@ class TestDeleteGame:
 class TestSetResults:
     @pytest.fixture
     def setup(self):
-        self.team_1 = teams_factories.TeamFactory.create()
-        self.team_2 = teams_factories.TeamFactory.create()
-        self.team_3 = teams_factories.TeamFactory.create()
-        self.team_4 = teams_factories.TeamFactory.create()
         self.pot = pots_factories.PotFactory.create()
-        self.game1 = games_factories.GameFactory.create(pot=self.pot)
-        self.game1.teams.set((self.team_1, self.team_2))
-        self.game2 = games_factories.GameFactory.create(pot=self.pot)
-        self.game2.teams.set((self.team_3, self.team_4))
+        self.game_1 = games_factories.Game(pot=self.pot, with_teams=True)
+        self.team_1 = self.game_1.away_team
+        self.team_2 = self.game_1.home_team
+        self.game_2 = games_factories.Game(pot=self.pot, with_teams=True)
+        self.team_3 = self.game_2.away_team
+        self.team_4 = self.game_2.home_team
         self.url = urls.reverse("set_results", kwargs={"pot_id": self.pot.id})
         self.client = test.Client()
         assert self.pot.games.count() == 2
