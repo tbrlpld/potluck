@@ -12,11 +12,11 @@
                 </div>
                 {% include "molecules/games-list-team.html" with team=game.home_team winning_team=game.winning_team %}
             </div>
-            {% if pot.status == pot.Status.DRAFT %}
+            {% if show_delete_button  %}
                 <div class="w-3"></div>
                 <form action="{% url 'game_delete' game.pk %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="px-2 py-0.5 text-sm font-semibold text-white bg-primary-300 hover:bg-primary-400 active:bg-primary-500 rounded">
+                    <button type="submit" class="px-2 py-0.5 text-sm font-semibold border border-gray-500 hover:bg-primary-400 active:bg-primary-500">
                         Delete
                     </button>
                 </form>

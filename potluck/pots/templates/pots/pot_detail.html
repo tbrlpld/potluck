@@ -21,7 +21,11 @@
     {% endwith %}
 
     {% if pot.games.exists %}
-        {% include "molecules/games-list.html" with games=pot.games.all %}
+        {% if pot.status == pot.Status.DRAFT %}
+            {% include "molecules/games-list.html" with games=pot.games.all show_delete_button=True %}
+        {% else %}
+            {% include "molecules/games-list.html" with games=pot.games.all %}
+        {% endif %}
 
         {% if pot.tiebreaker_score %}
             <div>
