@@ -70,7 +70,15 @@ class TestCreateGame:
         assert game.home_team == home_team
         assert game.away_team == away_team
 
-    # TODO: Test home and away team the same
+    def test_data_home_team_equals_away_team(self, setup):
+        team = teams_factories.TeamFactory()
+        data = {"home_team": team, "away_team": team}
+        form = games_forms.CreateGame(data=data, pot=self.pot)
+
+        result = form.is_valid()
+
+        assert result is False
+        assert form.non_field_errors()
 
 
 @pytest.mark.django_db
