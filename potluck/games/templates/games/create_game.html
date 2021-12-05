@@ -10,11 +10,13 @@
         {% csrf_token %}
 
         {% if form.non_field_errors %}
-            {{ form.non_field_errors }}
+            <div class="my-5">
+                {{ form.non_field_errors }}
+            </div>
         {% endif %}
 
         {% include "components/form-field.html" with field=form.home_team %}
-
+        <div class="h-5"></div>
         {% include "components/form-field.html" with field=form.away_team %}
 
         <div class="mt-8 flex flex-row justify-between items-baseline">
