@@ -47,7 +47,8 @@ class TestGame:
 
     def test_set_and_save_winning_team_with_team_not_in_game(self, setup):
         team_not_in_game = teams_factories.TeamFactory.create()
-        assert team_not_in_game not in self.game.teams.all()
+        assert team_not_in_game != self.home_team
+        assert team_not_in_game != self.away_team
 
         with pytest.raises(exceptions.ValidationError):
             self.game.set_and_save_winning_team(team_not_in_game)

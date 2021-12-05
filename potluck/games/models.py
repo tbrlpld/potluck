@@ -75,9 +75,10 @@ class Game(models.Model):
         self.is_tie = True
 
     def clean(self) -> None:
+        super().clean()
         if self.winning_team and self.is_tie:
             raise exceptions.ValidationError(
                 "Winning team and tie are mutually exclusive. Set only either one."
             )
-        if self.winning_team and self.winning_team not in self.teams.all():
+        if self.winning_team and self.winning_team not in self.get_teams():
             raise exceptions.ValidationError("Team has to paricipate in game to win!")
