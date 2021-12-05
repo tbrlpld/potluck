@@ -1,30 +1,16 @@
 <ul>
     {% for game in games|dictsort:"id"  %}
-        <li class="p-3 flex flex-row justify-between items-center bg-primary-50 odd:bg-primary-100">
+        <li class="p-3 flex flex-row justify-between items-center odd:bg-primary-50">
             <div class="w-full flex flex-col xs:flex-row justify-between items-center">
-                    <div class="flex-1 flex justify-center">
-                        <div class="flex-initial text-center font-semibold">
-                            {% if game.away_team == game.winning_team %}
-                                <span class="text-xl">👑</span>
-                            {% endif %}
-                            {{ game.away_team.name }}
-                        </div>
-                    </div>
-                    <div class="flex-initial m-2 text-sm">
-                        {% if not game.is_tie %}
-                            vs
-                        {% else %}
-                            🥴 tied
-                        {% endif %}
-                    </div>
-                    <div class="flex-1 flex justify-center">
-                        <div class="flex-initial text-center font-semibold">
-                            {% if game.home_team == game.winning_team %}
-                                <span class="text-xl">👑</span>
-                            {% endif %}
-                            {{ game.home_team.name }}
-                        </div>
-                    </div>
+                {% include "molecules/games-list-team.html" with team=game.away_team winning_team=game.winning_team %}
+                <div class="flex-initial m-2 text-sm">
+                    {% if not game.is_tie %}
+                        vs
+                    {% else %}
+                        🥴 tied
+                    {% endif %}
+                </div>
+                {% include "molecules/games-list-team.html" with team=game.home_team winning_team=game.winning_team %}
             </div>
             {% if pot.status == pot.Status.DRAFT %}
                 <div class="w-3"></div>

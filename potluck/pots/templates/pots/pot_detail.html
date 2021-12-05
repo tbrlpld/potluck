@@ -21,7 +21,7 @@
     {% endwith %}
 
     {% if pot.games.exists %}
-        {% include "components/game-list.html" with games=pot.games.all %}
+        {% include "molecules/games-list.html" with games=pot.games.all %}
 
         {% if pot.tiebreaker_score %}
             <div>
