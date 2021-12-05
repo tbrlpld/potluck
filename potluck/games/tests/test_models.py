@@ -16,6 +16,20 @@ class TestGame:
         self.home_team = self.game.home_team
         self.away_team = self.game.away_team
 
+    def test_clean(self, setup):
+        self.game.clean()
+
+        assert True
+
+    def test_clean_home_team_equals_away_team(self):
+        game = games_factories.Game.build()
+        team = teams_factories.TeamFactory.build()
+        game.home_team = team
+        game.away_team = team
+
+        with pytest.raises(exceptions.ValidationError):
+            game.clean()
+
     def test_get_teams(self, setup, django_assert_num_queries):
         with django_assert_num_queries(1):
             teams = self.game.get_teams()
