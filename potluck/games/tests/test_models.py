@@ -35,7 +35,17 @@ class TestGame:
             games_models.Game.objects.get(pk=self.game.id).winning_team == self.home_team
         )
 
-    # TODO: Test set winning team away
+    def test_set_winning_team_away(self, setup):
+        self.game.set_winning_team(self.away_team)
+
+        assert self.game.winning_team == self.away_team
+
+    def test_set_and_save_winning_team_away(self, setup):
+        self.game.set_and_save_winning_team(self.away_team)
+
+        assert (
+            games_models.Game.objects.get(pk=self.game.id).winning_team == self.away_team
+        )
 
     def test_set_winning_team_with_team_not_in_game(self, setup):
         team_not_in_game = teams_factories.TeamFactory.create()
