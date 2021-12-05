@@ -61,7 +61,7 @@ class SetGameResult(forms.Form):
         self.fields["result"].choices = self.get_result_choices(game=self.game)
 
     def get_result_choices(self, *, game: games_models.Game) -> list[tuple[int, str]]:
-        choices = [(team.id, team.name) for team in game.teams.all()]
+        choices = [(team.id, team.name) for team in game.get_teams()]
         choices.append(self.TIE_CHOICE)
         return choices
 
@@ -74,7 +74,7 @@ class SetGameResult(forms.Form):
             if result_int == self.TIE_VALUE:
                 self.game.set_tie()
             else:
-                self.game.set_winning_team(self.game.teams.get(pk=result_int))
+                self.game.set_winning_team(teams_models.Team.objects.get(pk=result_int))
 
         return cleaned_data
 
