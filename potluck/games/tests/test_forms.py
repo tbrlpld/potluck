@@ -85,10 +85,9 @@ class TestCreateGame:
 class TestSetGameResult:
     @pytest.fixture
     def setup(self):
-        self.game = games_factories.Game()
-        self.team_1 = teams_factories.TeamFactory()
-        self.team_2 = teams_factories.TeamFactory()
-        self.game.teams.set((self.team_1, self.team_2))
+        self.game = games_factories.Game(with_teams=True)
+        self.team_1 = self.game.away_team
+        self.team_2 = self.game.home_team
 
     def test_init_with_no_game(self):
         with pytest.raises(TypeError):
