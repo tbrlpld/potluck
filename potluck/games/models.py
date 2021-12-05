@@ -50,6 +50,17 @@ class Game(models.Model):
     def __str__(self) -> str:
         return f"{self.away_team} vs {self.home_team}"
 
+    def clean(self) -> None:
+        super().clean()
+        if self.home_team == self.away_team:
+            raise exceptions.ValidationError("Home team and away team need to be different.")
+        if self.winning_team and self.is_tie:
+            raise exceptions.ValidationError(
+                "Winning team and tie are mutually exclusive. Set only either one."
+            )
+        if self.winning_team and self.winning_team not in self.get_teams():
+            raise exceptions.ValidationError("Team has to paricipate in game to win!")
+
     def get_teams(self) -> models.QuerySet[teams_models.Team]:
         team_ids = [team.id for team in (self.home_team, self.away_team) if team is not None]
         return teams_models.Team.objects.filter(pk__in=team_ids)
@@ -68,12 +79,3 @@ class Game(models.Model):
         if self.winning_team is not None:
             self.winning_team = None
         self.is_tie = True
-
-    def clean(self) -> None:
-        super().clean()
-        if self.winning_team and self.is_tie:
-            raise exceptions.ValidationError(
-                "Winning team and tie are mutually exclusive. Set only either one."
-            )
-        if self.winning_team and self.winning_team not in self.get_teams():
-            raise exceptions.ValidationError("Team has to paricipate in game to win!")
