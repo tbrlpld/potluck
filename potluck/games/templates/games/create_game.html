@@ -8,27 +8,14 @@
     <p class="my-4 text-gray-500"><strong class="font-semibold">Pick the 2 teams</strong> that are competing in this game.</p>
     <form action="" method="POST">
         {% csrf_token %}
-        {# {{ form.as_p }} #}
 
         {% if form.non_field_errors %}
-            <p>
-                {{ form.non_field_errors }}
-            </p>
+            {{ form.non_field_errors }}
         {% endif %}
 
-        {% for field in form %}
-            {{ field.errors }}
-            {% if field.name == "teams" %}
-                {% for box in form.teams %}
-                    {{ box.tag|insert:'-1, class="hidden"'|safe }}
-                    <label for="{{ box.id_for_label }}" class="block my-2 p-4 box hover:bg-primary-100 font-bold text-center checked-input-label">
-                        {{ box.choice_label }}
-                    </label>
-                {% endfor %}
-            {% else %}
-                {{ field }}
-            {% endif %}
-        {% endfor %}
+        {% include "components/form-field.html" with field=form.home_team %}
+
+        {% include "components/form-field.html" with field=form.away_team %}
 
         <div class="mt-8 flex flex-row justify-between items-baseline">
             <button type="submit"  class="px-4 py-3 btn">Add game</button>
