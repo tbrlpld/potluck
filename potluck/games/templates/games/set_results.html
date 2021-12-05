@@ -13,13 +13,13 @@
         {{ set_game_result_formset.non_field_errors }}
         {% for game_form in set_game_result_formset %}
             {% for field in game_form %}
-                {% if field.name == "result" %}
-                    <div class="my-4 p-3 box">
+                <div class="my-4 p-3 odd:bg-primary-50">
+                    {% if field.name == "result" %}
                         {% include "components/team-radio-select.html" with field=field %}
-                    </div>
-                {% else %}
-                    {{ field }}
-                {% endif %}
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                </div>
             {% endfor %}
         {% endfor %}
 

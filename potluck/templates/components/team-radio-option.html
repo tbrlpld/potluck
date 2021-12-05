@@ -1,5 +1,5 @@
-<label for="{{ radio.id_for_label }}" class="flex-1 flex justify-center font-semibold{% if small %} text-sm text-gray-400{% endif %}">
+<label for="{{ radio.id_for_label }}" class="w-full flex justify-center items-center font-semibold{% if small %} text-sm text-gray-400{% endif %}">
     {{ radio.tag }}
-    <span class="inline-block w-4"></span>
-    {{ radio.choice_label }}
+    <div class="inline-block w-4"></div>
+    <div>{{ radio.choice_label }}</div>
 </label>
