@@ -64,7 +64,7 @@ class TestGame:
 
     def test_set_winning_team_with_team_not_in_game(self, setup):
         team_not_in_game = teams_factories.TeamFactory.create()
-        assert team_not_in_game not in self.game.teams.all()
+        assert team_not_in_game not in self.game.get_teams()
 
         self.game.set_winning_team(team_not_in_game)
 
