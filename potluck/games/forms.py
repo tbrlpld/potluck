@@ -74,6 +74,7 @@ class SetGameResult(forms.Form):
                 self.game.set_tie()
             else:
                 self.game.set_winning_team(teams_models.Team.objects.get(pk=result_int))
+        self.game.full_clean(exclude=["pot"])
 
         return cleaned_data
 
