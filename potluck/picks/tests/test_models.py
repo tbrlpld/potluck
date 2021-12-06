@@ -1,22 +1,18 @@
 import pytest
 
-from potluck.games.models import Game
 from potluck.games import factories as games_factories
-from potluck.picks.models import Pick, PickSheet
-from potluck.picks.tests.factories import PickFactory, PickSheetFactory
-from potluck.pots.models import Pot
-from potluck.pots.tests.factories import PotFactory
-from potluck.teams.models import Team
-from potluck.teams.tests.factories import TeamFactory
+from potluck.picks import models as picks_models
+from potluck.picks.tests import factories as picks_factories
+from potluck.pots.tests import factories as pots_factories
 
 
 @pytest.mark.django_db
 class TestPickSheet:
     @pytest.fixture
     def setup_picksheet(self):
-        self.pot = PotFactory.create()
-        self.game_1 = games_factories.Game.create(pot=self.pot, with_teams=True)
-        self.game_2 = games_factories.Game.create(pot=self.pot, with_teams=True)
+        self.pot = pots_factories.PotFactory()
+        self.game_1 = games_factories.Game(pot=self.pot, with_teams=True)
+        self.game_2 = games_factories.Game(pot=self.pot, with_teams=True)
 
         self.game_1_winning_team = self.game_1.away_team
         self.game_1_loosing_team = self.game_1.home_team
@@ -28,11 +24,11 @@ class TestPickSheet:
         self.game_2.winning_team = self.game_2_winning_team
         self.game_2.save()
 
-        self.pick_sheet = PickSheetFactory.create(pot=self.pot)
+        self.pick_sheet = picks_factories.PickSheetFactory(pot=self.pot)
 
     @pytest.fixture
     def place_game_1_wrong_pick(self):
-        pick = PickFactory.create(
+        pick = picks_factories.PickFactory(
             pick_sheet=self.pick_sheet,
             game=self.game_1,
             picked_team=self.game_1_loosing_team,
@@ -44,7 +40,7 @@ class TestPickSheet:
 
     @pytest.fixture
     def place_game_1_correct_pick(self):
-        pick = PickFactory.create(
+        pick = picks_factories.PickFactory(
             pick_sheet=self.pick_sheet,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
@@ -56,7 +52,7 @@ class TestPickSheet:
 
     @pytest.fixture
     def place_game_2_wrong_pick(self):
-        pick = PickFactory.create(
+        pick = picks_factories.PickFactory(
             pick_sheet=self.pick_sheet,
             game=self.game_2,
             picked_team=self.game_2_loosing_team,
@@ -68,7 +64,7 @@ class TestPickSheet:
 
     @pytest.fixture
     def place_game_2_correct_pick(self):
-        pick = PickFactory.create(
+        pick = picks_factories.PickFactory(
             pick_sheet=self.pick_sheet,
             game=self.game_2,
             picked_team=self.game_2_winning_team,
@@ -79,16 +75,16 @@ class TestPickSheet:
         pick.delete()
 
     def test_factory(self):
-        pot = PotFactory.create()
+        pot = pots_factories.PotFactory()
 
-        picksheet = PickSheetFactory.create(pot=pot)
+        picksheet = picks_factories.PickSheetFactory(pot=pot)
 
         assert picksheet.pot == pot
 
     def test_basic_fields(self):
-        pot = PotFactory.create()
+        pot = pots_factories.PotFactory()
 
-        picksheet = PickSheetFactory.create(
+        picksheet = picks_factories.PickSheetFactory(
             pot=pot,
             picker="Tester",
             tiebreaker_guess=13,
@@ -146,7 +142,7 @@ class TestPickSheet:
         place_game_1_wrong_pick,
         place_game_2_wrong_pick,
     ):
-        pick_sheet = PickSheet.objects.annotate_correct_count().get(
+        pick_sheet =picks_models.PickSheet.objects.annotate_correct_count().get(
             pk=self.pick_sheet.id
         )
 
@@ -160,7 +156,7 @@ class TestPickSheet:
         place_game_1_correct_pick,
         place_game_2_wrong_pick,
     ):
-        pick_sheet = PickSheet.objects.annotate_correct_count().get(
+        pick_sheet =picks_models.PickSheet.objects.annotate_correct_count().get(
             pk=self.pick_sheet.id
         )
 
@@ -174,7 +170,7 @@ class TestPickSheet:
         place_game_1_wrong_pick,
         place_game_2_correct_pick,
     ):
-        pick_sheet = PickSheet.objects.annotate_correct_count().get(
+        pick_sheet =picks_models.PickSheet.objects.annotate_correct_count().get(
             pk=self.pick_sheet.id
         )
 
@@ -189,7 +185,7 @@ class TestPickSheet:
         place_game_1_correct_pick,
         place_game_2_correct_pick,
     ):
-        pick_sheet = PickSheet.objects.annotate_correct_count().get(
+        pick_sheet =picks_models.PickSheet.objects.annotate_correct_count().get(
             pk=self.pick_sheet.id
         )
 
@@ -205,22 +201,22 @@ class TestPickSheet:
     ):
         # Create another pick with 2 correct picks. It's existence can not influence the
         # fact that the pick under test only has one correct pick!
-        other_pick_sheet = PickSheetFactory.create(
-            pot=self.pot, picker="The Other Picker"
+        other_pick_sheet = picks_factories.PickSheetFactory(
+            pot=self.pot, picker="The Otherpicks_models.Picker"
         )
-        PickFactory.create(
+        picks_factories.PickFactory(
             pick_sheet=other_pick_sheet,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory(
             pick_sheet=other_pick_sheet,
             game=self.game_2,
             picked_team=self.game_2_winning_team,
         )
-        assert Pick.objects.count() == 4
+        assert picks_models.Pick.objects.count() == 4
         # Get the original pick, the one that is being tested
-        pick_sheet = PickSheet.objects.annotate_correct_count().get(
+        pick_sheet =picks_models.PickSheet.objects.annotate_correct_count().get(
             pk=self.pick_sheet.id
         )
 
@@ -237,9 +233,9 @@ class TestPickSheet:
         ],
     )
     def test_tiebreaker_delta(self, score, guess, expected, django_assert_num_queries):
-        pot = PotFactory.create(tiebreaker_score=score)
-        pick_sheet = PickSheetFactory.create(pot=pot, tiebreaker_guess=guess)
-        annotated_pick_sheets = PickSheet.objects.annotate_tiebreaker_delta().filter(
+        pot = pots_factories.PotFactory(tiebreaker_score=score)
+        pick_sheet = picks_factories.PickSheetFactory(pot=pot, tiebreaker_guess=guess)
+        annotated_pick_sheets =picks_models.PickSheet.objects.annotate_tiebreaker_delta().filter(
             pk=pick_sheet.id
         )
 
@@ -259,10 +255,10 @@ class TestPickSheet:
     def test_tiebreaker_delta_abs(
         self, score, guess, expected, django_assert_num_queries
     ):
-        pot = PotFactory.create(tiebreaker_score=score)
-        pick_sheet = PickSheetFactory.create(pot=pot, tiebreaker_guess=guess)
+        pot = pots_factories.PotFactory(tiebreaker_score=score)
+        pick_sheet = picks_factories.PickSheetFactory(pot=pot, tiebreaker_guess=guess)
         annotated_pick_sheets = (
-            PickSheet.objects.annotate_tiebreaker_delta_abs().filter(pk=pick_sheet.id)
+           picks_models.PickSheet.objects.annotate_tiebreaker_delta_abs().filter(pk=pick_sheet.id)
         )
 
         with django_assert_num_queries(1):
@@ -275,7 +271,7 @@ class TestPickSheet:
 class TestPick:
     @pytest.fixture
     def setup_game_with_two_teams(self):
-        self.game = games_factories.Game.create(with_teams=True)
+        self.game = games_factories.Game(with_teams=True)
         self.team_1 = self.game.away_team
         self.team_2 = self.game.home_team
 
@@ -285,9 +281,9 @@ class TestPick:
     ):
         winning_team = self.team_1
         self.game.set_and_save_winning_team(winning_team)
-        pick = PickFactory(game=self.game, picked_team=winning_team)
+        pick = picks_factories.PickFactory(game=self.game, picked_team=winning_team)
         # To get the annotation, you need to retrieve the object from the manager
-        pick = Pick.objects.annotate_is_correct().get(pk=pick.id)
+        pick =picks_models.Pick.objects.annotate_is_correct().get(pk=pick.id)
 
         result = pick.is_correct
 
@@ -300,9 +296,9 @@ class TestPick:
         winning_team = self.team_1
         loosing_team = self.team_2
         self.game.set_and_save_winning_team(winning_team)
-        pick = PickFactory(game=self.game, picked_team=loosing_team)
+        pick = picks_factories.PickFactory(game=self.game, picked_team=loosing_team)
         # To get the annotation, you need to retrieve the object from the manager
-        pick = Pick.objects.annotate_is_correct().get(pk=pick.id)
+        pick =picks_models.Pick.objects.annotate_is_correct().get(pk=pick.id)
 
         result = pick.is_correct
 
@@ -313,10 +309,10 @@ class TestPick:
         self.game.save()
         assert self.game.winning_team is None
         assert self.game.is_tie is True
-        pick_team_1 = PickFactory(game=self.game, picked_team=self.team_1)
-        pick_team_2 = PickFactory(game=self.game, picked_team=self.team_2)
-        pick_team_1 = Pick.objects.annotate_is_correct().get(pk=pick_team_1.id)
-        pick_team_2 = Pick.objects.annotate_is_correct().get(pk=pick_team_2.id)
+        pick_team_1 = picks_factories.PickFactory(game=self.game, picked_team=self.team_1)
+        pick_team_2 = picks_factories.PickFactory(game=self.game, picked_team=self.team_2)
+        pick_team_1 =picks_models.Pick.objects.annotate_is_correct().get(pk=pick_team_1.id)
+        pick_team_2 =picks_models.Pick.objects.annotate_is_correct().get(pk=pick_team_2.id)
 
         result_team_1 = pick_team_1.is_correct
         result_team_2 = pick_team_2.is_correct
