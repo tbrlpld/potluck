@@ -1,96 +1,93 @@
 import pytest
 
+from potluck.games import factories as games_factories
 from potluck.games import forms as games_forms
 from potluck.games import models as games_models
-from potluck.games.tests import factories as games_factories
 from potluck.pots.tests import factories as pots_factories
 from potluck.teams.tests import factories as teams_factories
 
 
 @pytest.mark.django_db
 class TestCreateGame:
+    @pytest.fixture
+    def setup(self):
+        self.pot = pots_factories.PotFactory()
+
     def test_no_pot(self):
         with pytest.raises(TypeError):
             games_forms.CreateGame()
 
-    def test_empty_form(self):
-        pot = pots_factories.PotFactory()
-        form = games_forms.CreateGame(pot=pot)
+    def test_empty_form(self, setup):
+        form = games_forms.CreateGame(pot=self.pot)
 
         result = form.is_valid()
 
         assert result is False
-        assert form.pot == pot
+        assert form.pot == self.pot
 
-    def test_with_empty_data(self):
-        pot = pots_factories.PotFactory()
-        form = games_forms.CreateGame(data={}, pot=pot)
-
-        result = form.is_valid()
-
-        assert result is False
-        assert "teams" in form.errors
-
-    def test_with_empty_teams(self):
-        pot = pots_factories.PotFactory()
-        form = games_forms.CreateGame({"teams": []}, pot=pot)
+    def test_data_empty(self, setup):
+        form = games_forms.CreateGame(data={}, pot=self.pot)
 
         result = form.is_valid()
 
         assert result is False
-        assert "teams" in form.errors
+        assert "home_team" in form.errors
+        assert "away_team" in form.errors
 
-    def test_with_one_team(self):
-        pot = pots_factories.PotFactory()
-        team_1 = teams_factories.TeamFactory()
-        form = games_forms.CreateGame(data={"teams": [team_1]}, pot=pot)
-
-        result = form.is_valid()
-
-        assert result is False
-        assert "teams" in form.errors
-
-    def test_with_three_teams(self):
-        pot = pots_factories.PotFactory()
-        team_1 = teams_factories.TeamFactory()
-        team_2 = teams_factories.TeamFactory()
-        team_3 = teams_factories.TeamFactory()
-        form = games_forms.CreateGame(
-            data={"teams": [team_1, team_2, team_3]},
-            pot=pot,
-        )
+    def test_data_home_team_only(self, setup):
+        home_team = teams_factories.TeamFactory()
+        data = {"home_team": home_team}
+        form = games_forms.CreateGame(data=data, pot=self.pot)
 
         result = form.is_valid()
 
         assert result is False
-        assert "teams" in form.errors
+        assert "away_team" in form.errors
 
-    def test_with_two_teams(self):
-        pot = pots_factories.PotFactory()
-        team_1 = teams_factories.TeamFactory()
-        team_2 = teams_factories.TeamFactory()
-        form = games_forms.CreateGame(
-            data={"teams": [team_1, team_2]},
-            pot=pot,
-        )
+    def test_data_away_team_only(self, setup):
+        away_team = teams_factories.TeamFactory()
+        data = {"away_team": away_team}
+        form = games_forms.CreateGame(data=data, pot=self.pot)
+
+        result = form.is_valid()
+
+        assert result is False
+        assert "home_team" in form.errors
+
+    def test_data_home_and_away_team(self, setup):
+        home_team = teams_factories.TeamFactory()
+        away_team = teams_factories.TeamFactory()
+        data = {"home_team": home_team, "away_team": away_team}
+        form = games_forms.CreateGame(data=data, pot=self.pot)
 
         result = form.is_valid()
 
         assert result is True
-        assert "teams" not in form.errors
-        assert "pot" not in form.errors
+
         game = form.save()
-        assert game.pot == pot
+
+        assert game.pot == self.pot
+        assert game.home_team == home_team
+        assert game.away_team == away_team
+
+    def test_data_home_team_equals_away_team(self, setup):
+        team = teams_factories.TeamFactory()
+        data = {"home_team": team, "away_team": team}
+        form = games_forms.CreateGame(data=data, pot=self.pot)
+
+        result = form.is_valid()
+
+        assert result is False
+        assert form.non_field_errors()
 
 
 @pytest.mark.django_db
 class TestSetGameResult:
     @pytest.fixture
     def setup(self):
-        self.game = games_factories.GameFactory()
-        self.team_1 = teams_factories.TeamFactory()
-        self.team_2 = teams_factories.TeamFactory()
-        self.game.teams.set((self.team_1, self.team_2))
+        self.game = games_factories.Game(with_teams=True)
+        self.team_1 = self.game.away_team
+        self.team_2 = self.game.home_team
 
     def test_init_with_no_game(self):
         with pytest.raises(TypeError):

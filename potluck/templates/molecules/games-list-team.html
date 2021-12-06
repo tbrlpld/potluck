@@ -1,0 +1,6 @@
+<div class="flex-1 flex justify-center items-baseline font-semibold">
+    {% if winning_team and team == winning_team %}
+        <div class="mr-2 text-xl">👑</div>
+    {% endif %}
+    <div>{{ team.name }}</div>
+</div>

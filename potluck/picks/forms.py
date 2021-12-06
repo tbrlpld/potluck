@@ -29,7 +29,7 @@ class CreatePick(forms.ModelForm):
     def __init__(self, *args, game, **kwargs):
         super().__init__(*args, **kwargs)
         self.game = game
-        self.fields["picked_team"].queryset = self.game.teams
+        self.fields["picked_team"].queryset = self.game.get_teams()
 
     def save(self, *args, **kwargs):
         self.instance.game = self.game

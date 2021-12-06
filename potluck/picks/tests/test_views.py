@@ -4,7 +4,7 @@ from django import test, urls
 
 import pytest
 
-from potluck.games.tests import factories as games_factories
+from potluck.games import factories as games_factories
 from potluck.picks import models as picks_models
 from potluck.picks.tests import factories as picks_factories
 from potluck.pots.tests import factories as pots_factories
@@ -15,21 +15,15 @@ from potluck.teams.tests import factories as teams_factories
 class TestTally:
     @pytest.fixture
     def setup(self):
-        team_1 = teams_factories.TeamFactory.create()
-        team_2 = teams_factories.TeamFactory.create()
-        team_3 = teams_factories.TeamFactory.create()
-        team_4 = teams_factories.TeamFactory.create()
         pot = pots_factories.PotFactory.create()
-        game_1 = games_factories.GameFactory.create(pot=pot)
-        game_1.teams.set((team_1, team_2))
-        game_2 = games_factories.GameFactory.create(pot=pot)
-        game_2.teams.set((team_3, team_4))
+        game_1 = games_factories.Game.create(pot=pot, with_teams=True)
+        game_2 = games_factories.Game.create(pot=pot, with_teams=True)
 
-        game_1_winning_team = team_1
+        game_1_winning_team = game_1.away_team
         game_1.set_and_save_winning_team(game_1_winning_team)
 
-        game_2_winning_team = team_3
-        game_2_loosing_team = team_4
+        game_2_winning_team = game_2.home_team
+        game_2_loosing_team = game_2.away_team
         game_2.set_and_save_winning_team(game_2_winning_team)
 
         # Pick 1 with 1 correct game pick
@@ -80,15 +74,13 @@ class TestTally:
 class TestSubmitPickSheet:
     @pytest.fixture
     def setup_pot_with_two_games(self):
-        self.team_1 = teams_factories.TeamFactory.create()
-        self.team_2 = teams_factories.TeamFactory.create()
-        self.team_3 = teams_factories.TeamFactory.create()
-        self.team_4 = teams_factories.TeamFactory.create()
         self.pot = pots_factories.PotFactory.create()
-        self.game_1 = games_factories.GameFactory.create(pot=self.pot)
-        self.game_1.teams.set((self.team_1, self.team_2))
-        self.game_2 = games_factories.GameFactory.create(pot=self.pot)
-        self.game_2.teams.set((self.team_3, self.team_4))
+        self.game_1 = games_factories.Game.create(pot=self.pot, with_teams=True)
+        self.team_1 = self.game_1.away_team
+        self.team_2 = self.game_1.home_team
+        self.game_2 = games_factories.Game.create(pot=self.pot, with_teams=True)
+        self.team_3 = self.game_2.home_team
+        self.team_4 = self.game_2.away_team
 
     def test_get_success(self, setup_pot_with_two_games):
         self.team_5 = teams_factories.TeamFactory.create()
@@ -105,8 +97,8 @@ class TestSubmitPickSheet:
         assert self.team_5.name not in str(response.content)
 
     def test_post_creates_pick_and_game_picks(self, setup_pot_with_two_games):
-        picked_team_1 = self.game_1.teams.first()
-        picked_team_2 = self.game_2.teams.first()
+        picked_team_1 = self.team_1
+        picked_team_2 = self.team_3
         picker_name = "Test Picker"
         data = {
             "pot": self.pot.id,

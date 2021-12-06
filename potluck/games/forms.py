@@ -1,25 +1,15 @@
 from typing import Any, Optional
 
 from django import forms
-from django.core import validators
 
 from potluck.games import models as games_models
 from potluck.teams import models as teams_models
 
 
 class CreateGame(forms.ModelForm):
-    teams = forms.ModelMultipleChoiceField(
-        queryset=teams_models.Team.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        validators=[
-            validators.MinLengthValidator(2),
-            validators.MaxLengthValidator(2),
-        ],
-    )
-
     class Meta:
         model = games_models.Game
-        fields = ("teams",)
+        fields = ("home_team", "away_team")
 
     def __init__(self, *args, pot, **kwargs):
         self.pot = pot
@@ -70,7 +60,7 @@ class SetGameResult(forms.Form):
         self.fields["result"].choices = self.get_result_choices(game=self.game)
 
     def get_result_choices(self, *, game: games_models.Game) -> list[tuple[int, str]]:
-        choices = [(team.id, team.name) for team in game.teams.all()]
+        choices = [(team.id, team.name) for team in game.get_teams()]
         choices.append(self.TIE_CHOICE)
         return choices
 
@@ -83,7 +73,7 @@ class SetGameResult(forms.Form):
             if result_int == self.TIE_VALUE:
                 self.game.set_tie()
             else:
-                self.game.set_winning_team(self.game.teams.get(pk=result_int))
+                self.game.set_winning_team(teams_models.Team.objects.get(pk=result_int))
 
         return cleaned_data
 

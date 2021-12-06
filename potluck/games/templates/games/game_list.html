@@ -6,9 +6,7 @@
         <ul>
             {% for game in object_list %}
                 <li>
-                    {% with game.get_team_names as teams  %}
-                        {{ teams|first }} vs {{ teams|last }}
-                    {% endwith %}
+                    {{ game.away_team.name }} vs {{ game.home_team.name }}
                 </li>
             {% endfor %}
         </ul>
