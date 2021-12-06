@@ -1,6 +1,6 @@
 import pytest
 
-from potluck.games.tests import factories as games_factories
+from potluck.games import factories as games_factories
 from potluck.picks import forms as picks_forms
 from potluck.pots.tests import factories as pots_factories
 from potluck.teams.tests import factories as teams_factories
@@ -36,10 +36,9 @@ class TestCreatePickSheet:
 class TestCreatePick:
     @pytest.fixture
     def setup(self):
-        self.team_1 = teams_factories.TeamFactory.create()
-        self.team_2 = teams_factories.TeamFactory.create()
-        self.game = games_factories.GameFactory.create()
-        self.game.teams.set((self.team_1, self.team_2))
+        self.game = games_factories.Game(with_teams=True)
+        self.team_1 = self.game.away_team
+        self.team_2 = self.game.home_team
 
     def test_empty(self):
         with pytest.raises(TypeError):
