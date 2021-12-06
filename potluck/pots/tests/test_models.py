@@ -1,10 +1,9 @@
 import pytest
 
 from potluck.games import factories as games_factories
-from potluck.picks.tests.factories import PickFactory, PickSheetFactory
-from potluck.pots.models import Pot
-from potluck.pots.tests.factories import PotFactory
-from potluck.teams.tests.factories import TeamFactory
+from potluck.picks.tests import factories as picks_factories
+from potluck.pots import models as pots_models
+from potluck.pots.tests import factories as pots_factories
 
 
 @pytest.mark.django_db
@@ -12,7 +11,7 @@ class TestPot:
     @pytest.fixture
     def setup_pot_with_two_games(self):
 
-        self.pot = PotFactory.create()
+        self.pot = pots_factories.PotFactory.create()
 
         self.game_1 = games_factories.Game.create(pot=self.pot, with_teams=True)
         self.team_1 = self.game_1.home_team
@@ -29,12 +28,12 @@ class TestPot:
         self.game_2.set_and_save_winning_team(self.game_2_winning_team)
 
     def test_factory(self):
-        PotFactory.create()
+        pots_factories.PotFactory.create()
 
         assert True
 
     def test_pot_fields(self):
-        pot = PotFactory.create(name="Test Pot", tiebreaker_score=13)
+        pot = pots_factories.PotFactory.create(name="Test Pot", tiebreaker_score=13)
 
         assert isinstance(pot.name, str)
         assert pot.name == "Test Pot"
@@ -46,39 +45,39 @@ class TestPot:
         setup_pot_with_two_games,
     ):
         # Pick with 1 correct game pick
-        pick_sheet_1 = PickSheetFactory.create(pot=self.pot)
-        PickFactory.create(
+        pick_sheet_1 = picks_factories.PickSheetFactory.create(pot=self.pot)
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_1,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_1,
             game=self.game_2,
             picked_team=self.game_2_loosing_team,
         )
 
         # Pick with 0 correct game pick
-        pick_sheet_0 = PickSheetFactory.create(pot=self.pot)
-        PickFactory.create(
+        pick_sheet_0 = picks_factories.PickSheetFactory.create(pot=self.pot)
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_0,
             game=self.game_1,
             picked_team=self.game_1_loosing_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_0,
             game=self.game_2,
             picked_team=self.game_2_loosing_team,
         )
 
         # Pick with 2 correct game picks
-        pick_sheet_2 = PickSheetFactory.create(pot=self.pot)
-        PickFactory.create(
+        pick_sheet_2 = picks_factories.PickSheetFactory.create(pot=self.pot)
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2,
             game=self.game_2,
             picked_team=self.game_2_winning_team,
@@ -99,16 +98,16 @@ class TestPot:
         self.pot.save()
 
         # Pick with 2 correct game picks, 20 off tiebreaker
-        pick_sheet_2_20 = PickSheetFactory.create(
+        pick_sheet_2_20 = picks_factories.PickSheetFactory.create(
             pot=self.pot,
             tiebreaker_guess=tiebreaker_score - 20,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_20,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_20,
             game=self.game_2,
             picked_team=self.game_2_winning_team,
@@ -117,29 +116,29 @@ class TestPot:
         # Pick with 1 correct game pick, and exact tiebreaker score.
         # The tiebreaker score of this pick sheet does not matter because the
         # correct number of games is not the highest.
-        pick_sheet_1_0 = PickSheetFactory.create(pot=self.pot, tiebreaker_guess=60)
-        PickFactory.create(
+        pick_sheet_1_0 = picks_factories.PickSheetFactory.create(pot=self.pot, tiebreaker_guess=60)
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_1_0,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_1_0,
             game=self.game_2,
             picked_team=self.game_2_loosing_team,
         )
 
         # Pick with 2 correct game picks, 10 off tiebreaker
-        pick_sheet_2_10 = PickSheetFactory.create(
+        pick_sheet_2_10 = picks_factories.PickSheetFactory.create(
             pot=self.pot,
             tiebreaker_guess=tiebreaker_score - 10,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_10,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_10,
             game=self.game_2,
             picked_team=self.game_2_winning_team,
@@ -159,31 +158,31 @@ class TestPot:
         self.pot.tiebreaker_score = tiebreaker_score
         self.pot.save()
 
-        pick_sheet_2_minus_10 = PickSheetFactory.create(
+        pick_sheet_2_minus_10 = picks_factories.PickSheetFactory.create(
             pot=self.pot,
             tiebreaker_guess=tiebreaker_score - 10,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_minus_10,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_minus_10,
             game=self.game_2,
             picked_team=self.game_2_winning_team,
         )
 
-        pick_sheet_2_plus_5 = PickSheetFactory.create(
+        pick_sheet_2_plus_5 = picks_factories.PickSheetFactory.create(
             pot=self.pot,
             tiebreaker_guess=tiebreaker_score + 5,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_plus_5,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_plus_5,
             game=self.game_2,
             picked_team=self.game_2_winning_team,
@@ -202,31 +201,31 @@ class TestPot:
         self.pot.tiebreaker_score = tiebreaker_score
         self.pot.save()
 
-        pick_sheet_2_plus_10 = PickSheetFactory.create(
+        pick_sheet_2_plus_10 = picks_factories.PickSheetFactory.create(
             pot=self.pot,
             tiebreaker_guess=tiebreaker_score + 10,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_plus_10,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_plus_10,
             game=self.game_2,
             picked_team=self.game_2_winning_team,
         )
 
-        pick_sheet_2_minus_5 = PickSheetFactory.create(
+        pick_sheet_2_minus_5 = picks_factories.PickSheetFactory.create(
             pot=self.pot,
             tiebreaker_guess=tiebreaker_score - 5,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_minus_5,
             game=self.game_1,
             picked_team=self.game_1_winning_team,
         )
-        PickFactory.create(
+        picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_2_minus_5,
             game=self.game_2,
             picked_team=self.game_2_winning_team,
@@ -240,14 +239,14 @@ class TestPot:
     @pytest.mark.parametrize(
         "initial_status, expected_next_status",
         [
-            (Pot.Status.DRAFT, Pot.Status.OPEN),
-            (Pot.Status.OPEN, Pot.Status.CLOSED),
-            (Pot.Status.CLOSED, Pot.Status.TALLY),
-            (Pot.Status.TALLY, None),
+            (pots_models.Pot.Status.DRAFT, pots_models.Pot.Status.OPEN),
+            (pots_models.Pot.Status.OPEN, pots_models.Pot.Status.CLOSED),
+            (pots_models.Pot.Status.CLOSED, pots_models.Pot.Status.TALLY),
+            (pots_models.Pot.Status.TALLY, None),
         ],
     )
     def test_next_status(self, initial_status, expected_next_status):
-        pot = PotFactory.create(status=initial_status)
+        pot = pots_factories.PotFactory.create(status=initial_status)
 
         next_status = pot.next_status
 
@@ -256,14 +255,14 @@ class TestPot:
     @pytest.mark.parametrize(
         "initial_status, expected_previous_status",
         [
-            (Pot.Status.DRAFT, None),
-            (Pot.Status.OPEN, Pot.Status.DRAFT),
-            (Pot.Status.CLOSED, Pot.Status.OPEN),
-            (Pot.Status.TALLY, Pot.Status.CLOSED),
+            (pots_models.Pot.Status.DRAFT, None),
+            (pots_models.Pot.Status.OPEN, pots_models.Pot.Status.DRAFT),
+            (pots_models.Pot.Status.CLOSED, pots_models.Pot.Status.OPEN),
+            (pots_models.Pot.Status.TALLY, pots_models.Pot.Status.CLOSED),
         ],
     )
     def test_previous_status(self, initial_status, expected_previous_status):
-        pot = PotFactory.create(status=initial_status)
+        pot = pots_factories.PotFactory.create(status=initial_status)
 
         previous_status = pot.previous_status
 
