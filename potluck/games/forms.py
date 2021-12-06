@@ -1,7 +1,6 @@
 from typing import Any, Optional
 
 from django import forms
-from django.core import validators
 
 from potluck.games import models as games_models
 from potluck.teams import models as teams_models

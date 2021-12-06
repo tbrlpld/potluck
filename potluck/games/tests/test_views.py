@@ -4,10 +4,9 @@ from django import test, urls
 
 import pytest
 
-from potluck.games import models as games_models
 from potluck.games import factories as games_factories
+from potluck.games import models as games_models
 from potluck.pots.tests import factories as pots_factories
-from potluck.teams.tests import factories as teams_factories
 
 
 @pytest.mark.django_db

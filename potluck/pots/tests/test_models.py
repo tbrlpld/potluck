@@ -116,7 +116,9 @@ class TestPot:
         # Pick with 1 correct game pick, and exact tiebreaker score.
         # The tiebreaker score of this pick sheet does not matter because the
         # correct number of games is not the highest.
-        pick_sheet_1_0 = picks_factories.PickSheetFactory.create(pot=self.pot, tiebreaker_guess=60)
+        pick_sheet_1_0 = picks_factories.PickSheetFactory.create(
+            pot=self.pot, tiebreaker_guess=60
+        )
         picks_factories.PickFactory.create(
             pick_sheet=pick_sheet_1_0,
             game=self.game_1,

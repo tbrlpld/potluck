@@ -1,8 +1,8 @@
 import pytest
 
+from potluck.games import factories as games_factories
 from potluck.games import forms as games_forms
 from potluck.games import models as games_models
-from potluck.games import factories as games_factories
 from potluck.pots.tests import factories as pots_factories
 from potluck.teams.tests import factories as teams_factories
 

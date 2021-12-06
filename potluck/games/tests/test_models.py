@@ -2,9 +2,8 @@ from django.core import exceptions
 
 import pytest
 
-from potluck.games import models as games_models
 from potluck.games import factories as games_factories
-from potluck.pots.tests import factories as pots_factories
+from potluck.games import models as games_models
 from potluck.teams.tests import factories as teams_factories
 
 
@@ -46,7 +45,8 @@ class TestGame:
         self.game.set_and_save_winning_team(self.home_team)
 
         assert (
-            games_models.Game.objects.get(pk=self.game.id).winning_team == self.home_team
+            games_models.Game.objects.get(pk=self.game.id).winning_team
+            == self.home_team
         )
 
     def test_set_winning_team_away(self, setup):
@@ -58,7 +58,8 @@ class TestGame:
         self.game.set_and_save_winning_team(self.away_team)
 
         assert (
-            games_models.Game.objects.get(pk=self.game.id).winning_team == self.away_team
+            games_models.Game.objects.get(pk=self.game.id).winning_team
+            == self.away_team
         )
 
     def test_set_winning_team_with_team_not_in_game(self, setup):

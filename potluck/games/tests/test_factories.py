@@ -5,7 +5,7 @@ from potluck.teams import models as teams_models
 
 class TestGame:
     def test_build(self):
-        game = games_factories.Game.build()
+        games_factories.Game.build()
 
         assert True
 
