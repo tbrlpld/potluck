@@ -20,13 +20,6 @@ class Game(models.Model):
         blank=False,
         on_delete=models.SET_NULL,
     )
-
-    # Deprecated. Do not use.
-    teams = models.ManyToManyField(
-        teams_models.Team,
-        related_name="+",
-    )
-
     winning_team = models.ForeignKey(
         teams_models.Team,
         on_delete=models.CASCADE,
