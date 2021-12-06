@@ -1,7 +1,7 @@
 import pytest
 
 from potluck.games.models import Game
-from potluck.games.tests.factories import GameFactory
+from potluck.games import factories as games_factories
 from potluck.picks.models import Pick, PickSheet
 from potluck.picks.tests.factories import PickFactory, PickSheetFactory
 from potluck.pots.models import Pot
@@ -14,46 +14,21 @@ from potluck.teams.tests.factories import TeamFactory
 class TestPickSheet:
     @pytest.fixture
     def setup_picksheet(self):
-        team_1 = TeamFactory.create()
-        team_2 = TeamFactory.create()
-        team_3 = TeamFactory.create()
-        team_4 = TeamFactory.create()
         self.pot = PotFactory.create()
-        self.game_1 = GameFactory.create(pot=self.pot)
-        self.game_1.teams.set((team_1, team_2))
-        self.game_2 = GameFactory.create(pot=self.pot)
-        self.game_2.teams.set((team_3, team_4))
+        self.game_1 = games_factories.Game.create(pot=self.pot, with_teams=True)
+        self.game_2 = games_factories.Game.create(pot=self.pot, with_teams=True)
 
-        self.game_1_winning_team = self.game_1.teams.first()
-        self.game_1_loosing_team = self.game_1.teams.last()
+        self.game_1_winning_team = self.game_1.away_team
+        self.game_1_loosing_team = self.game_1.home_team
         self.game_1.winning_team = self.game_1_winning_team
         self.game_1.save()
 
-        self.game_2_winning_team = self.game_2.teams.first()
-        self.game_2_loosing_team = self.game_2.teams.last()
+        self.game_2_winning_team = self.game_2.home_team
+        self.game_2_loosing_team = self.game_2.away_team
         self.game_2.winning_team = self.game_2_winning_team
         self.game_2.save()
 
         self.pick_sheet = PickSheetFactory.create(pot=self.pot)
-
-        assert Pot.objects.count() == 1
-        assert PickSheet.objects.count() == 1
-        assert Game.objects.count() == 2
-        assert Team.objects.count() == 4
-        assert Pick.objects.count() == 0
-
-        yield self
-
-        Pot.objects.all().delete()
-        PickSheet.objects.all().delete()
-        Game.objects.all().delete()
-        Team.objects.all().delete()
-
-        assert Pot.objects.count() == 0
-        assert PickSheet.objects.count() == 0
-        assert Game.objects.count() == 0
-        assert Team.objects.count() == 0
-        assert Pick.objects.count() == 0
 
     @pytest.fixture
     def place_game_1_wrong_pick(self):
@@ -300,16 +275,15 @@ class TestPickSheet:
 class TestPick:
     @pytest.fixture
     def setup_game_with_two_teams(self):
-        self.team_1 = TeamFactory.create()
-        self.team_2 = TeamFactory.create()
-        self.game = GameFactory.create()
-        self.game.teams.set((self.team_1, self.team_2))
+        self.game = games_factories.Game.create(with_teams=True)
+        self.team_1 = self.game.away_team
+        self.team_2 = self.game.home_team
 
     def test_is_correct_annotation_is_true_if_picked_team_matches_winning_team(
         self,
         setup_game_with_two_teams,
     ):
-        winning_team = self.game.teams.first()
+        winning_team = self.team_1
         self.game.set_and_save_winning_team(winning_team)
         pick = PickFactory(game=self.game, picked_team=winning_team)
         # To get the annotation, you need to retrieve the object from the manager
@@ -323,8 +297,8 @@ class TestPick:
         self,
         setup_game_with_two_teams,
     ):
-        winning_team = self.game.teams.first()
-        loosing_team = self.game.teams.last()
+        winning_team = self.team_1
+        loosing_team = self.team_2
         self.game.set_and_save_winning_team(winning_team)
         pick = PickFactory(game=self.game, picked_team=loosing_team)
         # To get the annotation, you need to retrieve the object from the manager
