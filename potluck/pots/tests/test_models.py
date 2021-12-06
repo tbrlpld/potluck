@@ -1,6 +1,6 @@
 import pytest
 
-from potluck.games.tests.factories import GameFactory
+from potluck.games import factories as games_factories
 from potluck.picks.tests.factories import PickFactory, PickSheetFactory
 from potluck.pots.models import Pot
 from potluck.pots.tests.factories import PotFactory
@@ -11,21 +11,19 @@ from potluck.teams.tests.factories import TeamFactory
 class TestPot:
     @pytest.fixture
     def setup_pot_with_two_games(self):
-        self.team_1 = TeamFactory.create()
-        self.team_2 = TeamFactory.create()
-        self.team_3 = TeamFactory.create()
-        self.team_4 = TeamFactory.create()
 
         self.pot = PotFactory.create()
 
-        self.game_1 = GameFactory.create(pot=self.pot)
-        self.game_1.teams.set((self.team_1, self.team_2))
+        self.game_1 = games_factories.Game.create(pot=self.pot, with_teams=True)
+        self.team_1 = self.game_1.home_team
+        self.team_2 = self.game_1.away_team
         self.game_1_winning_team = self.team_1
         self.game_1_loosing_team = self.team_2
         self.game_1.set_and_save_winning_team(self.game_1_winning_team)
 
-        self.game_2 = GameFactory.create(pot=self.pot)
-        self.game_2.teams.set((self.team_3, self.team_4))
+        self.game_2 = games_factories.Game.create(pot=self.pot, with_teams=True)
+        self.team_3 = self.game_2.away_team
+        self.team_4 = self.game_2.home_team
         self.game_2_winning_team = self.team_3
         self.game_2_loosing_team = self.team_4
         self.game_2.set_and_save_winning_team(self.game_2_winning_team)
