@@ -109,6 +109,8 @@ if DEBUG:
         # prefixes that will be searched to populate the groups.
         "SECTIONS": (
             ("atoms", ["atoms"]),
+            ("molecules", ["molecules"]),
+            ("organisms", ["organisms"]),
             ("pages", ["pages"]),
         ),
         # Configure which files to detect as templates.
