@@ -5,6 +5,7 @@ from django import test, urls
 import pytest
 
 from potluck.pots import models as pots_models
+from potluck.pots import views as pots_views
 from potluck.pots.tests import factories as pots_factories
 
 
@@ -70,7 +71,8 @@ class TestPotCreate:
         response = client.post(url, data=data, follow=True)
 
         assert response.status_code == http.HTTPStatus.OK
-        assert pots_models.Pot.objects.first().name == "Test Pot"
+        assert b"Test Pot" in response.content
+        assert response.resolver_match.url_name == "pot_detail"
 
 
 @pytest.mark.django_db

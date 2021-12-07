@@ -28,8 +28,10 @@ class PotDetail(generic.DetailView):
 class PotCreate(generic.CreateView):
     model = pots_models.Pot
     template_name = "pots/pot_create.html"
-    success_url = urls.reverse_lazy("pots_list")
     fields = ("name", "tiebreaker_description")
+
+    def get_success_url(self):
+        return urls.reverse_lazy("pot_detail", kwargs={"pk": self.object.id})
 
 
 class PotDelete(generic.DeleteView):
