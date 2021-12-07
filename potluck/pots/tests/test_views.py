@@ -5,7 +5,6 @@ from django import test, urls
 import pytest
 
 from potluck.pots import models as pots_models
-from potluck.pots import views as pots_views
 from potluck.pots.tests import factories as pots_factories
 
 
