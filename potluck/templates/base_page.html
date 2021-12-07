@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <header class="p-3 text-xl font-semibold">
+        {% block header %}
+            {% include "components/header.html" %}
+        {% endblock header %}
+    </header>
+    <main class="self-center w-full max-w-xl grow p-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+{% endblock body %}
