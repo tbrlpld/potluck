@@ -17,8 +17,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
-import debug_toolbar  # type: ignore
-
 from potluck.games import views as games_views
 from potluck.picks import views as picks_views
 from potluck.pots import views as pots_views
@@ -64,4 +62,9 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns.append(path("__debug__/", include(debug_toolbar.urls)))
+    import debug_toolbar
+
+    urlpatterns.extend([
+        path("__debug__/", include(debug_toolbar.urls)),
+        path("pattern-library/", include("pattern_library.urls")),
+    ])
