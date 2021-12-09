@@ -4,7 +4,7 @@
 {% load utils %}
 
 {% block content %}
-    {% include "components/heading-with-eyebrow.html" with heading=pot.name eyebrow="Add game" %}
+    {% include "molecules/heading/heading-with-eyebrow.html" with heading=pot.name eyebrow="Add game" %}
     <p class="my-4 text-gray-500"><strong class="font-semibold">Pick the 2 teams</strong> that are competing in this game.</p>
     <form action="" method="POST">
         {% csrf_token %}
@@ -15,9 +15,9 @@
             </div>
         {% endif %}
 
-        {% include "components/form-field.html" with field=form.away_team %}
+        {% include "molecules/form-fields/form-field.html" with field=form.away_team %}
         <div class="h-5"></div>
-        {% include "components/form-field.html" with field=form.home_team %}
+        {% include "molecules/form-fields/form-field.html" with field=form.home_team %}
 
         <div class="mt-8 flex flex-row justify-between items-baseline">
             <button type="submit"  class="px-4 py-3 btn">Add game</button>
